@@ -10,6 +10,9 @@ html, body {
     height: 100%;
     margin: 0 auto -100px;
 }
+#wrap-container{
+    padding-top: 60px;
+}
 
 .push {
     height: 110px;
@@ -93,4 +96,55 @@ footer .no:before {
 
 footer .alphabet {
     font-size: 16px;
+}
+
+.navbar-search .input-append .btn {
+    border-radius: 0 14px 14px 0;
+}
+
+.navbar-inverse .navbar-search .input-append .btn {
+    border-color: #111111;
+    color: #333333;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: none 0s ease 0s;
+    background-image: none;
+    background-color: #FFFFFF;
+    border-left: 0;
+    margin-left: 0;
+    text-shadow: 0 1px 0 #FFFFFF
+}
+
+.navbar-search .input-append .search-query {
+    border-radius: 14px 0 0 14px;
+}
+
+.navbar-inverse .navbar-search .input-append .search-query {
+    border-right: 0;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+    background-color: #FFFFFF;
+    text-shadow: 0 1px 0 #FFFFFF;
+    color: #333333;
+    padding-right: 0;
+}
+
+.navbar-inverse .navbar-search .input-append .search-query:focus {
+    border: 1px solid;
+    border-right: 0;
+    padding: 4px 14px;
+    padding-right: 0;
+}
+
+.navbar-inverse .navbar-search .search-query:-moz-placeholder {
+    color: #cccccc;
+}
+.navbar-inverse .navbar-search .search-query:-ms-input-placeholder {
+    color: #cccccc;
+}
+.navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
+    color: #cccccc;
+}
+
+.affix {
+    position: fixed;
+    top: 41px;
 }

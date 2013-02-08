@@ -3,7 +3,7 @@ function resetHomeContainer() {
     var height = $(window).height();
 
     if (height > 150) {
-        var newHeight = (height - 250) / 2;
+        var newHeight = (height - 400) / 2;
         if (newHeight > 150) {
             $('#home-container').attr("style", "margin-top: " + newHeight + "px;");
         } else {
@@ -12,4 +12,17 @@ function resetHomeContainer() {
     } else {
         $('#home-container').removeAttr("style");
     }
+}
+
+function resetNavbarAffixTop() {
+    var width = $('#wrap-container').width();
+    var menu = $('#navbar-affix-top');
+    menu.attr("style", "width: " + width + "px;");
+
+    $('#navbar-affix-top').affix({
+        offset:{
+            top:$('#navbar-affix-top').position().top - 40,
+            left:$('#navbar-affix-top').position().left
+        }
+    });
 }
