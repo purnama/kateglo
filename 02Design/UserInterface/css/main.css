@@ -4,13 +4,31 @@ html, body {
     height: 100%;
 }
 
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 26.5px;
+}
+
+sup {
+    position: static;
+    vertical-align: super;
+}
+
+.collapse{
+    position: static;
+}
+
 .wrap {
     min-height: 100%;
     height: auto !important;
     height: 100%;
     margin: 0 auto -100px;
 }
-#wrap-container{
+
+#wrap-container {
     padding-top: 60px;
 }
 
@@ -137,9 +155,11 @@ footer .alphabet {
 .navbar-inverse .navbar-search .search-query:-moz-placeholder {
     color: #cccccc;
 }
+
 .navbar-inverse .navbar-search .search-query:-ms-input-placeholder {
     color: #cccccc;
 }
+
 .navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
     color: #cccccc;
 }
@@ -147,4 +167,22 @@ footer .alphabet {
 .affix {
     position: fixed;
     top: 41px;
+}
+
+#thesaurus .accordion-inner ul li:after,
+#equivalent .accordion-inner ul li:after {
+    content: ".";
+    padding: 0 5px;
+}
+
+#thesaurus .accordion-inner ul li:last-child:after,
+#equivalent .accordion-inner ul li:last-child:after {
+    content: "";
+    padding: 0;
+}
+
+#thesaurus .accordion-inner ul li,
+#equivalent .accordion-inner ul li {
+    display: inline;
+    list-style: none outside none;
 }

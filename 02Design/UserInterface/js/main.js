@@ -32,4 +32,25 @@ function resetNavbarAffixTop() {
         $('#affix-title strong').html('');
     });
 
+    var elem = $('#' + window.location.hash.replace('#', ''));
+    if(elem) {
+        console.log(elem[0]);
+        elem[0].scrollIntoView();
+        scrollBy(0, -100);
+    }
+
+    $(window).scrollspy({wrap:$('.wrap')[0]});
+
+    $('#navbar-affix-scrollspy .nav li a').click(function (event) {
+        event.preventDefault();
+        var parent = $(this).parent();
+        $.each(parent.siblings(), function () {
+            $(this).removeClass('active');
+        });
+        parent.addClass('active');
+        console.log($($(this).attr('href'))[0]);
+        $($(this).attr('href'))[0].scrollIntoView();
+        scrollBy(0, -100);
+    });
+
 }

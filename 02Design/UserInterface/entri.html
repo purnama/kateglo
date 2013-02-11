@@ -21,7 +21,7 @@
 
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
-<body>
+<body data-spy="scroll" data-target="#navbar-affix-scrollspy" data-offset="150">
 <!--[if lt IE 7]>
 <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
@@ -33,14 +33,14 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar collapsed" data-target=".navbar-responsive-collapse" data-toggle="collapse">
+                <a class="btn btn-navbar collapsed" data-target="#navbar-inverse-fixed-top" data-toggle="collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
                 <a class="brand" href="/">Kateglo</a>
 
-                <div class="nav-collapse collapse navbar-responsive-collapse">
+                <div class="nav-collapse collapse navbar-responsive-collapse" id="navbar-inverse-fixed-top">
                     <ul class="nav">
                         <li><a href="#">Kamus</a></li>
                         <li><a href="#">Tesaurus</a></li>
@@ -63,264 +63,510 @@
 </header>
 <!-- Content -->
 <div class="wrap">
-    <!-- Content -->
-    <div class="container" id="wrap-container">
-        <h1 id="entry-title">Entri</h1>
+<!-- Content -->
+<div class="container" id="wrap-container">
+<h1 id="entry-title">entri</h1>
 
-        <div data-spy="affix" class="navbar affix-top" id="navbar-affix-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a id="affix-title" class="brand" href="#"><strong></strong></a>
 
-                    <div class="nav-collapse collapse navbar-responsive-collapse">
-                        <ul class="nav pull-right">
-                            <li class="active"><a href="#">Definisi</a></li>
-                            <li><a href="#">Tesaurus</a></li>
-                            <li><a href="#">Padanan</a></li>
-                            <li><a href="#">Sumber</a></li>
-                            <li><a href="#">Diskusi</a></li>
-                        </ul>
+<div class="row">
+<div class="navbar navbar-static" id="navbar-affix-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target="#navbar-affix-scrollspy">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a id="affix-title" class="brand" href="#"><strong></strong></a>
+
+            <div class="nav-collapse collapse navbar-responsive-collapse" id="navbar-affix-scrollspy">
+                <ul class="nav pull-right">
+                    <li><a href="#definition">Definisi</a></li>
+                    <li><a href="#thesaurus">Tesaurus</a></li>
+                    <li><a href="#equivalent">Padanan</a></li>
+                    <li><a href="#source">Sumber</a></li>
+                    <li><a href="#discussion">Diskusi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span8">
+<section id="definition">
+    <h2>Definisi</h2>
+    <dl>
+        <dt><dfn>en&middot;tri</dfn> <sup>1</sup></dt>
+        <dd class="pronounciation">/éntri/</dd>
+        <dd class="category">Kata Dasar</dd>
+        <dd class="definition">
+            <abbr title="nomina">n.</abbr>
+            <em>Linguistik</em>
+            kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
+            lafal, etimologi, contoh pemakaian, dsb
+            <ul class="examples">
+                <li>contoh kalimat entri.</li>
+            </ul>
+        </dd>
+        <dd class="etymology">
+            "financial institution," late 15c., from either O.It. banca or M.Fr. banque (itself from the O.It. word),
+            both meaning "table" (the notion is of the moneylender's exchange table), from a Gmc. source (cf. O.H.G.
+            bank "bench"); see bank (2). The verb meaning "to put confidence
+        </dd>
+    </dl>
+    <dl>
+        <dt><dfn>en&middot;tri</dfn> <sup>2</sup></dt>
+        <dd class="pronounciation">/éntri/</dd>
+        <dd class="category">Kata ulang, Kata ulang berubah bunyi</dd>
+        <dd class="definition">
+            <abbr title="nomina">n.</abbr>
+            <em>Linguistik</em>
+            kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
+            lafal, etimologi, contoh pemakaian, dsb
+            <ul class="examples">
+                <li>contoh kalimat entri.</li>
+            </ul>
+        </dd>
+        <dd class="definition">
+            <abbr title="verba">v.</abbr>
+            <em>Linguistik</em>
+            kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
+            lafal, etimologi, contoh pemakaian, dsb
+            <ul class="examples">
+                <li>contoh kalimat entri.</li>
+            </ul>
+        </dd>
+    </dl>
+</section>
+<section id="thesaurus">
+    <h2>Tesaurus</h2>
+    <div class="accordion" id="thesaurus-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-synonym">
+                    Sinonim
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-synonym">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-antonym">
+                    Antonim
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-antonym">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-homophone">
+                    Homofon
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-homophone">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-hyponym">
+                    Hiponim
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-hyponym">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-hypernym">
+                    Hipernim
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-hypernym">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-rhyme">
+                    Rima
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-rhyme">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-contextual">
+                    Kontekstual
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-contextual">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-reverse">
+                    Reverse Dictionary
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-reverse">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="equivalent">
+    <h2>Padanan</h2>
+    <div class="accordion" id="equivalent-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-english">
+                    Inggris
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-english">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-german">
+                    Jerman
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-german">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-france">
+                    Perancis
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-france">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-japan">
+                    Jepang
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-japan">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse"
+                   href="#collapse-arabic">
+                    Arab
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-arabic">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapse-chinese">
+                    Cina
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="collapse-chinese">
+                <div class="accordion-inner">
+                    <ul>
+                        <li><a href="#">adduce</a></li>
+                        <li><a href="#">bear</a></li>
+                        <li><a href="#">carry</a></li>
+                        <li><a href="#">cast</a></li>
+                        <li><a href="#">cause</a></li>
+                        <li><a href="#">command</a></li>
+                        <li><a href="#">conduct</a></li>
+                        <li><a href="#">conjure</a></li>
+                        <li><a href="#">convey</a></li>
+                        <li><a href="#">deduce</a></li>
+                        <li><a href="#">draw</a></li>
+                        <li><a href="#">encash</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="source">
+    <h2>Sumber</h2>
+    <div class="accordion" id="source-accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#source-kbbi">
+                    Kamus Besar Bahasa Indonesia
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="source-kbbi">
+                <div class="accordion-inner">
+                    <div>
+                        <b>
+                            <sup>1</sup>
+                            bi·sa
+                        </b>
+                        <i>v</i>
+                        mampu (kuasa melakukan sesuatu); dapat:
+                        <i>
+                            ia -- membaca, tetapi tidak -- menulis;
+                            <br>
+                            alah -- oleh (krn) biasa, pb
+                        </i>
+                        sesuatu yg sukar, kalau sudah biasa dikerjakan, tidak terasa sukar lagi;
+                    </div>
+                    <div>
+                        <b>
+                            <sup>2</sup>
+                            bi·sa
+                        </b>
+                        <i>n</i>
+                        <b>1</b>
+                        zat racun yg dapat menyebabkan luka, busuk, atau mati bagi sesuatu yg hidup (biasanya terdapat
+                        pd
+                        binatang);
+                        <b>2</b>
+                        <i>ki</i>
+                        sesuatu yg buruk, yg dapat merusakkan akhlak manusia atau masyarakat:
+                        <i>
+                            ajaranmu itu akan menjadi -- bagi kami;
+                            <br>
+                        </i>
                     </div>
                 </div>
             </div>
         </div>
-        <div>
-            <h2>Definisi</h2>
-            <dl>
-                <dt><dfn>Entri</dfn> <sup>1</sup></dt>
-                <dd class="pronounciation">/éntri/</dd>
-                <dd class="category">Kata Dasar</dd>
-                <dd class="definition">
-                    <abbr title="nomina">n.</abbr>
-                    <em>Linguistik</em>
-                    kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
-                    lafal, etimologi, contoh pemakaian, dsb
-                    <ul class="examples">
-                        <li>contoh kalimat entri.</li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt><dfn>Entri</dfn> <sup>2</sup></dt>
-                <dd class="pronounciation">/éntri/</dd>
-                <dd class="category">Kata ulang, Kata ulang berubah bunyi</dd>
-                <dd class="definition">
-                    <abbr title="nomina">n.</abbr>
-                    <em>Linguistik</em>
-                    kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
-                    lafal, etimologi, contoh pemakaian, dsb
-                    <ul class="examples">
-                        <li>contoh kalimat entri.</li>
-                    </ul>
-                </dd>
-                <dd class="definition">
-                    <abbr title="verba">v.</abbr>
-                    <em>Linguistik</em>
-                    kata atau frasa dl kamus beserta penjelasan maknanya dng tambahan penjelasan berupa kelas kata,
-                    lafal, etimologi, contoh pemakaian, dsb
-                    <ul class="examples">
-                        <li>contoh kalimat entri.</li>
-                    </ul>
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <h2>Tesaurus</h2>
-            <dl>
-                <dt>Sinonim</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                        <li><a href="#">command</a></li>
-                        <li><a href="#">conduct</a></li>
-                        <li><a href="#">conjure</a></li>
-                        <li><a href="#">convey</a></li>
-                        <li><a href="#">deduce</a></li>
-                        <li><a href="#">draw</a></li>
-                        <li><a href="#">encash</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Antonim</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Hiponim</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Hipernim</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Rima</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Kontekstual</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Reverse Dictionary</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-
-        </div>
-        <div>
-            <h2>Padanan</h2>
-            <dl>
-                <dt>Inggris</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                        <li><a href="#">command</a></li>
-                        <li><a href="#">conduct</a></li>
-                        <li><a href="#">conjure</a></li>
-                        <li><a href="#">convey</a></li>
-                        <li><a href="#">deduce</a></li>
-                        <li><a href="#">draw</a></li>
-                        <li><a href="#">encash</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Jerman</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Perancis</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Jepang</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Arab</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>China</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Itali</dt>
-                <dd>
-                    <ul>
-                        <li><a href="#">adduce</a></li>
-                        <li><a href="#">bear</a></li>
-                        <li><a href="#">carry</a></li>
-                        <li><a href="#">cast</a></li>
-                        <li><a href="#">cause</a></li>
-                    </ul>
-                </dd>
-            </dl>
-
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#source-wiktionary">
+                    Wiktionary
+                </a>
+            </div>
+            <div class="accordion-body collapse" id="source-wiktionary">
+                <div class="accordion-inner">
+                    Adverbia
+                    <ol>
+                        <li>mungkin</li>
+                        <li>racun ular</li>
+                    </ol>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="push"></div>
+</section>
+</div>
+
+</div>
+</div>
+<div class="push"></div>
 </div>
 
 <footer>
