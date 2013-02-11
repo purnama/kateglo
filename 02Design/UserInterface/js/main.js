@@ -21,8 +21,15 @@ function resetNavbarAffixTop() {
 
     $('#navbar-affix-top').affix({
         offset:{
-            top:$('#navbar-affix-top').position().top - 40,
+            top:$('#navbar-affix-top').position().top - 42,
             left:$('#navbar-affix-top').position().left
         }
     });
+    $('#navbar-affix-top').on('affixed', function () {
+        $('#affix-title strong').html($('#entry-title').html());
+    });
+    $('#navbar-affix-top').on('unaffixed', function () {
+        $('#affix-title strong').html('');
+    });
+
 }

@@ -1231,7 +1231,7 @@
       'top'    : false
 
     if (this.affixed === affix) return
-
+    this.$element.trigger(affix ? 'unaffixed' : 'affixed')
     this.affixed = affix
     this.unpin = affix == 'bottom' ? position.top - scrollTop : null
 
