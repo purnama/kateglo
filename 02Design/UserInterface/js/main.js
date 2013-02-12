@@ -27,14 +27,15 @@ function resetNavbarAffixTop() {
     });
     $('#navbar-affix-top').on('affixed', function () {
         $('#affix-title strong').html($('#entry-title').html());
+        $('#wrap-container div.span8').attr('style', 'margin-top:60px;')
     });
     $('#navbar-affix-top').on('unaffixed', function () {
         $('#affix-title strong').html('');
+        $('#wrap-container div.span8').removeAttr('style')
     });
 
     var elem = $('#' + window.location.hash.replace('#', ''));
-    if(elem) {
-        console.log(elem[0]);
+    if(elem[0]) {
         elem[0].scrollIntoView();
         scrollBy(0, -100);
     }
@@ -48,7 +49,6 @@ function resetNavbarAffixTop() {
             $(this).removeClass('active');
         });
         parent.addClass('active');
-        console.log($($(this).attr('href'))[0]);
         $($(this).attr('href'))[0].scrollIntoView();
         scrollBy(0, -100);
     });

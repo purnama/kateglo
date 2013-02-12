@@ -17,7 +17,7 @@ sup {
     vertical-align: super;
 }
 
-.collapse{
+.collapse {
     position: static;
 }
 
@@ -26,6 +26,8 @@ sup {
     height: auto !important;
     height: 100%;
     margin: 0 auto -100px;
+    position: inherit;
+    z-index: 2;
 }
 
 #wrap-container {
@@ -185,4 +187,52 @@ footer .alphabet {
 #equivalent .accordion-inner ul li {
     display: inline;
     list-style: none outside none;
+}
+
+.vote {
+    text-align: center;
+}
+
+.answered-accepted {
+    background: none repeat scroll 0 0 #75845C;
+    color: #E1E818;
+}
+
+.status {
+    margin-top: -3px;
+    padding: 4px 0;
+    text-align: center;
+}
+
+.stats {
+    background: none repeat scroll 0 0 #EEEEEE;
+    width: 76px;
+    margin-left: 11px;
+    padding: 4px 7px 6px;
+}
+
+.statsarrow {
+    width: 0;
+    height: 0;
+    border-top: 10px dashed transparent;
+    border-left: 10px solid #EEEEEE;
+    border-bottom: 10px dashed transparent;
+    float: right;
+
+}
+
+#discussion ul {
+    margin: 0 0 10px 0;
+}
+
+#discussion ul li.discuss {
+    list-style: none outside none;
+}
+
+#discussion .discussion-status {
+   text-align: center;
+}
+
+.discuss .span8{
+    margin-left: 8px;
 }
