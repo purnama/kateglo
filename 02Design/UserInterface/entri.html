@@ -567,42 +567,55 @@
 <section id="discussion">
     <h2>Diskusi</h2>
     <ul>
-        <li class="discuss">
+        <li  class="discuss">
             <div class="row-fluid">
-                <div class="span2 discussion-status">
-                    <div class="statsarrow"></div>
-                    <div class="stats">
-                        <div class="vote">
-                            <div class="votes">
-                                <span class="vote-count-post high-scored-post"><strong>3790</strong></span>
-                                <div class="viewcount">votes</div>
-                            </div>
+                <div class="span12">
+                    <div class="avatar">
+                        <i class="icon-user"></i>
+                    </div>
+                    <div  class="comment">
+                        <header>
+                            <a>Phasellus erat</a>
+                            <span>&middot;</span>
+                            <span>5 bulan lalu</span>
+                        </header>
+                        <div>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi viverra euismod auctor. Nulla
+                            tempus
+                            nunc sed nisl aliquet eget pellentesque mi scelerisque. In commodo tellus sit amet lectus
+                            adipiscing
+                            scelerisque. Curabitur aliquet nunc ac tortor ultricies in facilisis massa tempor.
                         </div>
-                        <div class="status answered-accepted">
-                            <strong>8</strong>answers
-                        </div>
-                    </div>
-                    <div title="205,689 views" class="views supernova">
-                        206k views
-                    </div>
-                </div>
-                <div class="span8">
-                    <div class="user">
-                        <a href="">Phasellus erat</a>
-                    </div>
-                    <div class="date">Rabu, 13 Februari 2013 | 00:36 WIB</div>
-                    <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi viverra euismod auctor. Nulla tempus
-                        nunc sed nisl aliquet eget pellentesque mi scelerisque. In commodo tellus sit amet lectus adipiscing
-                        scelerisque. Curabitur aliquet nunc ac tortor ultricies in facilisis massa tempor.
-                    </div>
-                </div>
-                <div class="span2">
-                    <div class="response">
-                        <a href="">Tanggapi</a>
-                    </div>
-                    <div class="report">
-                        <a href="">Laporkan</a>
+                        <footer>
+                            <menu>
+                                <li>
+                                    <a data-toggle="tooltip"
+                                       data-original-title="You must sign in to up-vote this post.">
+                                        <span>20</span>
+                                        <span><i class="icon-thumbs-up"></i></span>
+                                    </a>
+                                    <a data-toggle="tooltip"
+                                       data-original-title="You must sign in to down-vote this post.">
+                                        <span>2</span>
+                                        <span><i class="icon-thumbs-down"></i></span>
+                                    </a>
+                                </li>
+                                <li>&middot;</li>
+                                <li>
+                                    <a title="Reply">
+                                        <span><i class="icon-comment"></i></span>
+                                        <span>Tanggapi</span>
+                                    </a>
+                                </li>
+                                <li>&middot;</li>
+                                <li>
+                                    <a title="Report">
+                                        <span><i class="icon-warning-sign"></i></span>
+                                        <span>Laporkan</span>
+                                    </a>
+                                </li>
+                            </menu>
+                        </footer>
                     </div>
                 </div>
             </div>
@@ -616,7 +629,7 @@
 <div class="push"></div>
 </div>
 
-<footer>
+<footer class="footer">
     <div class="container">
         <nav>
             <ul>
@@ -683,7 +696,7 @@
 <script>
     $(document).ready(resetNavbarAffixTop);
     $(window).resize(resetNavbarAffixTop);
-
+    $('#discussion footer menu li a').tooltip();
     var _gaq = [
         ['_setAccount', 'UA-XXXXX-X'],
         ['_trackPageview']
