@@ -12,7 +12,8 @@
         "zendframework/zendframework": "2.*",
         "doctrine/orm": "2.*",
         "stubbles/core": "2.*",
-        "room13/PhpSolrClient" : "dev-master"
+        "room13/PhpSolrClient" : "dev-master",
+        "phptal/phptal": "dev-master"
 
     }
 }
