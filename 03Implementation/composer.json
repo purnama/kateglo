@@ -1,0 +1,18 @@
+{
+    "name": "kateglo/kateglo",
+    "description": "k kamus, tesaurus, dan glosarium bahasa Indonesia",
+    "license": "GNU GPL v2",
+    "keywords": [
+        "dictionary",
+        "indonesian"
+    ],
+    "homepage": "http://kateglo.googlecode.com/",
+    "require": {
+        "php": ">=5.4",
+        "zendframework/zendframework": "2.*",
+        "doctrine/orm": "2.*",
+        "stubbles/core": "2.*",
+        "room13/PhpSolrClient" : "dev-master"
+
+    }
+}
