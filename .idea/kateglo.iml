@@ -7,10 +7,10 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://D:/Users/arthurpurnama/Documents/MyProjects/kateglo/03Implementation/composer.phar" />
+          <root url="phar:///Users/arthurpurnama/PhpstormProjects/kateglo/03Implementation/composer.phar" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://D:/Users/arthurpurnama/Documents/MyProjects/kateglo/03Implementation/composer.phar" />
+          <root url="phar:///Users/arthurpurnama/PhpstormProjects/kateglo/03Implementation/composer.phar" />
         </SOURCES>
       </library>
     </orderEntry>

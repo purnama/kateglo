@@ -2,78 +2,59 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c433b73-841a-441c-acbf-4aede1183a62" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/composer.phar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ar_SY.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/cs_CZ.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/de_DE.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/en_US.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/es_ES.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/fr_CA.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/fr_FR.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/it_IT.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ja_JP.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/nb_NO.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/nl_NL.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/pl_PL.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/pt_BR.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ru_RU.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/tr_TR.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/zh_CN.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/zh_TW.mo" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/images/favicon.ico" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/images/zf2-logo.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/kateglo.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/sass_stdlib.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/.gitmodules" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/composer.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/config/application.config.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/config/autoload/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/config/autoload/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/config/autoload/global.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/config/autoload/local.php.dist" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/data/cache/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/init_autoloader.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/Module.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/config/module.config.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ar_SY.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/cs_CZ.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/de_DE.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/en_US.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/es_ES.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/fr_CA.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/fr_FR.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/it_IT.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ja_JP.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/nb_NO.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/nl_NL.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/pl_PL.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/pt_BR.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/ru_RU.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/tr_TR.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/zh_CN.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/language/zh_TW.po" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/src/Application/Controller/IndexController.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/view/application/index/index.phtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/view/error/404.phtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/view/error/index.phtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/module/Application/view/layout/layout.phtml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/.htaccess" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/style.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/index.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/html5.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/jquery.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/vendor/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-bold-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-bold-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-bold-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsansmono-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsansmono-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsansmono-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bold-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bold-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bold-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bolditalic-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bolditalic-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bolditalic-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-italic-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-italic-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-italic-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-webfont.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-webfont.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-webfont.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/img/glyphicons-halflings-white.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/img/glyphicons-halflings.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/crossdomain.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/font.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/css/main.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-bold-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsans-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidsansmono-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bold-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-bolditalic-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-italic-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/font/droidserif-webfont.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/humans.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/main.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/plugins.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/vendor/bootstrap.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/vendor/bootstrap.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/vendor/jquery-1.9.0.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/03Implementation/public/robots.txt" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/css/style.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/images/favicon.ico" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/images/zf2-logo.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/js/bootstrap.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/js/html5.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/03Implementation/public/js/jquery.min.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/kateglo.iml" afterPath="$PROJECT_DIR$/.idea/kateglo.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.min.css" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/03Implementation/public/css/bootstrap.min.css" afterPath="$PROJECT_DIR$/03Implementation/public/css/bootstrap.min.css" />
     </list>
     <ignored path="kateglo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -116,8 +97,44 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/03Implementation/config/autoload/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bootstrap.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/03Implementation/public/js/vendor/bootstrap.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/03Implementation/public/js/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bootstrap-responsive.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="crossdomain.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/03Implementation/public/crossdomain.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
@@ -159,10 +176,9 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP-XAMPP" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1186" />
+    <option name="y" value="22" />
+    <option name="width" value="1920" />
+    <option name="height" value="1093" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -190,6 +206,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -236,86 +253,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="vendor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="03Implementation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="03Implementation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="module" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Application" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="03Implementation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cache" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kateglo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="03Implementation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -330,38 +267,45 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="03Implementation" />
+              <option name="myItemId" value="02Design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="autoload" />
+              <option name="myItemId" value="UserInterface" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="preferences.pluginManager" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../xampp/php" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="recentsLimit" value="5" />
+    <property name="last_opened_file_path" value="$USER_HOME$/xampp/php" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="PublishConfig">
+    <servers>
+      <server id="d51c1b11-52eb-46f8-8e91-478264c4075b">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </server>
+    </servers>
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/03Implementation/public" />
+      <recent name="$PROJECT_DIR$/03Implementation/public/js" />
       <recent name="D:\Users\arthurpurnama\Documents\MyProjects\kateglo\03Implementation\public" />
       <recent name="D:\Users\arthurpurnama\Documents\MyProjects\kateglo\03Implementation\public\js" />
       <recent name="D:\Users\arthurpurnama\Documents\MyProjects\kateglo\03Implementation\public\css" />
-      <recent name="D:\Users\arthurpurnama\Documents\MyProjects\kateglo\02Design\UserInterface" />
     </key>
   </component>
   <component name="RunManager" selected="PHP Script.index.php">
@@ -381,6 +325,9 @@
       <method />
     </configuration>
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
@@ -466,16 +413,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1186" extended-state="6" />
+    <frame x="0" y="22" width="1920" height="1093" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976654" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976654" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976654" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32921812" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26627535" sideWeight="0.32782102" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26627535" sideWeight="0.6702335" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26947704" sideWeight="0.6707819" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19552529" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26627535" sideWeight="0.4007782" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32976654" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -484,6 +430,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -558,6 +505,55 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/03Implementation/config/autoload/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="45" selection-start="447" selection-end="447" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/vendor/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="7" selection-start="67" selection-end="67" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/config/autoload/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/public/js/vendor/bootstrap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/public/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/public/css/bootstrap-responsive.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/03Implementation/public/crossdomain.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
