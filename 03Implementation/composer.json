@@ -15,5 +15,9 @@
         "room13/PhpSolrClient" : "dev-master",
         "phptal/phptal": "dev-master"
 
+    },
+    "scripts": {
+        "post-install-cmd": "org\\stubbles\\scripts\\ComposerScripts::postInstall",
+        "post-update-cmd": "org\\stubbles\\scripts\\ComposerScripts::postUpdate"
     }
 }
