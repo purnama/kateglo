@@ -1,5 +1,22 @@
 <?php
 return array(
+    //Doctrine Configuration
+    'doctrine' => array(
+        'metadata' => array(
+           dirname(__DIR__).'/lib/Kateglo/Entity',
+        ),
+        'database' => array(
+            //'pdo_mysql' 'pdo_sqlite' 'pdo_pgsql'  'pdo_oci' 'oci8' 'ibm_db2'
+            //'pdo_ibm' 'pdo_sqlsrv' 'mysqli' 'drizzle_pdo_mysql' 'sqlsrv'
+            'driver' => 'pdo_sqlite' ,
+            'path' => dirname(__DIR__).'/data/db.sqlite',
+            //'host' => 'hostname',
+            //'port' => 'portnumber',
+            //'user' => 'username',
+            //'password' => 'password',
+        ),
+    ),
+
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',

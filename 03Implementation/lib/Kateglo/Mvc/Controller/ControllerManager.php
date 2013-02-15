@@ -25,8 +25,8 @@
 namespace Kateglo\Mvc\Controller;
 
 use net\stubbles\ioc\Binder;
-use Kateglo\Ioc\Binding\BindingIndex;
 use net\stubbles\ioc\binding\BindingScopes;
+use Kateglo\Ioc\Binding\BindingIndex;
 use Kateglo\Ioc\Binding\SessionBindingScope;
 use Zend\Mvc\Exception\InvalidControllerException;
 
@@ -53,6 +53,12 @@ class ControllerManager extends \Zend\Mvc\Controller\ControllerManager
             || (is_array($this->creationOptions) && empty($this->creationOptions))
         ) {
             $binder = new Binder(new BindingIndex(new BindingScopes(null, new SessionBindingScope())));
+            $configuration = $this->serviceLocator->get("ApplicationConfig");
+            //TODO: finish entity manager
+            $entityManager = \Doctrine\ORM\EntityManager::create(
+                $configuration['doctrine']['database'],
+                \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($configuration['doctrine']['metadata'],
+                    $_SERVER['APPLICATION_ENV'] === 'development'));
             $instance = $binder->getInjector()->getInstance($invokable);
         } else {
             throw new InvalidControllerException(sprintf(
