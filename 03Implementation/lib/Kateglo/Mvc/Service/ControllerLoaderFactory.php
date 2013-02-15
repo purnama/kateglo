@@ -1,6 +1,6 @@
 <?php
-/*
- *  $Id$
+/**
+ *  Kateglo: Kamus, Tesaurus dan Glosarium bahasa Indonesia.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,29 +17,28 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the GPL 2.0. For more information, see
  * <http://code.google.com/p/kateglo/>.
+ *
+ * @license <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html> GPL 2.0
+ * @link    http://code.google.com/p/kateglo/
+ * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
 namespace Kateglo\Mvc\Service;
 
 use Kateglo\Mvc\Controller\ControllerManager;
 use Zend\Mvc\Service\DiStrictAbstractServiceFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
 /**
  *
- *
- *
- * @license <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html> GPL 2.0
- * @link    http://code.google.com/p/kateglo/
- * @since   $LastChangedDate$
- * @version $LastChangedRevision$
+ * @see \Zend\Mvc\Service\ControllerLoaderFactory
  * @author  Arthur Purnama <arthur@purnama.de>
- * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
 class ControllerLoaderFactory extends \Zend\Mvc\Service\ControllerLoaderFactory
 {
 
     /**
      *
-     * @see Zend\Mvc\Service\ControllerLoaderFactory::createService
+     * @see \Zend\Mvc\Service\ControllerLoaderFactory::createService
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @return \Zend\Mvc\Controller\ControllerManager
      */
