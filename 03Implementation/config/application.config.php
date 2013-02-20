@@ -1,9 +1,15 @@
 <?php
 return array(
+
+    //IOC Custom Injection Providers
+    'providers' => array(
+        'Doctrine\ORM\EntityManager' => 'Momoku\Ioc\Provider\EntityManager',
+    ),
+
     //Doctrine Configuration
     'doctrine' => array(
         'metadata' => array(
-           dirname(__DIR__).'/lib/Kateglo/Entity',
+           dirname(__DIR__).'/lib/Momoku/Entity',
         ),
         'database' => array(
             //'pdo_mysql' 'pdo_sqlite' 'pdo_pgsql'  'pdo_oci' 'oci8' 'ibm_db2'
@@ -20,6 +26,7 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
+        'User',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

@@ -1,49 +1,148 @@
 <?php echo $this->doctype(); ?>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <?php echo $this->headTitle('Kateglo ' . $this->translate('Beranda'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?php echo $this->headMeta()->appendName('description', $this->translate('Beranda'))
+    ->appendName('viewport', 'width=device-width, initial-scale=1.0')  ?>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <!-- Le styles -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+    ->prependStylesheet($this->basePath() . '/css/vendor/font.css')
+    ->prependStylesheet($this->basePath() . '/css/vendor/bootstrap.min.css')
+    ->prependStylesheet($this->basePath() . '/css/vendor/bootstrap-responsive.min.css')
+    ->prependStylesheet($this->basePath() . '/css/main.css') ?>
 
-        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+    <!-- Scripts -->
+    <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+    ->prependFile($this->basePath() . '/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') ?>
 
-        <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to
+    improve your experience.</p>
+<![endif]-->
 
-        <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-                                      ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
+<!-- Navigation Bar -->
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar collapsed" data-target=".navbar-responsive-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">Kateglo</a>
 
-    </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
+                <div class="nav-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav">
+                        <li><a href="#">Kamus</a></li>
+                        <li><a href="#">Tesaurus</a></li>
+                        <li><a href="#">Padanan</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li><a href="user/signup">Daftar</a></li>
+                        <li><a href="user/login">Masuk</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <?php echo $this->content; ?>
-            <hr>
-            <footer>
-                <p>&copy; 2005 - 2012 by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-        </div> <!-- /container -->
-        <?php echo $this->inlineScript() ?>
-    </body>
+    </nav>
+</header>
+
+<div class="wrap">
+    <!-- Content -->
+    <div class="container" id="wrap-container">
+        <?php echo $this->content; ?>
+    </div>
+    <div class="push"></div>
+</div>
+<!-- /container -->
+
+<footer class="footer">
+    <div class="container">
+        <nav>
+            <ul>
+                <li class="no"><a href="http://bahtera.org">Bahtera</a></li>
+                <li><a href="/entri/hariini">Entri hari ini</a></li>
+                <li><a href="/acak/entri">Entri acak</a></li>
+                <li><a href="/acak/salaheja">Salah eja</a></li>
+                <li><a href="http://blog.bahtera.org">Blog</a></li>
+                <!--li><a href="#">Mobile</a></li-->
+                <li><a href="/kontak">Kontak</a></li>
+                <li>
+                    <a href="http://code.google.com/p/kateglo/wiki/KategloPemanfaatanInternetUntukPengayaanIstilahBahasaIndonesia">Tentang
+                        Kateglo</a></li>
+                <li><a href="http://code.google.com/p/kateglo/wiki/PencarianKateglo">FAQ</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+                <li><a href="/api">API</a></li>
+                <li><a href="/aplikasi">Aplikasi</a></li>
+                <li><a href="http://twitter.com/#!/kateglo">Twitter</a></li>
+                <!--li><a href="#">Facebook</a></li-->
+            </ul>
+            <!-- footnav -->
+            <ul class="alphabet">
+                <li class="no"><a href="/alfabet/a">A</a></li>
+                <li><a href="/alfabet/b">B</a></li>
+                <li><a href="/alfabet/c">C</a></li>
+                <li><a href="/alfabet/d">D</a></li>
+                <li><a href="/alfabet/e">E</a></li>
+                <li><a href="/alfabet/f">F</a></li>
+                <li><a href="/alfabet/g">G</a></li>
+                <li><a href="/alfabet/h">H</a></li>
+                <li><a href="/alfabet/i">I</a></li>
+                <li><a href="/alfabet/j">J</a></li>
+                <li><a href="/alfabet/k">K</a></li>
+                <li><a href="/alfabet/l">L</a></li>
+                <li><a href="/alfabet/m">M</a></li>
+                <li><a href="/alfabet/n">N</a></li>
+                <li><a href="/alfabet/o">O</a></li>
+                <li><a href="/alfabet/p">P</a></li>
+                <li><a href="/alfabet/q">Q</a></li>
+                <li><a href="/alfabet/r">R</a></li>
+                <li><a href="/alfabet/s">S</a></li>
+                <li><a href="/alfabet/t">T</a></li>
+                <li><a href="/alfabet/u">U</a></li>
+                <li><a href="/alfabet/v">V</a></li>
+                <li><a href="/alfabet/w">W</a></li>
+                <li><a href="/alfabet/x">X</a></li>
+                <li><a href="/alfabet/y">Y</a></li>
+                <li><a href="/alfabet/z">Z</a></li>
+            </ul>
+            <!-- abc -->
+        </nav>
+        <p>All the words are brought to you by Kateglo, the free online Indonesia dictionary and thesaurus &copy;2009-2013</p>
+    </div>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="<?php echo $this->basePath() ?>/js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+<?php echo $this->inlineScript()->prependFile($this->basePath() . '/js/main.js')
+    ->prependFile($this->basePath() . '/js/plugins.js')
+    ->prependFile($this->basePath() . '/js/vendor/bootstrap.min.js')
+     ?>
+<script>
+    var _gaq = [
+        ['_setAccount', 'UA-XXXXX-X'],
+        ['_trackPageview']
+    ];
+    (function (d, t) {
+        var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+        g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g, s)
+    }(document, 'script'));
+</script>
+</body>
 </html>

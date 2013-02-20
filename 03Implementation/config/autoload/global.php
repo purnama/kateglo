@@ -15,7 +15,7 @@ return array(
     'service_manager' => array(
 
         'factories' => array(
-            'ControllerLoader' => 'Kateglo\Mvc\Service\ControllerLoaderFactory',
+            'ControllerLoader' => 'Momoku\Mvc\Service\ControllerLoaderFactory',
         ),
     ),
 );
