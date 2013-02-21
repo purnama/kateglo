@@ -27,15 +27,55 @@ namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Kateglo\Dao\UserDao;
+use User\Form\SignupForm;
+use Kateglo\Entity\User;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
 class SignupController extends AbstractActionController
 {
+
+    /**
+     * @var \Kateglo\Dao\UserDao
+     */
+    private $dao;
+
+    /**
+     * @var \User\Form\SignupForm
+     */
+    private $form;
+
+    /**
+     * @Inject
+     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Form\SignupForm $form
+     */
+    public function __construct(UserDao $dao, SignupForm $form)
+    {
+        $this->dao = $dao;
+        $this->form = $form;
+    }
+
     public function indexAction()
     {
-        return new ViewModel();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $this->form->setData($request->getPost());
+
+            if ($this->form->isValid()) {
+                $album = new User();
+                $this->exchangeArrayToObject($album, $this->form->getData());
+                $this->dao->persist($album);
+                $this->dao->flush();
+
+                // Redirect to list of albums
+                return $this->redirect()->toRoute('album');
+            }
+        }
+
+        return new ViewModel(array('form' => $this->form));
     }
 
 }

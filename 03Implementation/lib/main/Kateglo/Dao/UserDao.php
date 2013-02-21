@@ -22,7 +22,7 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace User\Dao;
+namespace Kateglo\Dao;
 
 use Momoku\Dao\AbstractDao;
 /**

@@ -1,14 +1,19 @@
 <div class="row">
     <div class="span6">
         <h2>Belum tergabung dengan Kateglo?</h2>
-        <form>
-            <fieldset>
-                <input class="input-xlarge" type="text" placeholder="Nama pengguna" />
-                <input class="input-xlarge" type="text" placeholder="Email">
-                <input class="input-xlarge" type="text" placeholder="Kata kunci">
-                <input class="input-xlarge" type="text" placeholder="Ulangi kata kunci">
-                <button class="btn btn-large btn-primary btn-signup" type="submit">Daftar sekarang!</button>
-            </fieldset>
-        </form>
+        <?php
+        $this->form->prepare();
+        echo $this->form()->openTag($form);
+        ?>
+        <fieldset>
+            <?= $this->formRow($this->form->get('username'))?>
+            <?=$this->formRow($this->form->get('email'))?>
+            <?=$this->formRow($this->form->get('password'))?>
+            <?=$this->formRow($this->form->get('password-retype'))?>
+            <?=$this->formButton()->render($this->form->get('submit'), 'Daftar Sekarang!')?>
+        </fieldset>
+        <?php
+        echo $this->form()->closeTag();
+        ?>
     </div>
 </div>
