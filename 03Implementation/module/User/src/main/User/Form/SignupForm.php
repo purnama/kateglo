@@ -43,28 +43,27 @@ class SignupForm extends Form
 {
     public function __construct($name = null)
     {
-        // we want to ignore the name passed
         parent::__construct($name);
         $this->setAttribute('method', 'post')->setAttribute('action', '/user/signup');
         $this->add( (new Text())->setName('username')->setAttributes(array(
                 'class' => 'input-xlarge',
+                'required' => 'required',
                 'placeholder' => 'Name Pengguna',
             )));
         $this->add( (new Email())->setName('email')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Email',
         )));
         $this->add( (new Password())->setName('password')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Kata kunci',
         )));
         $this->add( (new Password())->setName('password-retype')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Ulangi kata kunci',
-        )));
-        $this->add( (new Button())->setName('submit')->setAttributes(array(
-            'type' => 'submit',
-            'class' => 'btn btn-large btn-primary btn-signup',
         )));
 
         $inputFilter = new InputFilter();
