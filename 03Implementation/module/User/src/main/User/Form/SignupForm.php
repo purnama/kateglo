@@ -48,23 +48,23 @@ class SignupForm extends Form
         $this->setAttribute('method', 'post')->setAttribute('action', '/user/signup');
         $this->add( (new Text())->setName('username')->setAttributes(array(
                 'class' => 'input-xlarge',
+                'required' => 'required',
                 'placeholder' => 'Name Pengguna',
             )));
         $this->add( (new Email())->setName('email')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Email',
         )));
         $this->add( (new Password())->setName('password')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Kata kunci',
         )));
         $this->add( (new Password())->setName('password-retype')->setAttributes(array(
             'class' => 'input-xlarge',
+            'required' => 'required',
             'placeholder' => 'Ulangi kata kunci',
-        )));
-        $this->add( (new Button())->setName('submit')->setAttributes(array(
-            'type' => 'submit',
-            'class' => 'btn btn-large btn-primary btn-signup',
         )));
 
         $inputFilter = new InputFilter();
@@ -77,12 +77,13 @@ class SignupForm extends Form
         $inputFilter->add($username);
 
         $password = (new Input('password'))->setRequired(true);
-        $password->getValidatorChain()->attach(new StringLength(array('min' => 6)));
+        $password->getValidatorChain()->attach(new StringLength(array('min' => 6)), true)
+            ->attach((new Identical())->setToken('password-retype'));
         $inputFilter->add($password);
 
         $passwordRetype = (new Input('password-retype'))->setRequired(true);
         $passwordRetype->getValidatorChain()
-            ->attach(new StringLength(array('min' => 6)))
+            ->attach(new StringLength(array('min' => 6)), true)
             ->attach((new Identical())->setToken('password'));
         $inputFilter->add($passwordRetype);
         $this->setInputFilter($inputFilter);
