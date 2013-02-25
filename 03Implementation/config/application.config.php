@@ -9,7 +9,7 @@ return array(
     //Doctrine Configuration
     'doctrine' => array(
         'metadata' => array(
-           dirname(__DIR__).'/lib/Momoku/Entity',
+           dirname(__DIR__).'/lib/main/Kateglo/Entity',
         ),
         'database' => array(
             //'pdo_mysql' 'pdo_sqlite' 'pdo_pgsql'  'pdo_oci' 'oci8' 'ibm_db2'

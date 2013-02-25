@@ -28,25 +28,32 @@ use Zend\Form\Form;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Email;
 use Zend\Form\Element\Password;
-use Zend\Form\Element\Button;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\I18n\Validator\Alnum;
 use Zend\Validator\EmailAddress;
 use Zend\Validator\StringLength;
 use Zend\Validator\Identical;
+use User\Validator\UserNameValidator;
+use User\Validator\UserEmailValidator;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
 class SignupForm extends Form
 {
-    public function __construct($name = null)
+
+    /**
+     * @Inject
+     * @param \User\Validator\UserNameValidator $nameValidator
+     * @param \User\Validator\UserEmailValidator $emailValidator
+     */
+    public function __construct(UserNameValidator $nameValidator, UserEmailValidator $emailValidator)
     {
         // we want to ignore the name passed
-        parent::__construct($name);
+        parent::__construct('signup');
         $this->setAttribute('method', 'post')->setAttribute('action', '/user/signup');
-        $this->add( (new Text())->setName('username')->setAttributes(array(
+        $this->add( (new Text())->setName('name')->setAttributes(array(
                 'class' => 'input-xlarge',
                 'required' => 'required',
                 'placeholder' => 'Name Pengguna',
@@ -68,16 +75,21 @@ class SignupForm extends Form
         )));
 
         $inputFilter = new InputFilter();
-        $username = (new Input('username'))->setRequired(true);
-        $username->getValidatorChain()->attach(new Alnum());
+        $username = (new Input('name'))->setRequired(true);
+        $username->getValidatorChain()
+            ->attach(new Alnum(), true)
+            ->attach($nameValidator);
         $inputFilter->add($username);
 
         $email = (new Input('email'))->setRequired(true);
-        $email->getValidatorChain()->attach(new EmailAddress());
-        $inputFilter->add($username);
+        $email->getValidatorChain()
+            ->attach(new EmailAddress(), true)
+            ->attach($emailValidator);
+        $inputFilter->add($email);
 
         $password = (new Input('password'))->setRequired(true);
-        $password->getValidatorChain()->attach(new StringLength(array('min' => 6)), true)
+        $password->getValidatorChain()
+            ->attach(new StringLength(array('min' => 6)), true)
             ->attach((new Identical())->setToken('password-retype'));
         $inputFilter->add($password);
 

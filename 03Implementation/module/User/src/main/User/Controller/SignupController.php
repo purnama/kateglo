@@ -30,6 +30,7 @@ use Zend\View\Model\ViewModel;
 use Kateglo\Dao\UserDao;
 use User\Form\SignupForm;
 use Kateglo\Entity\User;
+
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -65,17 +66,29 @@ class SignupController extends AbstractActionController
             $this->form->setData($request->getPost());
 
             if ($this->form->isValid()) {
-                $album = new User();
-                $this->exchangeArrayToObject($album, $this->form->getData());
-                $this->dao->persist($album);
+                $user = new User();
+                $this->exchangeArrayToObject($user, $this->form->getData());
+                $this->dao->persist($user);
                 $this->dao->flush();
 
                 // Redirect to list of albums
-                return $this->redirect()->toRoute('album');
+                return $this->redirect()->toRoute('user',  array('controller' => 'signup', 'action' => 'success'));
             }
         }
 
         return new ViewModel(array('form' => $this->form));
     }
 
+    public function successAction()
+    {
+        return new ViewModel();
+    }
+
+    public function exchangeArrayToObject(User $user, array $data)
+    {
+        $user->setMail(isset($data['email']) ? $data['email'] : null);
+        $user->setName(isset($data['name']) ? $data['name'] : null);
+        $user->setPassword(isset($data['password']) ? md5($data['password']) : null);
+        $user->setSince(new \DateTime('now'));
+    }
 }
