@@ -30,7 +30,7 @@ use Kateglo\Dao\UserDao;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class UserEmailNotExistValidator implements ValidatorInterface
+class NameNotExistValidator implements ValidatorInterface
 {
 
     /**
@@ -59,7 +59,7 @@ class UserEmailNotExistValidator implements ValidatorInterface
      */
     public function isValid($value)
     {
-        return !$this->dao->isEmailExist($value);
+        return !$this->dao->isNameExist($value);
     }
 
     /**
@@ -74,6 +74,6 @@ class UserEmailNotExistValidator implements ValidatorInterface
      */
     public function getMessages()
     {
-        return array('This email address is already taken');
+        return array('This name is already taken');
     }
 }

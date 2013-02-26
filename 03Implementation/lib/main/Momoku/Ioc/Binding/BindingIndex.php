@@ -24,8 +24,6 @@
  */
 namespace Momoku\Ioc\Binding;
 
-use net\stubbles\ioc\binding\BindingScopes;
-
 /**
  *
  * @see \net\stubbles\ioc\binding\BindingIndex

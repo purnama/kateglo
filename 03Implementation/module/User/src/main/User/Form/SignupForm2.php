@@ -30,6 +30,7 @@ use Zend\Validator\EmailAddress;
 use Zend\Validator\StringLength;
 use Zend\Validator\Identical;
 use Zend\Form\Annotation;
+use Momoku\Form\Annotation\Validator;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -43,7 +44,8 @@ class SignupForm2
      * @Annotation\Type("Text")
      * @Annotation\Required(true)
      * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
-     * @Annotation\Validator({"name": "Alnum"})
+     * @Validator({"name": "Alnum", "break_chain_on_failure": true})
+     * @Validator("User\Validator\NameNotExistValidator")
      * @var string
      */
     protected $name;
@@ -52,8 +54,9 @@ class SignupForm2
      * @Annotation\Name("email")
      * @Annotation\Type("Email")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
-     * @Annotation\Validator({"name": "EmailAddress"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Email"})
+     * @Validator({"name": "EmailAddress", "break_chain_on_failure": true})
+     * @Validator("User\Validator\EmailNotExistValidator")
      * @var string
      */
     protected $mail;
@@ -62,9 +65,9 @@ class SignupForm2
      * @Annotation\Name("password")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
-     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}})
-     * @Annotation\Validator({"name": "Identical", "options": {"token":"password-retype"}})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci"})
+     * @Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
+     * @Validator({"name": "Identical", "options": {"token":"password-retype"}})
      * @var string
      */
     protected $password;
@@ -73,9 +76,9 @@ class SignupForm2
      * @Annotation\Name("password-retype")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
-     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}})
-     * @Annotation\Validator({"name": "Identical", "options": {"token":"password"}})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Ulangi kata kunci"})
+     * @Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
+     * @Validator({"name": "Identical", "options": {"token":"password"}})
      * @var string
      */
     protected $passwordRetype;

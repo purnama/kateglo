@@ -56,7 +56,7 @@ class SignupController extends AbstractActionController
     public function __construct(UserDao $dao, SignupForm2 $form)
     {
         $this->dao = $dao;
-        $this->form = (new \Zend\Form\Annotation\AnnotationBuilder())->createForm($form);
+        $this->form = (new \Momoku\Form\Annotation\AnnotationBuilder())->createForm($form);
     }
 
     public function indexAction()
