@@ -28,7 +28,7 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Kateglo\Dao\UserDao;
-use User\Form\SignupForm;
+use User\Form\SignupForm2;
 use Kateglo\Entity\User;
 
 /**
@@ -44,19 +44,19 @@ class SignupController extends AbstractActionController
     private $dao;
 
     /**
-     * @var \User\Form\SignupForm
+     * @var \User\Form\SignupForm2
      */
     private $form;
 
     /**
      * @Inject
      * @param \Kateglo\Dao\UserDao $dao
-     * @param \User\Form\SignupForm $form
+     * @param \User\Form\SignupForm2 $form
      */
-    public function __construct(UserDao $dao, SignupForm $form)
+    public function __construct(UserDao $dao, SignupForm2 $form)
     {
         $this->dao = $dao;
-        $this->form = $form;
+        $this->form = (new \Zend\Form\Annotation\AnnotationBuilder())->createForm($form);
     }
 
     public function indexAction()

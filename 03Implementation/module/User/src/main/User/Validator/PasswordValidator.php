@@ -30,7 +30,7 @@ use Kateglo\Dao\UserDao;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class UserEmailValidator implements ValidatorInterface
+class PasswordValidator implements ValidatorInterface
 {
 
     /**
@@ -59,7 +59,7 @@ class UserEmailValidator implements ValidatorInterface
      */
     public function isValid($value)
     {
-        return !$this->dao->isEmailExist($value);
+        return "";
     }
 
     /**

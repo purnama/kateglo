@@ -34,8 +34,8 @@ use Zend\I18n\Validator\Alnum;
 use Zend\Validator\EmailAddress;
 use Zend\Validator\StringLength;
 use Zend\Validator\Identical;
-use User\Validator\UserNameValidator;
-use User\Validator\UserEmailValidator;
+use User\Validator\UserNameNotExistValidator;
+use User\Validator\UserEmailNotExistValidator;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -45,10 +45,10 @@ class SignupForm extends Form
 
     /**
      * @Inject
-     * @param \User\Validator\UserNameValidator $nameValidator
-     * @param \User\Validator\UserEmailValidator $emailValidator
+     * @param \User\Validator\UserNameNotExistValidator $nameValidator
+     * @param \User\Validator\UserEmailNotExistValidator $emailValidator
      */
-    public function __construct(UserNameValidator $nameValidator, UserEmailValidator $emailValidator)
+    public function __construct(UserNameNotExistValidator $nameValidator, UserEmailNotExistValidator $emailValidator)
     {
         // we want to ignore the name passed
         parent::__construct('signup');

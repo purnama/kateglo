@@ -49,13 +49,13 @@ namespace Kateglo\Entity;
     protected $version;
 
     /**
-     * @Column(type="string", unique=true)
+     * @Column(type="string", unique=true, nullable=true)
      * @var string name of the user
      */
     protected $name;
 
     /**
-     * @Column(type="string", unique=true)
+     * @Column(type="string", unique=true, nullable=true)
      * @var string email address
      */
     protected $mail;
