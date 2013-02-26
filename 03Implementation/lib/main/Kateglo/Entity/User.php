@@ -49,13 +49,13 @@ namespace Kateglo\Entity;
     protected $version;
 
     /**
-     * @Column(type="string", unique="true")
+     * @Column(type="string", unique=true)
      * @var string name of the user
      */
     protected $name;
 
     /**
-     * @Column(type="string", unique="true")
+     * @Column(type="string", unique=true)
      * @var string email address
      */
     protected $mail;
@@ -142,14 +142,6 @@ namespace Kateglo\Entity;
     public function getSince()
     {
         return $this->since;
-    }
-
-    /**
-     * @param int $version
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
     }
 
     /**

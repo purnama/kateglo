@@ -1,29 +1,28 @@
 <?php
 /**@var $this \Zend\View\Renderer\PhpRenderer */
 /**@var $form \User\Form\SignupForm */
-$this->form();
-$form->prepare();
-
+/**@var $formElementErrors \Zend\Form\View\Helper\FormElementErrors */
+$formElementErrors = $this->formElementErrors();
+$formElementErrors->setMessageOpenFormat('')->setMessageSeparatorString('')->setMessageCloseString('');
+$this->form->prepare();
 ?>
 <div class="row">
     <div class="span6">
         <h2>Belum tergabung dengan Kateglo?</h2>
-        <?php
-        echo $this->form()->openTag($form);
-        ?>
+        <?= $this->form()->openTag($form); ?>
         <fieldset>
-            <?php foreach($form->getElements() as $element) : ?>
-            <div class="control-group <?php if($this->formElementErrors($element)) echo "error" ?>">
-            <?= $this->formRow($form->get('username'))?>
-            <?=$this->formRow($form->get('email'))?>
-            <?=$this->formRow($form->get('password'))?>
-            <?=$this->formRow($form->get('password-retype'))?>
+            <?php foreach ($form->getElements() as $element) : ?>
+            <div class="control-group<?=$this->formElementErrors($element) ? ' error' : '' ?>">
+                <div class="controls">
+                    <?=$this->formElement($element);?>
+                    <?php if ($this->formElementErrors($element)): ?>
+                    <span class="help-inline"><?=$this->formElementErrors($element) ?></span>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endforeach; ?>
             <button class="btn btn-large btn-primary btn-signup" type="submit">Daftar sekarang!</button>
         </fieldset>
-        <?php
-        echo $this->form()->closeTag();
-        ?>
+        <?= $this->form()->closeTag(); ?>
     </div>
 </div>

@@ -25,6 +25,7 @@
 namespace Kateglo\Dao;
 
 use Momoku\Dao\AbstractDao;
+use Kateglo\Entity\User;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -33,4 +34,31 @@ use Momoku\Dao\AbstractDao;
 class UserDao extends AbstractDao
 {
 
+    /**
+     * @param string $email
+     * @return bool
+     */
+    public function isEmailExist($email){
+        $dql = 'SELECT u FROM Kateglo\Entity\User u WHERE u.mail = :mail ';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('mail', $email);
+        if($query->getOneOrNullResult() instanceof User){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function isNameExist($name){
+        $dql = 'SELECT u FROM Kateglo\Entity\User u where u.name = :name ';
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter('name', $name);
+        if($query->getOneOrNullResult() instanceof User){
+            return true;
+        }
+        return false;
+    }
 }

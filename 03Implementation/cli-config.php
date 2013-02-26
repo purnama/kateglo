@@ -34,8 +34,8 @@ if (file_exists('vendor/autoload.php')) {
 }
 
 if (isset($loader)) {
+    $loader->add('Kateglo', __DIR__.'/lib/main' );
     $loader->add('Momoku', __DIR__.'/lib/main' );
-    $loader->add('Demo', __DIR__.'/lib/main' );
 }
 
 $_SERVER['APPLICATION_ENV'] = 'development';
