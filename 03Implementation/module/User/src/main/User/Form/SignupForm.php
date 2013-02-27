@@ -25,80 +25,63 @@
 namespace User\Form;
 
 use Zend\Form\Form;
-use Zend\Form\Element\Text;
-use Zend\Form\Element\Email;
-use Zend\Form\Element\Password;
-use Zend\InputFilter\Input;
-use Zend\InputFilter\InputFilter;
 use Zend\I18n\Validator\Alnum;
 use Zend\Validator\EmailAddress;
 use Zend\Validator\StringLength;
 use Zend\Validator\Identical;
-use User\Validator\UserNameNotExistValidator;
-use User\Validator\UserEmailNotExistValidator;
+use Zend\Form\Annotation;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
+ * @Annotation\Name("signup")
+ * @Annotation\Attributes({"method":"post", "action": "/user/signup"})
  */
-class SignupForm extends Form
+class SignupForm
 {
+    /**
+     * @Annotation\Name("name")
+     * @Annotation\Type("Text")
+     * @Annotation\Required(true)
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
+     * @Annotation\Filter({"name": "StringTrim"})
+     * @Annotation\Validator({"name": "Alnum", "break_chain_on_failure": true})
+     * @Annotation\Validator({"name": "User\Validator\NameNotExistValidator"})
+     * @var string
+     */
+    protected $name;
 
     /**
-     * @Inject
-     * @param \User\Validator\UserNameNotExistValidator $nameValidator
-     * @param \User\Validator\UserEmailNotExistValidator $emailValidator
+     * @Annotation\Name("email")
+     * @Annotation\Type("Email")
+     * @Annotation\Required(true)
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Email"})
+     * @Annotation\Filter({"name": "StringTrim"})
+     * @Annotation\Validator({"name": "EmailAddress", "break_chain_on_failure": true})
+     * @Annotation\Validator({"name": "User\Validator\EmailNotExistValidator"})
+     * @var string
      */
-    public function __construct(UserNameNotExistValidator $nameValidator, UserEmailNotExistValidator $emailValidator)
-    {
-        // we want to ignore the name passed
-        parent::__construct('signup');
-        $this->setAttribute('method', 'post')->setAttribute('action', '/user/signup');
-        $this->add( (new Text())->setName('name')->setAttributes(array(
-                'class' => 'input-xlarge',
-                'required' => 'required',
-                'placeholder' => 'Name Pengguna',
-            )));
-        $this->add( (new Email())->setName('email')->setAttributes(array(
-            'class' => 'input-xlarge',
-            'required' => 'required',
-            'placeholder' => 'Email',
-        )));
-        $this->add( (new Password())->setName('password')->setAttributes(array(
-            'class' => 'input-xlarge',
-            'required' => 'required',
-            'placeholder' => 'Kata kunci',
-        )));
-        $this->add( (new Password())->setName('password-retype')->setAttributes(array(
-            'class' => 'input-xlarge',
-            'required' => 'required',
-            'placeholder' => 'Ulangi kata kunci',
-        )));
+    protected $mail;
 
-        $inputFilter = new InputFilter();
-        $username = (new Input('name'))->setRequired(true);
-        $username->getValidatorChain()
-            ->attach(new Alnum(), true)
-            ->attach($nameValidator);
-        $inputFilter->add($username);
+    /**
+     * @Annotation\Name("password")
+     * @Annotation\Type("Password")
+     * @Annotation\Required(true)
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci"})
+     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
+     * @Annotation\Validator({"name": "Identical", "options": {"token":"password-retype"}})
+     * @var string
+     */
+    protected $password;
 
-        $email = (new Input('email'))->setRequired(true);
-        $email->getValidatorChain()
-            ->attach(new EmailAddress(), true)
-            ->attach($emailValidator);
-        $inputFilter->add($email);
+    /**
+     * @Annotation\Name("password-retype")
+     * @Annotation\Type("Password")
+     * @Annotation\Required(true)
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Ulangi kata kunci"})
+     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
+     * @Annotation\Validator({"name": "Identical", "options": {"token":"password"}})
+     * @var string
+     */
+    protected $passwordRetype;
 
-        $password = (new Input('password'))->setRequired(true);
-        $password->getValidatorChain()
-            ->attach(new StringLength(array('min' => 6)), true)
-            ->attach((new Identical())->setToken('password-retype'));
-        $inputFilter->add($password);
-
-        $passwordRetype = (new Input('password-retype'))->setRequired(true);
-        $passwordRetype->getValidatorChain()
-            ->attach(new StringLength(array('min' => 6)), true)
-            ->attach((new Identical())->setToken('password'));
-        $inputFilter->add($passwordRetype);
-        $this->setInputFilter($inputFilter);
-
-    }
 }

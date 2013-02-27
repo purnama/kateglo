@@ -22,54 +22,67 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\Dao;
+namespace Kateglo\Auth;
 
-use Momoku\Dao\AbstractDao;
-use Kateglo\Entity\User;
+use Kateglo\Dao\UserDao;
+use Zend\Authentication\Adapter\AdapterInterface;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @KeyEntity(key='id', entity='Kateglo\\Entity\\User')
  */
-class UserDao extends AbstractDao
+class Adapter implements AdapterInterface
 {
 
     /**
-     * @param string $email
-     * @return bool
+     * @var \Kateglo\Dao\UserDao
      */
-    public function isEmailExist($email){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u WHERE u.mail = :mail ';
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter('mail', $email);
-        if($query->getOneOrNullResult() instanceof User){
-            return true;
-        }
-        return false;
+    protected $dao;
+
+    /**
+     * @var string
+     */
+    protected $identity;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    /**
+     * @param \Kateglo\Dao\UserDao $dao
+     */
+    public function __construct(UserDao $dao){
+        $this->dao = $dao;
     }
 
     /**
-     * @param string $name
-     * @return bool
+     * Performs an authentication attempt
+     *
+     * @return \Zend\Authentication\Result
+     * @throws \Zend\Authentication\Adapter\Exception\ExceptionInterface If authentication cannot be performed
      */
-    public function isNameExist($name){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u where u.name = :name ';
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter('name', $name);
-        if($query->getOneOrNullResult() instanceof User){
-            return true;
+    public function authenticate()
+    {
+        try{
+
+        }catch (\Exception $e){
+
         }
-        return false;
     }
 
     /**
-     * @param $nameOrMail
-     * @return \Kateglo\Entity\User
+     * @param string $identity
      */
-    public function findByNameOrMail($nameOrMail){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u where u.name = :nameOrMail OR u.mail = :nameOrMail ';
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter('nameOrMail', $nameOrMail);
-        return $query->getSingleResult();
+    public function setIdentity($identity)
+    {
+        $this->identity = $identity;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 }

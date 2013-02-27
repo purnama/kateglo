@@ -23,30 +23,28 @@
  * @copyright Copyright (c) 2013 Momoku (http://github.com/purnama/momoku)
  */
 
-namespace Momoku\Form\Annotation;
+namespace Momoku\Form;
 
-use Momoku\Form\Factory;
+use Momoku\InputFilter;
 /**
- * Parses a class' properties for annotations in order to create a form and
- * input filter definition.
+ *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class AnnotationBuilder extends \Zend\Form\Annotation\AnnotationBuilder
+class Factory extends \Zend\Form\Factory
 {
-    /**
-     * Retrieve form factory
-     *
-     * Lazy-loads the default form factory if none is currently set.
-     *
-     * @return Factory
-     */
-    public function getFormFactory()
-    {
-        if ($this->formFactory) {
-            return $this->formFactory;
-        }
 
-        $this->formFactory = new Factory();
-        return $this->formFactory;
+    /**
+     * Get current input filter factory
+     *
+     * If none provided, uses an unconfigured instance.
+     *
+     * @return \Momoku\InputFilter\Factory
+     */
+    public function getInputFilterFactory()
+    {
+        if (null === $this->inputFilterFactory) {
+            $this->setInputFilterFactory(new InputFilter\Factory());
+        }
+        return $this->inputFilterFactory;
     }
 }

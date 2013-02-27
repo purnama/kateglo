@@ -28,8 +28,9 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Kateglo\Dao\UserDao;
-use User\Form\SignupForm2;
+use User\Form\SignupForm;
 use Kateglo\Entity\User;
+use Momoku\Form\Annotation\AnnotationBuilder;
 
 /**
  *
@@ -52,11 +53,12 @@ class SignupController extends AbstractActionController
      * @Inject
      * @param \Kateglo\Dao\UserDao $dao
      * @param \User\Form\SignupForm2 $form
+     * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
      */
-    public function __construct(UserDao $dao, SignupForm2 $form)
+    public function __construct(UserDao $dao, SignupForm $form, AnnotationBuilder $annotationBuilder)
     {
         $this->dao = $dao;
-        $this->form = (new \Momoku\Form\Annotation\AnnotationBuilder())->createForm($form);
+        $this->form = $annotationBuilder->createForm($form);
     }
 
     public function indexAction()

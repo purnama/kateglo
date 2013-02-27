@@ -24,10 +24,8 @@
  */
 namespace Momoku\Mvc\Controller;
 
-use net\stubbles\ioc\Binder;
-use net\stubbles\ioc\binding\BindingScopes;
-use Momoku\Ioc\Binding\BindingIndex;
-use Momoku\Ioc\Binding\SessionBindingScope;
+
+use Momoku\Ioc\Binder;
 use Zend\Mvc\Exception\InvalidControllerException;
 
 /**
@@ -52,7 +50,7 @@ class ControllerManager extends \Zend\Mvc\Controller\ControllerManager
         if (null === $this->creationOptions
             || (is_array($this->creationOptions) && empty($this->creationOptions))
         ) {
-            $binder = new Binder(new BindingIndex(new BindingScopes(null, new SessionBindingScope())));
+            $binder = Binder::get();
             $configuration = $this->serviceLocator->get("ApplicationConfig");
             $binder->bindConstant('ApplicationConfiguration')->to($configuration);
             foreach($configuration['providers'] as $impl => $providerClass){
