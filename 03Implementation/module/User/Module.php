@@ -47,6 +47,14 @@ class Module
         return include __DIR__ . '/config/module.config.php';
     }
 
+    public function getControllerConfig() {
+        return array(
+            'abstract_factories' => array(
+                'Momoku\ServiceManager\ControllerFactory',
+            ),
+        );
+    }
+
     public function getAutoloaderConfig()
     {
         return array(

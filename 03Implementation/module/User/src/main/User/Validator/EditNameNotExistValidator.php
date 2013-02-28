@@ -27,23 +27,25 @@ namespace User\Validator;
 use Zend\Validator\ValidatorInterface;
 use Kateglo\Dao\UserDao;
 use Zend\Validator\Exception\RuntimeException;
+
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class NameNotExistValidator implements ValidatorInterface
+class EditNameNotExistValidator implements ValidatorInterface
 {
 
     /**
-     * @var Kateglo\Dao\UserDao
+     * @var \Kateglo\Dao\UserDao
      */
     private $dao;
 
     /**
      * @Inject
-     * @param Kateglo\Dao\UserDao $dao
+     * @param \Kateglo\Dao\UserDao $dao
      */
-    public function __construct(UserDao $dao){
+    public function __construct(UserDao $dao)
+    {
         $this->dao = $dao;
     }
 
@@ -60,8 +62,16 @@ class NameNotExistValidator implements ValidatorInterface
      */
     public function isValid($value)
     {
-        if(!is_string($value)){
+        if (!is_string($value)) {
             throw new RuntimeException("Value is not string.");
+        }
+        if (!$this->authService->hasIdentity()) {
+            throw new RuntimeException("Identity not exist");
+        }
+        /**@var $identity \Kateglo\Entity\User */
+        $identity = $this->authService->getIdentity();
+        if ($identity->getName() === $value) {
+            return true;
         }
         return !$this->dao->isNameExist($value);
     }

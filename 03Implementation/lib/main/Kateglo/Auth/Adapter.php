@@ -26,6 +26,7 @@ namespace Kateglo\Auth;
 
 use Kateglo\Dao\UserDao;
 use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Authentication\Result;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -49,6 +50,7 @@ class Adapter implements AdapterInterface
     protected $password;
 
     /**
+     * @Inject
      * @param \Kateglo\Dao\UserDao $dao
      */
     public function __construct(UserDao $dao){
@@ -64,9 +66,15 @@ class Adapter implements AdapterInterface
     public function authenticate()
     {
         try{
-
+            $user = $this->dao->findByNameOrMail($this->identity);
+            if($user->getPassword() === md5($this->password)){
+                $this->dao->detach($user);
+                return new Result(Result::SUCCESS, $user, array("Authentication successful."));
+            }else{
+                return $this->failed();
+            }
         }catch (\Exception $e){
-
+            return $this->failed();
         }
     }
 
@@ -84,5 +92,9 @@ class Adapter implements AdapterInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    protected function failed(){
+        return new Result(Result::FAILURE, null, array("Authentication failed, please try again."));
     }
 }

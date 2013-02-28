@@ -12,10 +12,5 @@
  */
 
 return array(
-    'service_manager' => array(
 
-        'factories' => array(
-            'ControllerLoader' => 'Momoku\Mvc\Service\ControllerLoaderFactory',
-        ),
-    ),
 );

@@ -25,26 +25,26 @@
 namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
-use Kateglo\Dao\UserDao;
+use Zend\Authentication\AuthenticationService;
 use Zend\Validator\Exception\RuntimeException;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class NameNotExistValidator implements ValidatorInterface
+class ChangePasswordValidator implements ValidatorInterface
 {
 
     /**
-     * @var Kateglo\Dao\UserDao
+     * @var \Zend\Authentication\AuthenticationService
      */
-    private $dao;
+    private $authService;
 
     /**
      * @Inject
-     * @param Kateglo\Dao\UserDao $dao
+     * @param \Zend\Authentication\AuthenticationService $authService
      */
-    public function __construct(UserDao $dao){
-        $this->dao = $dao;
+    public function __construct(AuthenticationService $authService){
+        $this->authService = $authService;
     }
 
     /**
@@ -63,7 +63,12 @@ class NameNotExistValidator implements ValidatorInterface
         if(!is_string($value)){
             throw new RuntimeException("Value is not string.");
         }
-        return !$this->dao->isNameExist($value);
+        if(!$this->authService->hasIdentity()){
+            throw new RuntimeException("Identity not exist");
+        }
+        /**@var $identity \Kateglo\Entity\User */
+        $identity = $this->authService->getIdentity();
+        return $identity->getPassword() === md5($value);
     }
 
     /**
@@ -78,6 +83,6 @@ class NameNotExistValidator implements ValidatorInterface
      */
     public function getMessages()
     {
-        return array('This name is already taken');
+        return array('Wrong password. Please try again.');
     }
 }

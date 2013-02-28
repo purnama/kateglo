@@ -26,25 +26,30 @@ namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
 use Kateglo\Dao\UserDao;
+use Zend\Authentication\AuthenticationService;
 use Zend\Validator\Exception\RuntimeException;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class NameNotExistValidator implements ValidatorInterface
+class EditEmailNotExistValidator implements ValidatorInterface
 {
 
     /**
-     * @var Kateglo\Dao\UserDao
+     * @var \Kateglo\Dao\UserDao
      */
-    private $dao;
+    protected $dao;
+
+    protected $authService;
 
     /**
      * @Inject
-     * @param Kateglo\Dao\UserDao $dao
+     * @param \Kateglo\Dao\UserDao $dao
+     * @param \Zend\Authentication\AuthenticationService $authService
      */
-    public function __construct(UserDao $dao){
+    public function __construct(UserDao $dao, AuthenticationService $authService){
         $this->dao = $dao;
+        $this->authService = $authService;
     }
 
     /**
@@ -63,7 +68,15 @@ class NameNotExistValidator implements ValidatorInterface
         if(!is_string($value)){
             throw new RuntimeException("Value is not string.");
         }
-        return !$this->dao->isNameExist($value);
+        if(!$this->authService->hasIdentity()){
+            throw new RuntimeException("Identity not exist");
+        }
+        /**@var $identity \Kateglo\Entity\User */
+        $identity = $this->authService->getIdentity();
+        if($identity->getMail() === $value){
+            return true;
+        }
+        return !$this->dao->isEmailExist($value);
     }
 
     /**
@@ -78,6 +91,6 @@ class NameNotExistValidator implements ValidatorInterface
      */
     public function getMessages()
     {
-        return array('This name is already taken');
+        return array('This email address is already taken');
     }
 }

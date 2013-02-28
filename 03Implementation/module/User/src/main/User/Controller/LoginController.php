@@ -26,17 +26,18 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
 use Kateglo\Dao\UserDao;
-use User\Form\SignupForm;
-use Kateglo\Entity\User;
+use Kateglo\Auth\Adapter;
+use User\Form\LoginForm;
 use Momoku\Form\Annotation\AnnotationBuilder;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class SignupController extends AbstractActionController
+class LoginController extends AbstractActionController
 {
 
     /**
@@ -49,51 +50,73 @@ class SignupController extends AbstractActionController
      */
     private $form;
 
+    /**
+     * @var \Kateglo\Auth\Adapter
+     */
+    private $adapter;
 
+    /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
     private $authService;
 
     /**
      * @Inject
      * @param \Kateglo\Dao\UserDao $dao
-     * @param \User\Form\SignupForm $form
+     * @param \User\Form\LoginForm $form
      * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
+     * @param \Zend\Authentication\AuthenticationService $authService
+     * @param \Kateglo\Auth\Adapter $adapter
      */
-    public function __construct(UserDao $dao, SignupForm $form,
-                                AnnotationBuilder $annotationBuilder)
+    public function __construct(UserDao $dao, LoginForm $form,
+                                AnnotationBuilder $annotationBuilder,
+                                AuthenticationService $authService,
+                                Adapter $adapter)
     {
         $this->dao = $dao;
         $this->form = $annotationBuilder->createForm($form);
+        $this->adapter = $adapter;
+        $this->authService = $authService->setAdapter($adapter);
     }
 
     public function indexAction()
     {
+        if ($this->authService->hasIdentity()) {
+            return $this->redirect()->toRoute('user', array('controller' => 'profile', 'action' => 'index'));
+        }
         $request = $this->getRequest();
         if ($request->isPost()) {
             $this->form->setData($request->getPost());
 
             if ($this->form->isValid()) {
-                $user = new User();
-                $this->exchangeArrayToObject($user, $this->form->getData());
-                $this->dao->persist($user);
-                $this->dao->flush();
-
-                return $this->redirect()->toRoute('user',  array('controller' => 'signup', 'action' => 'success'));
+                $this->adapter->setIdentity($this->form->getData()['identity']);
+                $this->adapter->setPassword($this->form->getData()['password']);
+                if ($this->authService->authenticate()->isValid()) {
+                    return $this->redirect()->toRoute('user', array('controller' => 'login', 'action' => 'success'));
+                } else {
+                    return $this->failed();
+                }
+            } else {
+                return $this->failed();
             }
         }
 
         return new ViewModel(array('form' => $this->form));
+
     }
 
     public function successAction()
     {
-        return new ViewModel();
+        if ($this->authService->hasIdentity()) {
+            return new ViewModel();
+        } else {
+            return $this->redirect()->toRoute('user', array('controller' => 'login', 'action' => 'index'));
+        }
     }
 
-    public function exchangeArrayToObject(User $user, array $data)
+    protected function failed()
     {
-        $user->setMail(isset($data['email']) ? $data['email'] : null);
-        $user->setName(isset($data['name']) ? $data['name'] : null);
-        $user->setPassword(isset($data['password']) ? md5($data['password']) : null);
-        $user->setSince(new \DateTime('now'));
+        return new ViewModel(array('form' => $this->form, 'messages' => 'Login failed. Please try again.'));
     }
+
 }

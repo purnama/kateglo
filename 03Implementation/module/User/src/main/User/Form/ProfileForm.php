@@ -28,10 +28,10 @@ use Zend\Form\Annotation;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @Annotation\Name("signup")
- * @Annotation\Attributes({"method":"post", "action": "/user/signup"})
+ * @Annotation\Name("profile")
+ * @Annotation\Attributes({"method":"post", "action": "/user/profile"})
  */
-class SignupForm
+class ProfileForm
 {
     /**
      * @Annotation\Name("name")
@@ -40,7 +40,7 @@ class SignupForm
      * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
      * @Annotation\Filter({"name": "StringTrim"})
      * @Annotation\Validator({"name": "Alnum", "break_chain_on_failure": true})
-     * @Annotation\Validator({"name": "User\Validator\NameNotExistValidator"})
+     * @Annotation\Validator({"name": "User\Validator\EditNameNotExistValidator"})
      * @var string
      */
     protected $name;
@@ -52,31 +52,9 @@ class SignupForm
      * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Email"})
      * @Annotation\Filter({"name": "StringTrim"})
      * @Annotation\Validator({"name": "EmailAddress", "break_chain_on_failure": true})
-     * @Annotation\Validator({"name": "User\Validator\EmailNotExistValidator"})
+     * @Annotation\Validator({"name": "User\Validator\EditEmailNotExistValidator"})
      * @var string
      */
     protected $mail;
-
-    /**
-     * @Annotation\Name("password")
-     * @Annotation\Type("Password")
-     * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci"})
-     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
-     * @Annotation\Validator({"name": "Identical", "options": {"token":"password-retype"}})
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * @Annotation\Name("password-retype")
-     * @Annotation\Type("Password")
-     * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Ulangi kata kunci"})
-     * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
-     * @Annotation\Validator({"name": "Identical", "options": {"token":"password"}})
-     * @var string
-     */
-    protected $passwordRetype;
 
 }

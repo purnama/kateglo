@@ -80,9 +80,9 @@ abstract class AbstractDao
     /**
      * @see \Doctrine\ORM\EntityManager::clear()
      */
-    public function clear()
+    public function clear($entity=null)
     {
-        $this->entityManager->clear($this->entity);
+        $this->entityManager->clear($entity);
     }
 
     /**
@@ -180,6 +180,18 @@ abstract class AbstractDao
     }
 
     /**
+     *
+     * @see \\Doctrine\ORM\EntityManager::detach()
+     * @param object $entity
+     * @throws InvalidEntityException
+     */
+    public function detach($entity)
+    {
+        $this->validateEntity($entity);
+        $this->entityManager->detach($entity);
+    }
+
+    /**
      * @see \Doctrine\ORM\EntityManager::persist()
      * @param object $entity
      * @throws InvalidEntityException
@@ -240,4 +252,5 @@ abstract class AbstractDao
             throw new InvalidEntityException($entity, $this->entity);
         }
     }
+
 }

@@ -8,9 +8,16 @@ $this->form->prepare();
 ?>
 <div class="row">
     <div class="span6">
-        <h2>Belum tergabung dengan Kateglo?</h2>
+        <h2>Masuk</h2>
         <?= $this->form()->openTag($form); ?>
         <fieldset>
+            <?php if(isset($this->messages)) :?>
+            <div class="control-group error">
+                <div class="controls">
+                    <span class="help-inline"><?=$this->messages ?></span>
+                </div>
+            </div>
+            <?php endif; ?>
             <?php foreach ($form->getElements() as $element) : ?>
             <div class="control-group<?=$this->formElementErrors($element) ? ' error' : '' ?>">
                 <div class="controls">
@@ -21,7 +28,7 @@ $this->form->prepare();
                 </div>
             </div>
             <?php endforeach; ?>
-            <button class="btn btn-large btn-primary btn-signup" type="submit">Daftar sekarang!</button>
+            <button class="btn btn-large btn-primary btn-signup" type="submit">Masuk</button>
         </fieldset>
         <?= $this->form()->closeTag(); ?>
     </div>

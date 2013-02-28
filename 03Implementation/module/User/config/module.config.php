@@ -8,11 +8,6 @@
  */
 
 return array(
-    'controllers' => array(
-        'invokables' => array(
-            'User\Controller\Signup' => 'User\Controller\SignupController',
-        ),
-    ),
 
     // The following section is new and should be added to your file
     'router' => array(

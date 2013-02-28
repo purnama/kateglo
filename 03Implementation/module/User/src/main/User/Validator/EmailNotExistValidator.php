@@ -26,6 +26,7 @@ namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
 use Kateglo\Dao\UserDao;
+use Zend\Validator\Exception\RuntimeException;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
@@ -53,12 +54,15 @@ class EmailNotExistValidator implements ValidatorInterface
      * getMessages() will return an array of messages that explain why the
      * validation failed.
      *
-     * @param  mixed $value
+     * @param  string $value
      * @return bool
-     * @throws Exception\RuntimeException If validation of $value is impossible
+     * @throws \Zend\Validator\Exception\RuntimeException If validation of $value is impossible
      */
     public function isValid($value)
     {
+        if(!is_string($value)){
+            throw new RuntimeException("Value is not string.");
+        }
         return !$this->dao->isEmailExist($value);
     }
 

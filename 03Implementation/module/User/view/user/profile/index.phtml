@@ -1,0 +1,61 @@
+<?php
+/**@var $this \Zend\View\Renderer\PhpRenderer */
+/**@var $profileForm \Zend\Form\Form */
+/**@var $changePasswordForm \Zend\Form\Form */
+/**@var $formElementErrors \Zend\Form\View\Helper\FormElementErrors */
+$formElementErrors = $this->formElementErrors();
+$formElementErrors->setMessageOpenFormat('')->setMessageSeparatorString('')->setMessageCloseString('');
+$profileForm->prepare();
+$changePasswordForm->prepare();
+?>
+<div class="row">
+    <div class="span6">
+        <h2>Edit Profile</h2>
+        <?= $this->form()->openTag($profileForm); ?>
+        <fieldset>
+            <?php if(isset($this->profileMessages)) :?>
+            <div class="control-group error">
+                <div class="controls">
+                    <span class="help-inline"><?=$this->profileMessages ?></span>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php foreach ($profileForm->getElements() as $element) : ?>
+            <div class="control-group<?=$this->formElementErrors($element) ? ' error' : '' ?>">
+                <div class="controls">
+                    <?=$this->formElement($element);?>
+                    <?php if ($this->formElementErrors($element)): ?>
+                    <span class="help-inline"><?=$this->formElementErrors($element) ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <button class="btn btn-large btn-primary btn-signup" type="submit">Edit Profile</button>
+        </fieldset>
+        <?= $this->form()->closeTag(); ?>
+
+        <h2>Change Password</h2>
+        <?= $this->form()->openTag($changePasswordForm); ?>
+        <fieldset>
+            <?php if(isset($this->passwordMessages)) :?>
+            <div class="control-group error">
+                <div class="controls">
+                    <span class="help-inline"><?=$this->passwordMessages ?></span>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php foreach ($changePasswordForm->getElements() as $element) : ?>
+            <div class="control-group<?=$this->formElementErrors($element) ? ' error' : '' ?>">
+                <div class="controls">
+                    <?=$this->formElement($element);?>
+                    <?php if ($this->formElementErrors($element)): ?>
+                    <span class="help-inline"><?=$this->formElementErrors($element) ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <button class="btn btn-large btn-primary btn-signup" type="submit">Change Password</button>
+        </fieldset>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

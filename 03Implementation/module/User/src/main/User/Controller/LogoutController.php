@@ -26,74 +26,39 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
 use Kateglo\Dao\UserDao;
-use User\Form\SignupForm;
-use Kateglo\Entity\User;
+use Kateglo\Auth\Adapter;
+use User\Form\LoginForm;
 use Momoku\Form\Annotation\AnnotationBuilder;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class SignupController extends AbstractActionController
+class LogoutController extends AbstractActionController
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \Zend\Authentication\AuthenticationService
      */
-    private $dao;
-
-    /**
-     * @var \Zend\Form\Form
-     */
-    private $form;
-
-
     private $authService;
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
-     * @param \User\Form\SignupForm $form
-     * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
+     * @param \Zend\Authentication\AuthenticationService $authService
      */
-    public function __construct(UserDao $dao, SignupForm $form,
-                                AnnotationBuilder $annotationBuilder)
+    public function __construct(AuthenticationService $authService)
     {
-        $this->dao = $dao;
-        $this->form = $annotationBuilder->createForm($form);
+        $this->authService = $authService;
     }
 
     public function indexAction()
     {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $this->form->setData($request->getPost());
-
-            if ($this->form->isValid()) {
-                $user = new User();
-                $this->exchangeArrayToObject($user, $this->form->getData());
-                $this->dao->persist($user);
-                $this->dao->flush();
-
-                return $this->redirect()->toRoute('user',  array('controller' => 'signup', 'action' => 'success'));
-            }
+        if($this->authService->hasIdentity()){
+            $this->authService->clearIdentity();
         }
-
-        return new ViewModel(array('form' => $this->form));
-    }
-
-    public function successAction()
-    {
-        return new ViewModel();
-    }
-
-    public function exchangeArrayToObject(User $user, array $data)
-    {
-        $user->setMail(isset($data['email']) ? $data['email'] : null);
-        $user->setName(isset($data['name']) ? $data['name'] : null);
-        $user->setPassword(isset($data['password']) ? md5($data['password']) : null);
-        $user->setSince(new \DateTime('now'));
+        return $this->redirect()->toRoute('user', array('controller' => 'login', 'action' => 'index'));
     }
 }
