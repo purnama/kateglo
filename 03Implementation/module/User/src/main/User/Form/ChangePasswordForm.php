@@ -37,7 +37,7 @@ class ChangePasswordForm
      * @Annotation\Name("password-old")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci lama"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "autocomplete": "off", "placeholder": "Kata kunci lama"})
      * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
      * @Annotation\Validator({"name": "User\Validator\ChangePasswordValidator"})
      * @var string
@@ -48,7 +48,7 @@ class ChangePasswordForm
      * @Annotation\Name("password")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci baru"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "autocomplete": "off", "placeholder": "Kata kunci baru"})
      * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
      * @Annotation\Validator({"name": "Identical", "options": {"token":"password-retype"}})
      * @var string
@@ -59,7 +59,7 @@ class ChangePasswordForm
      * @Annotation\Name("password-retype")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Ulangi kata kunci baru"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "autocomplete": "off", "placeholder": "Ulangi kata kunci baru"})
      * @Annotation\Validator({"name": "StringLength", "options": {"min": 6}, "break_chain_on_failure": true})
      * @Annotation\Validator({"name": "Identical", "options": {"token":"password"}})
      * @var string

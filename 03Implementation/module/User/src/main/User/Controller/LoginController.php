@@ -90,7 +90,7 @@ class LoginController extends AbstractActionController
 
             if ($this->form->isValid()) {
                 $this->adapter->setIdentity($this->form->getData()['identity']);
-                $this->adapter->setPassword($this->form->getData()['password']);
+                $this->adapter->setPassword(md5($this->form->getData()['password']));
                 if ($this->authService->authenticate()->isValid()) {
                     return $this->redirect()->toRoute('user', array('controller' => 'login', 'action' => 'success'));
                 } else {

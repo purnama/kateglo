@@ -26,6 +26,7 @@ namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
 use Kateglo\Dao\UserDao;
+use Zend\Authentication\AuthenticationService;
 use Zend\Validator\Exception\RuntimeException;
 
 /**
@@ -41,12 +42,19 @@ class EditNameNotExistValidator implements ValidatorInterface
     private $dao;
 
     /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
+    protected $authService;
+
+    /**
      * @Inject
      * @param \Kateglo\Dao\UserDao $dao
+     * @param \Zend\Authentication\AuthenticationService $authService
      */
-    public function __construct(UserDao $dao)
+    public function __construct(UserDao $dao, AuthenticationService $authService)
     {
         $this->dao = $dao;
+        $this->authService = $authService;
     }
 
     /**

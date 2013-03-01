@@ -40,6 +40,9 @@ class EditEmailNotExistValidator implements ValidatorInterface
      */
     protected $dao;
 
+    /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
     protected $authService;
 
     /**

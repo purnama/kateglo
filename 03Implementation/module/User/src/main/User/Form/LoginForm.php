@@ -37,7 +37,7 @@ class LoginForm
      * @Annotation\Name("identity")
      * @Annotation\Type("Text")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Nama Pengguna"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "autocomplete": "off", "placeholder": "Nama Pengguna"})
      * @Annotation\Filter({"name": "StringTrim"})
      * @var string
      */
@@ -47,7 +47,7 @@ class LoginForm
      * @Annotation\Name("password")
      * @Annotation\Type("Password")
      * @Annotation\Required(true)
-     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "placeholder": "Kata kunci"})
+     * @Annotation\Attributes({"class": "input-xlarge", "required": "required", "autocomplete": "off", "placeholder": "Kata kunci"})
      * @var string
      */
     protected $password;

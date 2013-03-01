@@ -49,9 +49,6 @@ class SignupController extends AbstractActionController
      */
     private $form;
 
-
-    private $authService;
-
     /**
      * @Inject
      * @param \Kateglo\Dao\UserDao $dao

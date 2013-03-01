@@ -67,7 +67,7 @@ class Adapter implements AdapterInterface
     {
         try{
             $user = $this->dao->findByNameOrMail($this->identity);
-            if($user->getPassword() === md5($this->password)){
+            if($user->getPassword() === $this->password){
                 $this->dao->detach($user);
                 return new Result(Result::SUCCESS, $user, array("Authentication successful."));
             }else{

@@ -35,13 +35,13 @@ class NameNotExistValidator implements ValidatorInterface
 {
 
     /**
-     * @var Kateglo\Dao\UserDao
+     * @var \Kateglo\Dao\UserDao
      */
     private $dao;
 
     /**
      * @Inject
-     * @param Kateglo\Dao\UserDao $dao
+     * @param \Kateglo\Dao\UserDao $dao
      */
     public function __construct(UserDao $dao){
         $this->dao = $dao;

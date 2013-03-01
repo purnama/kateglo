@@ -27,10 +27,13 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
-use User\Form\ProfileForm;
-use User\Form\ChangePasswordForm;
+use Zend\Http\PhpEnvironment\Request;
 use Momoku\Form\Annotation\AnnotationBuilder;
 use Kateglo\Dao\UserDao;
+use Kateglo\Auth\Adapter;
+use User\Form\ProfileForm;
+use User\Form\ChangePasswordForm;
+use Kateglo\Entity\User;
 
 /**
  *
@@ -49,6 +52,11 @@ class ProfileController extends AbstractActionController
     protected $authService;
 
     /**
+     * @var \Kateglo\Auth\Adapter
+     */
+    protected $authAdapter;
+
+    /**
      * @var \Zend\Form\Form
      */
     protected $profileForm;
@@ -60,18 +68,21 @@ class ProfileController extends AbstractActionController
 
     /**
      * @Inject
-     * @param UserDao $userDao
+     * @param \Kateglo\Dao\UserDao $userDao
      * @param \User\Form\ProfileForm $profileForm
      * @param \User\Form\ChangePasswordForm $changePasswordForm
      * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
      * @param \Zend\Authentication\AuthenticationService $authService
+     * @param \Kateglo\Auth\Adapter $authAdapter
      */
     public function __construct(UserDao $userDao, ProfileForm $profileForm,
                                 ChangePasswordForm $changePasswordForm,
                                 AnnotationBuilder $annotationBuilder,
-                                AuthenticationService $authService)
+                                AuthenticationService $authService,
+                                Adapter $authAdapter)
     {
         $this->authService = $authService;
+        $this->authAdapter = $authAdapter;
         $this->userDao = $userDao;
         $this->profileForm = $annotationBuilder->createForm($profileForm);
         $this->changePasswordForm = $annotationBuilder->createForm($changePasswordForm);
@@ -84,40 +95,71 @@ class ProfileController extends AbstractActionController
             return $this->redirect()->toRoute('user', array('controller' => 'login', 'action' => 'index'));
         }
         /**@var $request \Zend\Http\PhpEnvironment\Request */
-        /**@var $user \Kateglo\Entity\User */
         $request = $this->getRequest();
         if ($request->isPost()) {
-            if ($request->getPost('name') !== null && $request->getPost('email')) {
+            if ($request->getPost('name') !== null && $request->getPost('email') !== null) {
                 $this->profileForm->setData($request->getPost());
                 if ($this->profileForm->isValid()) {
-                    $user = $this->authService->getIdentity();
-                    $user = $this->userDao->merge($user);
-                    $user->setMail($this->profileForm->getData()['email']);
-                    $user->setName($this->profileForm->getData()['name']);
-                    $this->userDao->persist($user);
-                    $this->userDao->flush();
-                    new ViewModel(array('profileForm' => $this->profileForm,
-                                    'changePasswordForm' => $this->changePasswordForm,
-                                    'profileMessages' => 'Profile edited successfully'));
+                    return $this->editProfile($request);
                 }
             } else if ($request->getPost('password-old') !== null &&
                 $request->getPost('password') !== null &&
                 $request->getPost('password-retype') !== null
             ) {
+                $this->setProfileData();
                 $this->changePasswordForm->setData($request->getPost());
-                if($this->changePasswordForm->isValid()){
-                    $user = $this->authService->getIdentity();
-                    $user = $this->userDao->merge($user);
-                    $user->setPassword(md5($this->profileForm->getData()['password']));
-                    $this->userDao->persist($user);
-                    $this->userDao->flush();
-                    new ViewModel(array('profileForm' => $this->profileForm,
-                        'changePasswordForm' => $this->changePasswordForm,
-                        'changePasswordMessages' => 'Password changed successfully'));
+                if ($this->changePasswordForm->isValid()) {
+                    return $this->changePassword($request);
                 }
             }
+        }else{
+            $this->setProfileData();
         }
-
         return new ViewModel(array('profileForm' => $this->profileForm, 'changePasswordForm' => $this->changePasswordForm));
+    }
+
+    protected function setProfileData(){
+        /**@var $user \Kateglo\Entity\User */
+        $user = $this->authService->getIdentity();
+        $data['name'] = $user->getName();
+        $data['email'] = $user->getMail();
+        $this->profileForm->setData($data);
+    }
+
+    protected function editProfile(Request $request)
+    {
+        /**@var $user \Kateglo\Entity\User */
+        $user = $this->authService->getIdentity();
+        $user = $this->userDao->merge($user);
+        $user->setMail($this->profileForm->getData()['email']);
+        $user->setName($this->profileForm->getData()['name']);
+        $this->userDao->persist($user);
+        $this->userDao->flush();
+        $this->resetAuth($user);
+        return new ViewModel(array('profileForm' => $this->profileForm,
+            'changePasswordForm' => $this->changePasswordForm,
+            'profileMessages' => 'Profile edited successfully'));
+    }
+
+    protected function changePassword(Request $request)
+    {
+        /**@var $user \Kateglo\Entity\User */
+        $user = $this->authService->getIdentity();
+        $user = $this->userDao->merge($user);
+        $user->setPassword(md5($this->changePasswordForm->getData()['password']));
+        $this->userDao->persist($user);
+        $this->userDao->flush();
+        $this->resetAuth($user);
+        return new ViewModel(array('profileForm' => $this->profileForm,
+            'changePasswordForm' => $this->changePasswordForm,
+            'passwordMessages' => 'Password changed successfully'));
+    }
+
+    protected function resetAuth(User $user)
+    {
+        $this->authService->clearIdentity();
+        $this->authAdapter->setIdentity($user->getMail());
+        $this->authAdapter->setPassword($user->getPassword());
+        $this->authService->authenticate($this->authAdapter);
     }
 }
