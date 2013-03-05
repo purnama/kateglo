@@ -25,15 +25,14 @@
 namespace Kateglo\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  *
  * @Entity
- * @Table(name="user")
+ * @Table(name="role")
  */
-class User
+class Role
 {
 
     /**
@@ -52,42 +51,38 @@ class User
     protected $version;
 
     /**
-     * @Column(type="string", unique=true, nullable=true)
+     * @Column(type="string", unique=true)
      * @var string name of the user
      */
     protected $name;
 
     /**
-     * @Column(type="string", unique=true, nullable=true)
-     * @var string email address
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", mappedBy="children")
      */
-    protected $mail;
-
-    /**
-     * @Column(type="string")
-     * @var string user password
-     */
-    protected $password;
-
-    /**
-     * @Column(type="datetime")
-     * @var string user since date
-     */
-    protected $since;
+    protected $parent;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="users")
-     * @JoinTable(name="rel_user_role",
-     *      joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")}
+     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="parents")
+     * @JoinTable(name="rel_role",
+     *      joinColumns={@JoinColumn(name="role_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="child_id", referencedColumnName="id")}
      *      )
      */
-    protected $roles;
+    protected $children;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ManyToMany(targetEntity="\Kateglo\Entity\User", mappedBy="roles")
+     */
+    protected $users;
 
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->parent = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -107,22 +102,6 @@ class User
     }
 
     /**
-     * @param string $mail
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMail()
-    {
-        return $this->mail;
-    }
-
-    /**
      * @param string $name
      */
     public function setName($name)
@@ -139,63 +118,89 @@ class User
     }
 
     /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $since
-     */
-    public function setSince($since)
-    {
-        $this->since = $since;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSince()
-    {
-        return $this->since;
-    }
-
-    /**
      * @param \Kateglo\Entity\Role $role
      */
-    public function addRole(Role $role)
+    public function addParent(Role $role)
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
-            $role->addUser($this);
+        if (!$this->parent->contains($role)) {
+            $this->parent->add($role);
+            $role->addChildren($this);
         }
     }
 
     /**
      * @param \Kateglo\Entity\Role $role
      */
-    public function removeRole(Role $role)
+    public function removeParent(Role $role)
     {
-        $removed = $this->roles->removeElement($role);
+        $removed = $this->parent->removeElement($role);
         if ($removed !== null) {
-            $removed->removeUser($this);
+            $removed->removeChildren($this);
         }
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getRoles(){
-        return $this->roles;
+    public function getParent(){
+        return $this->parent;
+    }
+
+    /**
+     * @param \Kateglo\Entity\Role $role
+     */
+    public function addChildren(Role $role)
+    {
+        if (!$this->users->contains($role)) {
+            $this->users->add($role);
+            $role->addParent($this);
+        }
+    }
+
+    /**
+     * @param \Kateglo\Entity\Role $role
+     */
+    public function removeChildren(Role $role)
+    {
+        $removed = $this->children->removeElement($role);
+        if ($removed !== null) {
+            $removed->removeParent($this);
+        }
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChildren(){
+        return $this->children;
+    }
+
+    /**
+     * @param \Kateglo\Entity\User $user
+     */
+    public function addUser(User $user)
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addRole($this);
+        }
+    }
+
+    /**
+     * @param \Kateglo\Entity\User $user
+     */
+    public function removeUser(User $user)
+    {
+        $removed = $this->users->removeElement($user);
+        if ($removed !== null) {
+            $removed->removeRole($this);
+        }
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getUsers(){
+        return $this->users;
     }
 }
