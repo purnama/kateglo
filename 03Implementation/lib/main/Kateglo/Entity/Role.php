@@ -64,7 +64,7 @@ class Role
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="parents")
+     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="parent")
      * @JoinTable(name="rel_role",
      *      joinColumns={@JoinColumn(name="role_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="child_id", referencedColumnName="id")}
@@ -118,28 +118,6 @@ class Role
     }
 
     /**
-     * @param \Kateglo\Entity\Role $role
-     */
-    public function addParent(Role $role)
-    {
-        if (!$this->parent->contains($role)) {
-            $this->parent->add($role);
-            $role->addChildren($this);
-        }
-    }
-
-    /**
-     * @param \Kateglo\Entity\Role $role
-     */
-    public function removeParent(Role $role)
-    {
-        $removed = $this->parent->removeElement($role);
-        if ($removed !== null) {
-            $removed->removeChildren($this);
-        }
-    }
-
-    /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getParent(){
@@ -151,8 +129,8 @@ class Role
      */
     public function addChildren(Role $role)
     {
-        if (!$this->users->contains($role)) {
-            $this->users->add($role);
+        if (!$this->children->contains($role)) {
+            $this->children->add($role);
             $role->addParent($this);
         }
     }
@@ -173,28 +151,6 @@ class Role
      */
     public function getChildren(){
         return $this->children;
-    }
-
-    /**
-     * @param \Kateglo\Entity\User $user
-     */
-    public function addUser(User $user)
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addRole($this);
-        }
-    }
-
-    /**
-     * @param \Kateglo\Entity\User $user
-     */
-    public function removeUser(User $user)
-    {
-        $removed = $this->users->removeElement($user);
-        if ($removed !== null) {
-            $removed->removeRole($this);
-        }
     }
 
     /**
