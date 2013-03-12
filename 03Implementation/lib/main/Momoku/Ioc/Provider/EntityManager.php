@@ -26,6 +26,7 @@ namespace Momoku\Ioc\Provider;
 
 use net\stubbles\ioc\InjectionProvider;
 use net\stubbles\lang\BaseObject;
+use Doctrine\ORM;
 /**
  * Provider to create Entity Manager Instance
  *
@@ -57,9 +58,9 @@ class EntityManager extends BaseObject implements InjectionProvider
      */
     public function get($name = null)
     {
-        return \Doctrine\ORM\EntityManager::create(
+        return ORM\EntityManager::create(
             $this->configuration['database'],
-            \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($this->configuration['metadata'],
+            ORM\Tools\Setup::createAnnotationMetadataConfiguration($this->configuration['metadata'],
                 $_SERVER['APPLICATION_ENV'] === 'development'));
     }
 }

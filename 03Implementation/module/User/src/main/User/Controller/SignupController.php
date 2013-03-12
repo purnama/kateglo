@@ -27,20 +27,20 @@ namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Kateglo\Dao\UserDao;
+use User\Dao\UserDao;
 use User\Form\SignupForm;
-use Kateglo\Entity\User;
+use User\Entity\User;
 use Momoku\Form\Annotation\AnnotationBuilder;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class SignupController extends AbstractActionController
+final class SignupController extends AbstractActionController
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \User\Dao\UserDao
      */
     private $dao;
 
@@ -51,7 +51,7 @@ class SignupController extends AbstractActionController
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Dao\UserDao $dao
      * @param \User\Form\SignupForm $form
      * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
      */
@@ -64,6 +64,7 @@ class SignupController extends AbstractActionController
 
     public function indexAction()
     {
+        /**@var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $this->form->setData($request->getPost());
@@ -86,7 +87,7 @@ class SignupController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function exchangeArrayToObject(User $user, array $data)
+    private function exchangeArrayToObject(User $user, array $data)
     {
         $user->setMail(isset($data['email']) ? $data['email'] : null);
         $user->setName(isset($data['name']) ? $data['name'] : null);

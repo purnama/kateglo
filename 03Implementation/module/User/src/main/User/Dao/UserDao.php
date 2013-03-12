@@ -22,14 +22,14 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\Dao;
+namespace User\Dao;
 
 use Momoku\Dao\AbstractDao;
-use Kateglo\Entity\User;
+use User\Entity\User;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @KeyEntity(key='id', entity='Kateglo\\Entity\\User')
+ * @KeyEntity(key='id', entity='User\\Entity\\User')
  */
 class UserDao extends AbstractDao
 {
@@ -39,7 +39,7 @@ class UserDao extends AbstractDao
      * @return bool
      */
     public function isEmailExist($email){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u WHERE u.mail = :mail ';
+        $dql = 'SELECT u FROM User\Entity\User u WHERE u.mail = :mail ';
         $query = $this->entityManager->createQuery($dql);
         $query->setParameter('mail', $email);
         if($query->getOneOrNullResult() instanceof User){
@@ -53,7 +53,7 @@ class UserDao extends AbstractDao
      * @return bool
      */
     public function isNameExist($name){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u where u.name = :name ';
+        $dql = 'SELECT u FROM User\Entity\User u where u.name = :name ';
         $query = $this->entityManager->createQuery($dql);
         $query->setParameter('name', $name);
         if($query->getOneOrNullResult() instanceof User){
@@ -64,10 +64,10 @@ class UserDao extends AbstractDao
 
     /**
      * @param $nameOrMail
-     * @return \Kateglo\Entity\User
+     * @return \User\Entity\User
      */
     public function findByNameOrMail($nameOrMail){
-        $dql = 'SELECT u FROM Kateglo\Entity\User u where u.name = :nameOrMail OR u.mail = :nameOrMail ';
+        $dql = 'SELECT u FROM User\Entity\User u where u.name = :nameOrMail OR u.mail = :nameOrMail ';
         $query = $this->entityManager->createQuery($dql);
         $query->setParameter('nameOrMail', $nameOrMail);
         return $query->getSingleResult();

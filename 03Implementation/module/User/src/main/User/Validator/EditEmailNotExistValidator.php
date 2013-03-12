@@ -25,7 +25,7 @@
 namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
-use Kateglo\Dao\UserDao;
+use User\Dao\UserDao;
 use Zend\Authentication\AuthenticationService;
 use Zend\Validator\Exception\RuntimeException;
 /**
@@ -36,7 +36,7 @@ class EditEmailNotExistValidator implements ValidatorInterface
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \User\Dao\UserDao
      */
     protected $dao;
 
@@ -47,7 +47,7 @@ class EditEmailNotExistValidator implements ValidatorInterface
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Dao\UserDao $dao
      * @param \Zend\Authentication\AuthenticationService $authService
      */
     public function __construct(UserDao $dao, AuthenticationService $authService){
@@ -74,7 +74,7 @@ class EditEmailNotExistValidator implements ValidatorInterface
         if(!$this->authService->hasIdentity()){
             throw new RuntimeException("Identity not exist");
         }
-        /**@var $identity \Kateglo\Entity\User */
+        /**@var $identity \User\Entity\User */
         $identity = $this->authService->getIdentity();
         if($identity->getMail() === $value){
             return true;

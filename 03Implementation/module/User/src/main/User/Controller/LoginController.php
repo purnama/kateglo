@@ -28,8 +28,8 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
-use Kateglo\Dao\UserDao;
-use Kateglo\Auth\Adapter;
+use User\Dao\UserDao;
+use User\Authentication\Adapter;
 use User\Form\LoginForm;
 use Momoku\Form\Annotation\AnnotationBuilder;
 
@@ -37,11 +37,11 @@ use Momoku\Form\Annotation\AnnotationBuilder;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class LoginController extends AbstractActionController
+final class LoginController extends AbstractActionController
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \User\Dao\UserDao
      */
     private $dao;
 
@@ -51,7 +51,7 @@ class LoginController extends AbstractActionController
     private $form;
 
     /**
-     * @var \Kateglo\Auth\Adapter
+     * @var \User\Authentication\Adapter
      */
     private $adapter;
 
@@ -62,11 +62,11 @@ class LoginController extends AbstractActionController
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Dao\UserDao $dao
      * @param \User\Form\LoginForm $form
      * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
      * @param \Zend\Authentication\AuthenticationService $authService
-     * @param \Kateglo\Auth\Adapter $adapter
+     * @param \User\Authentication\Adapter $adapter
      */
     public function __construct(UserDao $dao, LoginForm $form,
                                 AnnotationBuilder $annotationBuilder,
@@ -114,7 +114,7 @@ class LoginController extends AbstractActionController
         }
     }
 
-    protected function failed()
+    private function failed()
     {
         return new ViewModel(array('form' => $this->form, 'messages' => 'Login failed. Please try again.'));
     }

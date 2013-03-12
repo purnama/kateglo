@@ -66,7 +66,7 @@ class ChangePasswordValidator implements ValidatorInterface
         if(!$this->authService->hasIdentity()){
             throw new RuntimeException("Identity not exist");
         }
-        /**@var $identity \Kateglo\Entity\User */
+        /**@var $identity \User\Entity\User */
         $identity = $this->authService->getIdentity();
         return $identity->getPassword() === md5($value);
     }

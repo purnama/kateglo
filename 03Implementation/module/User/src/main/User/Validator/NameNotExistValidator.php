@@ -25,7 +25,7 @@
 namespace User\Validator;
 
 use Zend\Validator\ValidatorInterface;
-use Kateglo\Dao\UserDao;
+use User\Dao\UserDao;
 use Zend\Validator\Exception\RuntimeException;
 /**
  *
@@ -35,13 +35,13 @@ class NameNotExistValidator implements ValidatorInterface
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \User\Dao\UserDao
      */
     private $dao;
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Dao\UserDao $dao
      */
     public function __construct(UserDao $dao){
         $this->dao = $dao;

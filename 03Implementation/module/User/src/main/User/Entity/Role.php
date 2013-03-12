@@ -22,7 +22,7 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\Entity;
+namespace User\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 /**
@@ -58,13 +58,13 @@ class Role
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", mappedBy="children")
+     * @ManyToMany(targetEntity="\User\Entity\Role", mappedBy="children")
      */
     protected $parent;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="parent")
+     * @ManyToMany(targetEntity="\User\Entity\Role", inversedBy="parent")
      * @JoinTable(name="rel_role",
      *      joinColumns={@JoinColumn(name="role_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="child_id", referencedColumnName="id")}
@@ -74,7 +74,7 @@ class Role
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\User", mappedBy="roles")
+     * @ManyToMany(targetEntity="\User\Entity\User", mappedBy="roles")
      */
     protected $users;
 
@@ -125,7 +125,7 @@ class Role
     }
 
     /**
-     * @param \Kateglo\Entity\Role $role
+     * @param \User\Entity\Role $role
      */
     public function addChildren(Role $role)
     {
@@ -136,7 +136,7 @@ class Role
     }
 
     /**
-     * @param \Kateglo\Entity\Role $role
+     * @param \User\Entity\Role $role
      */
     public function removeChildren(Role $role)
     {

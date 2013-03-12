@@ -28,8 +28,8 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Authentication\AuthenticationService;
 use Zend\View\Model\ViewModel;
-use Kateglo\Dao\UserDao;
-use Kateglo\Auth\Adapter;
+use User\Dao\UserDao;
+use User\Authentication\Adapter;
 use User\Form\LoginForm;
 use Momoku\Form\Annotation\AnnotationBuilder;
 
@@ -37,7 +37,7 @@ use Momoku\Form\Annotation\AnnotationBuilder;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class LogoutController extends AbstractActionController
+final class LogoutController extends AbstractActionController
 {
 
     /**

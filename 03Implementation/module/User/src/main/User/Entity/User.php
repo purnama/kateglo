@@ -22,7 +22,7 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\Entity;
+namespace User\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -77,7 +77,7 @@ class User
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ManyToMany(targetEntity="\Kateglo\Entity\Role", inversedBy="users")
+     * @ManyToMany(targetEntity="\User\Entity\Role", inversedBy="users")
      * @JoinTable(name="rel_user_role",
      *      joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")}
@@ -171,7 +171,7 @@ class User
     }
 
     /**
-     * @param \Kateglo\Entity\Role $role
+     * @param \User\Entity\Role $role
      */
     public function addRole(Role $role)
     {
@@ -182,7 +182,7 @@ class User
     }
 
     /**
-     * @param \Kateglo\Entity\Role $role
+     * @param \User\Entity\Role $role
      */
     public function removeRole(Role $role)
     {

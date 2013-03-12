@@ -4,12 +4,19 @@ return array(
     //IOC Custom Injection Providers
     'providers' => array(
         'Doctrine\ORM\EntityManager' => 'Momoku\Ioc\Provider\EntityManager',
+        'Doctrine\Common\Annotations\Reader' => 'Momoku\Ioc\Provider\AnnotationReader',
+    ),
+
+    'annotation' => array(
+      'cache' => array(
+          'path' => dirname(__DIR__).'data/cache',
+      ),
     ),
 
     //Doctrine Configuration
     'doctrine' => array(
         'metadata' => array(
-           dirname(__DIR__).'/lib/main/Kateglo/Entity',
+           dirname(__DIR__).'/module/User/src/main/User/Entity',
         ),
         'database' => array(
             //'pdo_mysql' 'pdo_sqlite' 'pdo_pgsql'  'pdo_oci' 'oci8' 'ibm_db2'

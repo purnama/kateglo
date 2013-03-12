@@ -22,9 +22,9 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\Auth;
+namespace User\Authentication;
 
-use Kateglo\Dao\UserDao;
+use User\Dao\UserDao;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Result;
 /**
@@ -35,7 +35,7 @@ class Adapter implements AdapterInterface
 {
 
     /**
-     * @var \Kateglo\Dao\UserDao
+     * @var \User\Dao\UserDao
      */
     protected $dao;
 
@@ -51,7 +51,7 @@ class Adapter implements AdapterInterface
 
     /**
      * @Inject
-     * @param \Kateglo\Dao\UserDao $dao
+     * @param \User\Dao\UserDao $dao
      */
     public function __construct(UserDao $dao){
         $this->dao = $dao;

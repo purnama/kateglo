@@ -27,6 +27,7 @@ namespace Momoku\Dao;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\Common\Annotations\Reader;
 use Momoku\Reflection\Annotation\AnnotationNotFoundException;
 use Momoku\Reflection\Annotation\AnnotationValueNameNotFoundException;
 
@@ -59,22 +60,18 @@ abstract class AbstractDao
      * @param string $key
      * @param string $entity
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Reader $reader)
     {
         $this->entityManager = $entityManager;
-        $objReflection = new \net\stubbles\lang\reflect\ReflectionObject($this);
-        if (!$objReflection->hasAnnotation('KeyEntity')) {
+        $objReflection = new \ReflectionClass($this);
+        if ($reader->getClassAnnotation($objReflection, 'KeyEntity') === null) {
             throw new AnnotationNotFoundException('KeyEntity');
         }
-        $keyEntityAnnotation = $objReflection->getAnnotation('KeyEntity');
-        if (!$keyEntityAnnotation->hasValueByName('key')) {
-            throw new AnnotationValueNameNotFoundException('KeyEntity', 'key');
-        }
-        $this->key = $keyEntityAnnotation->getValueByName('key');
-        if (!$keyEntityAnnotation->hasValueByName('entity')) {
-            throw new AnnotationValueNameNotFoundException('KeyEntity', 'entity');
-        }
-        $this->entity = $keyEntityAnnotation->getValueByName('entity');
+        /**@var $keyEntityAnnotation \Momoku\Dao\Annotation\KeyEntity */
+        $keyEntityAnnotation = $reader->getClassAnnotation($objReflection, 'KeyEntity');
+
+        $this->key = $keyEntityAnnotation->getKey();
+        $this->entity = $keyEntityAnnotation->getEntity();
     }
 
     /**

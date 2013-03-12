@@ -60,7 +60,6 @@ class ControllerFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        /**@var $serviceLocator \Momoku\Mvc\Controller\ControllerManager*/
         $binder = Binder::get();
         $configuration = $serviceLocator->getServiceLocator()->get("ApplicationConfig");
         $binder->bindConstant('ApplicationConfiguration')->to($configuration);
