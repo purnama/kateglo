@@ -55,11 +55,15 @@ class AnnotationReader extends BaseObject implements InjectionProvider
     /**
      * returns the value to provide
      *
-     * @param   string  $name
+     * @param   string $name
      * @return  \Doctrine\Common\Annotations\Reader
      */
     public function get($name = null)
     {
+        foreach ($this->configuration['namespaces'] as $namespace => $path) {
+            Annotations\AnnotationRegistry::registerAutoloadNamespace($namespace, $path);
+        }
+        //return new Annotations\AnnotationReader();
         return new Annotations\FileCacheReader(new Annotations\AnnotationReader(),
             $this->configuration['cache']['path'],
             $_SERVER['APPLICATION_ENV'] === 'development'

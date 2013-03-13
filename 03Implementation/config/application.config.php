@@ -8,6 +8,9 @@ return array(
     ),
 
     'annotation' => array(
+      'namespaces' => array(
+          'Momoku\Dao\Annotation' => dirname(__DIR__).'/lib/main',
+      ),
       'cache' => array(
           'path' => dirname(__DIR__).'data/cache',
       ),

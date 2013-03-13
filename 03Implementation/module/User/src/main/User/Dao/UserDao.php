@@ -25,11 +25,12 @@
 namespace User\Dao;
 
 use Momoku\Dao\AbstractDao;
+use Momoku\Dao\Annotation\KeyEntity;
 use User\Entity\User;
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @KeyEntity(key='id', entity='User\\Entity\\User')
+ * @KeyEntity(key="id", entity="User\Entity\User")
  */
 class UserDao extends AbstractDao
 {

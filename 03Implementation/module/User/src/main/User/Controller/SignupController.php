@@ -25,6 +25,7 @@
 
 namespace User\Controller;
 
+use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use User\Dao\UserDao;
@@ -50,20 +51,32 @@ final class SignupController extends AbstractActionController
     private $form;
 
     /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
+    private $authService;
+
+    /**
      * @Inject
-     * @param \User\Dao\UserDao $dao
-     * @param \User\Form\SignupForm $form
-     * @param \Momoku\Form\Annotation\AnnotationBuilder $annotationBuilder
+     * @param UserDao $dao
+     * @param SignupForm $form
+     * @param AnnotationBuilder $annotationBuilder
+     * @param AuthenticationService $authService
      */
     public function __construct(UserDao $dao, SignupForm $form,
-                                AnnotationBuilder $annotationBuilder)
+                                AnnotationBuilder $annotationBuilder,
+                                AuthenticationService $authService)
     {
         $this->dao = $dao;
         $this->form = $annotationBuilder->createForm($form);
+        $this->authService = $authService;
     }
 
     public function indexAction()
     {
+        if ($this->authService->hasIdentity()) {
+            return $this->redirect()->toRoute('user', array('controller' => 'profile', 'action' => 'index'));
+        }
+
         /**@var $request \Zend\Http\PhpEnvironment\Request */
         $request = $this->getRequest();
         if ($request->isPost()) {
