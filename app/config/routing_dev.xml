@@ -5,11 +5,15 @@
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <!--
-        #Routing Configuration
         _welcome:
             pattern: /
             defaults: { _controller: AcmeDemoBundle:Welcome:index }
+    -->
+    <route id="_welcome" path="/">
+        <default key="_controller" >AcmeDemoBundle:Welcome:index</default>
+    </route>
 
+    <!--
         _demo_secured:
             resource: "@AcmeDemoBundle/Controller/SecuredController.php"
             type: annotation
@@ -18,7 +22,11 @@
             resource: "@AcmeDemoBundle/Controller/DemoController.php"
             type: annotation
             prefix: /demo
+    -->
+    <import type="annotation" resource="@AcmeDemoBundle/Controller/SecuredController.php"  />
+    <import type="annotation" prefix="/demo" resource="@AcmeDemoBundle/Controller/DemoController.php" />
 
+    <!--
         _wdt:
             resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
             prefix: /_wdt
@@ -30,20 +38,16 @@
         _configurator:
             resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
             prefix: /_configurator
-
-        _main:
-            resource: routing.yml
     -->
-    <route id="_welcome" path="/">
-        <default key="_controller" >AcmeDemoBundle:Welcome:index</default>
-    </route>
-
-    <import resource="routing.xml" />
-    <import type="annotation" resource="@AcmeDemoBundle/Controller/SecuredController.php"  />
-    <import type="annotation" prefix="/demo" resource="@AcmeDemoBundle/Controller/DemoController.php" />
-
-
     <import prefix="/_wdt" resource="@WebProfilerBundle/Resources/config/routing/wdt.xml" />
     <import prefix="/_profiler" resource="@WebProfilerBundle/Resources/config/routing/profiler.xml" />
     <import prefix="/_configurator" resource="@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml" />
+
+    <!--
+        _main:
+            resource: routing.yml
+    -->
+    <import resource="routing.xml" />
+
+
 </routes>

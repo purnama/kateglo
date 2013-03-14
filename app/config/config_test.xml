@@ -1,0 +1,55 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:framework="http://symfony.com/schema/dic/symfony"
+           xmlns:twig="http://symfony.com/schema/dic/twig"
+           xmlns:assetic="http://symfony.com/schema/dic/assetic"
+           xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
+           xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+           xmlns:webprofiler="http://symfony.com/schema/dic/webprofiler"
+           xmlns:monolog="http://symfony.com/schema/dic/monolog"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+           http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd
+           http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd
+           http://symfony.com/schema/dic/assetic http://symfony.com/schema/dic/assetic/assetic-1.0.xsd
+           http://symfony.com/schema/dic/doctrine http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd
+           http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+           http://symfony.com/schema/dic/webprofiler http://symfony.com/schema/dic/webprofiler/webprofiler-1.0.xsd
+           http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
+
+    <!--
+        imports:
+            - { resource: config_dev.yml }
+    -->
+    <imports>
+        <import resource="config_dev.xml"/>
+    </imports>
+
+    <!--
+        framework:
+            test: ~
+            session:
+                storage_id: session.storage.mock_file
+            profiler:
+                enabled: false
+    -->
+    <framework:config test="true">
+        <framework:session storage-id="session.storage.mock_file" />
+        <framework:profiler enabled="false" />
+    </framework:config>
+
+    <!--
+        web_profiler:
+            toolbar: false
+            intercept_redirects: false
+    -->
+    <webprofiler:config toolbar="false" intercept-redirects="false" />
+
+    <!--
+        swiftmailer:
+            disable_delivery: true
+    -->
+    <swiftmailer:config disable-delivery="true" />
+
+</container>

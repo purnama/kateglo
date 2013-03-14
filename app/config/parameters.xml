@@ -1,0 +1,42 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!--
+            parameters:
+                database_driver:   pdo_mysql
+                database_host:     127.0.0.1
+                database_port:     ~
+                database_name:     symfony
+                database_user:     root
+                database_password: ~
+        -->
+        <parameter key="database_driver" type="string">pdo_mysql</parameter>
+        <parameter key="database_host" type="string">127.0.0.1</parameter>
+        <parameter key="database_port" type="string"></parameter>
+        <parameter key="database_name" type="string">kateglo</parameter>
+        <parameter key="database_user" type="string">root</parameter>
+        <parameter key="database_password" type="string"></parameter>
+
+        <!--
+                mailer_transport:  smtp
+                mailer_host:       127.0.0.1
+                mailer_user:       ~
+                mailer_password:   ~
+        -->
+        <parameter key="mailer_transport" type="string">smtp</parameter>
+        <parameter key="mailer_host" type="string">127.0.0.1</parameter>
+        <parameter key="mailer_user" type="string"></parameter>
+        <parameter key="mailer_password"></parameter>
+
+        <!--
+                locale:            en
+                secret:            ThisTokenIsNotSoSecretChangeIt
+        -->
+        <parameter key="locale" type="string">en</parameter>
+        <parameter key="secret" type="string">ThisTokenIsNotSoSecretChangeIt</parameter>
+    </parameters>
+</container>

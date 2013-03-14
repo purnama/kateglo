@@ -1,0 +1,77 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:framework="http://symfony.com/schema/dic/symfony"
+           xmlns:twig="http://symfony.com/schema/dic/twig"
+           xmlns:assetic="http://symfony.com/schema/dic/assetic"
+           xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
+           xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+           xmlns:webprofiler="http://symfony.com/schema/dic/webprofiler"
+           xmlns:monolog="http://symfony.com/schema/dic/monolog"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+           http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd
+           http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd
+           http://symfony.com/schema/dic/assetic http://symfony.com/schema/dic/assetic/assetic-1.0.xsd
+           http://symfony.com/schema/dic/doctrine http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd
+           http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+           http://symfony.com/schema/dic/webprofiler http://symfony.com/schema/dic/webprofiler/webprofiler-1.0.xsd
+           http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
+
+    <!--
+        imports:
+            - { resource: config.yml }
+    -->
+    <imports>
+        <import resource="config.xml"/>
+    </imports>
+
+    <!--
+        framework:
+            router:   { resource: "%kernel.root_dir%/config/routing_dev.xml" }
+            profiler: { only_exceptions: false }
+    -->
+    <framework:config>
+        <framework:router resource="%kernel.root_dir%/config/routing_dev.xml" />
+        <framework:profiler only-exceptions="false" />
+    </framework:config>
+
+    <!--
+        web_profiler:
+            toolbar: true
+            intercept_redirects: false
+    -->
+    <webprofiler:config toolbar="true" intercept-redirects="false" />
+
+    <!--
+        monolog:
+            handlers:
+                main:
+                    type:  stream
+                    path:  %kernel.logs_dir%/%kernel.environment%.log
+                    level: debug
+                firephp:
+                    type:  firephp
+                    level: info
+                chromephp:
+                    type:  chromephp
+                    level: info
+    -->
+    <monolog:config>
+        <monolog:handler name="main" type="stream" path="%kernel.logs_dir%/%kernel.environment%.log" level="debug" />
+        <monolog:handler name="firephp" type="firephp" level="info" />
+        <monolog:handler name="chromephp" type="chromephp" level="info" />
+    </monolog:config>
+
+    <!--
+        assetic:
+            use_controller: true
+    -->
+    <assetic:config use-controller="true" />
+
+    <!--
+        #swiftmailer:
+        #    delivery_address: me@example.com
+    -->
+    <!--swiftmailer:config delivery-address="me@example.com" /-->
+</container>

@@ -7,12 +7,16 @@
            xmlns:assetic="http://symfony.com/schema/dic/assetic"
            xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+           xmlns:webprofiler="http://symfony.com/schema/dic/webprofiler"
+           xmlns:monolog="http://symfony.com/schema/dic/monolog"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
            http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd
            http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd
            http://symfony.com/schema/dic/assetic http://symfony.com/schema/dic/assetic/assetic-1.0.xsd
            http://symfony.com/schema/dic/doctrine http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd
-           http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd">
+           http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+           http://symfony.com/schema/dic/webprofiler http://symfony.com/schema/dic/webprofiler/webprofiler-1.0.xsd
+           http://symfony.com/schema/dic/monolog http://symfony.com/schema/dic/monolog/monolog-1.0.xsd">
 
     <!--
         #Imports Configuration
@@ -21,8 +25,8 @@
             - { resource: security.yml }
     -->
     <imports>
-        <import resource="parameters.yml"/>
-        <import resource="security.yml"/>
+        <import resource="parameters.xml"/>
+        <import resource="security.xml"/>
     </imports>
 
     <!--
@@ -46,17 +50,17 @@
             fragments:       ~
 
      -->
-    <framework:config secret="%secret%" default-locale="%locale%" trusted-proxies="~">
+    <framework:config secret="%secret%" default-locale="%locale%" trusted-proxies="">
         <!--framework:esi enabled="true"/>
         <framework:translator fallback="%locale%"/-->
-        <framework:router resource="%kernel.root_dir%/config/routing.xml" strict-parameters="%kernel.debug%"/>
+        <framework:router resource="%kernel.root_dir%/config/routing.xml" strict-requirements="%kernel.debug%"/>
         <framework:form enabled="true"/>
         <framework:csrf-protection enabled="true"/>
         <framework:validation enable-annotations="true"/>
         <framework:templating>
             <framework:engine>twig</framework:engine>
         </framework:templating>
-        <framework:session auto-start="true"/>
+        <framework:session/>
         <framework:fragments enabled="true"/>
     </framework:config>
 
@@ -84,10 +88,9 @@
 
     -->
     <assetic:config debug="%kernel.debug%" use-controller="false" java="/usr/bin/java">
-        <assetic:bundle name=""/>
         <assetic:filter name="cssrewrite"/>
-        <assetic:filter name="closure" jar="%kernel.root_dir%/Resources/java/compiler.jar"/>
-        <assetic:filter name="closure" jar="%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"/>
+        <!--assetic:filter name="closure" jar="%kernel.root_dir%/Resources/java/compiler.jar"/>
+        <assetic:filter name="closure" jar="%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"/-->
     </assetic:config>
 
     <!--
@@ -109,10 +112,10 @@
                 auto_generate_proxy_classes: %kernel.debug%
                 auto_mapping: true
     -->
-    <doctrine:config >
+    <doctrine:config>
         <doctrine:dbal driver="%database_driver%" host="%database_host%" port="%database_port%" dbname="%database_name%"
                        user="%database_user%" password="database_password%" charset="UTF8"/>
-        <doctrine:orm auto-generate-proxy-classes="%kernel.debug%" auto-mapping="true" />
+        <doctrine:orm auto-generate-proxy-classes="%kernel.debug%" auto-mapping="true"/>
     </doctrine:config>
 
 
@@ -125,7 +128,8 @@
             password:  %mailer_password%
             spool:     { type: memory }
     -->
-    <swiftmailer:config transport="%mailer_transport%" host="%mailer_host%" username="%mailer_user%" password="%mailer_password%">
-        <swiftmailer:spool type="memory" />
+    <swiftmailer:config transport="%mailer_transport%" host="%mailer_host%" username="%mailer_user%"
+                        password="%mailer_password%">
+        <swiftmailer:spool type="memory"/>
     </swiftmailer:config>
 </container>
