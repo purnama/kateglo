@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!--
+        #Routing Configuration
+        _welcome:
+            pattern: /
+            defaults: { _controller: AcmeDemoBundle:Welcome:index }
+
+        _demo_secured:
+            resource: "@AcmeDemoBundle/Controller/SecuredController.php"
+            type: annotation
+
+        _demo:
+            resource: "@AcmeDemoBundle/Controller/DemoController.php"
+            type: annotation
+            prefix: /demo
+
+        _wdt:
+            resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
+            prefix: /_wdt
+
+        _profiler:
+            resource: "@WebProfilerBundle/Resources/config/routing/profiler.xml"
+            prefix: /_profiler
+
+        _configurator:
+            resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
+            prefix: /_configurator
+
+        _main:
+            resource: routing.yml
+    -->
+    <route id="_welcome" path="/">
+        <default key="_controller" >AcmeDemoBundle:Welcome:index</default>
+    </route>
+
+    <import resource="routing.xml" />
+    <import type="annotation" resource="@AcmeDemoBundle/Controller/SecuredController.php"  />
+    <import type="annotation" prefix="/demo" resource="@AcmeDemoBundle/Controller/DemoController.php" />
+
+
+    <import prefix="/_wdt" resource="@WebProfilerBundle/Resources/config/routing/wdt.xml" />
+    <import prefix="/_profiler" resource="@WebProfilerBundle/Resources/config/routing/profiler.xml" />
+    <import prefix="/_configurator" resource="@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml" />
+</routes>

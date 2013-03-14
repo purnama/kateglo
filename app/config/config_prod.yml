@@ -1,5 +1,5 @@
 imports:
-    - { resource: config.yml }
+    - { resource: config.xml }
 
 # In production environment you should know that the parameters for URL generation
 # always pass the requirements. Otherwise it would break your link (or even site with

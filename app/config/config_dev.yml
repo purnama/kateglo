@@ -1,8 +1,8 @@
 imports:
-    - { resource: config.yml }
+    - { resource: config.xml }
 
 framework:
-    router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
+    router:   { resource: "%kernel.root_dir%/config/routing_dev.xml" }
     profiler: { only_exceptions: false }
 
 web_profiler:
