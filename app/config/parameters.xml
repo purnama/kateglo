@@ -14,12 +14,13 @@
                 database_user:     root
                 database_password: ~
         -->
-        <parameter key="database_driver" type="string">pdo_mysql</parameter>
-        <parameter key="database_host" type="string">127.0.0.1</parameter>
+        <parameter key="database_driver" type="string">pdo_sqlite</parameter>
+        <!--parameter key="database_host" type="string">127.0.0.1</parameter>
         <parameter key="database_port" type="string"></parameter>
         <parameter key="database_name" type="string">kateglo</parameter>
         <parameter key="database_user" type="string">root</parameter>
-        <parameter key="database_password" type="string"></parameter>
+        <parameter key="database_password" type="string"></parameter-->
+        <parameter key="database_path" type="string">%kernel.root_dir%/Resources/sqlite.db</parameter>
 
         <!--
                 mailer_transport:  smtp

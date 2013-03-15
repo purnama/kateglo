@@ -114,7 +114,7 @@
     -->
     <doctrine:config>
         <doctrine:dbal driver="%database_driver%" host="%database_host%" port="%database_port%" dbname="%database_name%"
-                       user="%database_user%" password="database_password%" charset="UTF8"/>
+                       user="%database_user%" password="database_password%" path="%database_path%" charset="UTF8"/>
         <doctrine:orm auto-generate-proxy-classes="%kernel.debug%" auto-mapping="true"/>
     </doctrine:config>
 
