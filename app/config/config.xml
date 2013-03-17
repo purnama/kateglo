@@ -134,5 +134,5 @@
         <swiftmailer:spool type="memory"/>
     </swiftmailer:config>
 
-    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Acme\DemoBundle\Entity\User" />
+    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User" />
 </container>
