@@ -17,9 +17,10 @@
         <!--
             security:
                 encoders:
-                    Symfony\Component\Security\Core\User\User: plaintext
+                    #Symfony\Component\Security\Core\User\User: plaintext
+                    FOS\UserBundle\Model\UserInterface: sha512
         -->
-        <security:encoder class="Symfony\Component\Security\Core\User\User" algorithm="plaintext"></security:encoder>
+        <security:encoder class="FOS\UserBundle\Model\UserInterface" algorithm="sha512"/>
 
         <!--
                 role_hierarchy:
@@ -31,18 +32,21 @@
 
         <!--
                 providers:
-                    in_memory:
-                        memory:
-                            users:
-                                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    #in_memory:
+                    #    memory:
+                    #        users:
+                    #            user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    #            admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    fos_userbundle:
+                        id: fos_user.user_provider.username
         -->
-        <security:provider name="in_memory">
+        <!--security:provider name="in_memory">
             <security:memory>
                 <security:user name="user" password="userpass" roles="ROLE_USER"/>
                 <security:user name="admin" password="adminpass" roles="ROLE_ADMIN"/>
             </security:memory>
-        </security:provider>
+        </security:provider-->
+        <security:provider name="fos_userbundle" id="fos_user.user_provider.username"/>
 
         <!--
                 firewalls:
@@ -56,32 +60,50 @@
 
                     secured_area:
                         pattern:    ^/demo/secured/
-                        form_login:
-                            check_path: _security_check
-                            login_path: _demo_login
-                        logout:
-                            path:   _demo_logout
-                            target: _demo
+                        #form_login:
+                        #    check_path: _security_check
+                        #    login_path: _demo_login
+                        #logout:
+                        #    path:   _demo_logout
+                        #    target: _demo
                         #anonymous: ~
                         #http_basic:
                         #    realm: "Secured Demo Area"
+                    main:
+                        pattern: ^/
+                        form_login:
+                            provider: fos_userbundle
+                            csrf_provider: form.csrf_provider
+                        logout:       true
+                        anonymous:    true
         -->
-        <security:firewall name="dev" pattern="^/(_(profiler|wdt)|css|images|js)/" security="false"/>
+        <!--security:firewall name="dev" pattern="^/(_(profiler|wdt)|css|images|js)/" security="false"/>
         <security:firewall name="login" pattern="^/demo/secured/login$" security="false"/>
         <security:firewall name="secured_area" pattern="^/demo/secured/">
             <security:form_login check_path="_security_check" login_path="_demo_login"/>
             <security:logout path="_demo_logout" target="_demo"/>
-            <!--security:anonymous/>
-            <security:http_basic realm="Secured Demo Area" /-->
+            <security:anonymous/>
+            <security:http_basic realm="Secured Demo Area" />
+        </security:firewall-->
+        <security:firewall name="secured_area" pattern="^/">
+            <security:form_login provider="fos_userbundle" csrf_provider="form.csrf_provider"/>
+            <security:logout/>
+            <security:anonymous/>
         </security:firewall>
 
         <!--
                 access_control:
                     #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+                    - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+                    - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+                    - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+                    - { path: ^/admin/, role: ROLE_ADMIN }
         -->
-        <security:access-control>
-            <!--security:rule path="^/login" role="IS_AUTHENTICATED_ANONYMOUSLY" required_channel="https" /-->
-        </security:access-control>
+        <!--security:rule path="^/login" role="IS_AUTHENTICATED_ANONYMOUSLY" required_channel="https" /-->
+        <security:rule path="^/login$" role="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:rule path="^/register" role="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:rule path="^/resetting" role="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:rule path="^/admin/" role="ROLE_ADMIN"/>
 
     </security:config>
 </container>

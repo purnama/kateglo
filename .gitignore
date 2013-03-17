@@ -2,6 +2,7 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/logs/*
+/app/Resources/*.db
 /build/
 /vendor/
 /bin/
