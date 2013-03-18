@@ -10,21 +10,8 @@
             defaults: { _controller: AcmeDemoBundle:Welcome:index }
     -->
     <route id="_welcome" path="/">
-        <default key="_controller" >AcmeDemoBundle:Welcome:index</default>
+        <default key="_controller" >KategloDefaultBundle:Default:index</default>
     </route>
-
-    <!--
-        _demo_secured:
-            resource: "@AcmeDemoBundle/Controller/SecuredController.php"
-            type: annotation
-
-        _demo:
-            resource: "@AcmeDemoBundle/Controller/DemoController.php"
-            type: annotation
-            prefix: /demo
-    -->
-    <import type="annotation" resource="@AcmeDemoBundle/Controller/SecuredController.php"  />
-    <import type="annotation" prefix="/demo" resource="@AcmeDemoBundle/Controller/DemoController.php" />
 
     <!--
         _wdt:
