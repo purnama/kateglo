@@ -20,7 +20,9 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new JMS\TwigJsBundle\JMSTwigJsBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
             new Kateglo\UserBundle\KategloUserBundle(),
             new Kateglo\DefaultBundle\KategloDefaultBundle(),
         );
@@ -36,6 +38,6 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.xml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.xml');
     }
 }

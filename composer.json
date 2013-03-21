@@ -20,7 +20,9 @@
         "jms/di-extra-bundle": "1.3.*",
         "jms/twig-js": "dev-master",
         "jms/twig-js-bundle": "dev-master",
-        "friendsofsymfony/user-bundle": "*"
+        "jms/serializer-bundle": "0.12.*@dev",
+        "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/rest-bundle": "0.12.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

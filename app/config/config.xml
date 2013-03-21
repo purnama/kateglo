@@ -9,7 +9,9 @@
            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
            xmlns:webprofiler="http://symfony.com/schema/dic/webprofiler"
            xmlns:monolog="http://symfony.com/schema/dic/monolog"
+           xmlns:sensio_framework_extra="sensio_framework_extra"
            xmlns:fos_user="fos_user"
+           xmlns:fos_rest="fos_rest"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
            http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd
            http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd
@@ -71,7 +73,8 @@
             debug:            %kernel.debug%
             strict_variables: %kernel.debug%
     -->
-    <twig:config debug="%kernel.debug%" strict-variables="%kernel.debug%"/>
+    <twig:config debug="%kernel.debug%" strict-variables="%kernel.debug%"
+                 exception-controller="FOS\RestBundle\Controller\ExceptionController::showAction"/>
 
     <!--
         # Assetic Configuration
@@ -134,5 +137,27 @@
         <swiftmailer:spool type="memory"/>
     </swiftmailer:config>
 
-    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User" />
+    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User"/>
+
+    <fos_rest:config>
+        <fos_rest:view failed_validation="HTTP_BAD_REQUEST" default_engine="twig" view_response_listener="true">
+            <fos_rest:formats json="true" xml="true" rss="false"/>
+            <fos_rest:templating_formats html="true"/>
+        </fos_rest:view>
+
+        <fos_rest:format_listener fallback_format="html">
+            <fos_rest:default_priorities>html</fos_rest:default_priorities>
+            <fos_rest:default_priorities>xml</fos_rest:default_priorities>
+            <fos_rest:default_priorities>json</fos_rest:default_priorities>
+        </fos_rest:format_listener>
+        <fos_rest:access_denied_listener json="true"/>
+        <fos_rest:exception>
+            <!-- TODO: ... -->
+        </fos_rest:exception>
+    </fos_rest:config>
+
+    <sensio_framework_extra:config>
+        <sensio_framework_extra:view annotations="false"/>
+        <sensio_framework_extra:router annotations="true"/>
+    </sensio_framework_extra:config>
 </container>
