@@ -3,17 +3,17 @@
 namespace Kateglo\DefaultBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/{name}")
-     * @Template()
+     * @Get("/")
+     * @View()
      */
-    public function indexAction($name="World")
+    public function indexAction()
     {
-        return array('name' => $name);
+        return array('name' => 'test');
     }
 }
