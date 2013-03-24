@@ -41,7 +41,7 @@
             toolbar: true
             intercept_redirects: false
     -->
-    <webprofiler:config toolbar="true" intercept-redirects="false" />
+    <webprofiler:config toolbar="false" intercept-redirects="false" />
 
     <!--
         monolog:

@@ -1,0 +1,218 @@
+/* Sticky Footer
+-------------------------------------------------- */
+html, body {
+    height: 100%;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 26.5px;
+}
+
+sup {
+    position: static;
+    vertical-align: super;
+}
+
+.collapse {
+    position: static;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px;
+    position: inherit;
+    z-index: 2;
+}
+
+#wrap-container {
+    padding-top: 60px;
+}
+
+.push {
+    height: 110px;
+}
+
+.footer {
+    height: 100px;
+    background-color: #f5f5f5;
+}
+
+@media (max-width: 767px) {
+    .footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+.footer {
+    color: #999999;
+    text-align: center;
+}
+
+.footer ul:first-child {
+    margin-top: 10px;
+}
+
+.footer a {
+    color: #156BC0;
+}
+
+.footer a:hover {
+    color: #333333;
+}
+
+.footer li {
+    display: inline;
+    list-style: none outside none;
+}
+
+.footer li:before {
+    content: ".";
+    padding: 0 5px;
+}
+
+.footer .no:before {
+    content: none;
+    padding: 0;
+}
+
+.footer .alphabet {
+    font-size: 16px;
+}
+
+/* ------------------------------------------------- */
+
+.center {
+    text-align: center;
+}
+
+.logo {
+    font-family: 'Droid Serif';
+    font-size: 90px;
+    color: #2773BD;
+    font-weight: normal;
+    margin-bottom: 45px;
+    text-shadow: 1px 1px 0 #105496, -1px -1px 0 #4589CD;
+}
+
+.navbar-inverse .brand {
+    font-family: 'Droid Serif';
+    color: #fff;
+    font-weight: normal;
+    text-shadow: -0.2px -0.2px 0 #97B9DC, 0.2px 0.2px 0 #2A73BB;
+}
+
+#home-container {
+    margin-top: 150px;
+}
+
+.nav-collapse .nav > li > a, .nav-collapse .dropdown-menu a {
+    font-weight: normal;
+}
+
+.navbar-search .input-append .btn {
+    border-radius: 0 14px 14px 0;
+}
+
+.navbar-inverse .navbar-search .input-append .btn {
+    border-color: #111111;
+    color: #333333;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: none 0s ease 0s;
+    background-image: none;
+    background-color: #FFFFFF;
+    border-left: 0;
+    margin-left: 0;
+    text-shadow: 0 1px 0 #FFFFFF
+}
+
+.navbar-search .input-append .search-query {
+    border-radius: 14px 0 0 14px;
+}
+
+.navbar-inverse .navbar-search .input-append .search-query {
+    border-right: 0;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+    background-color: #FFFFFF;
+    text-shadow: 0 1px 0 #FFFFFF;
+    color: #333333;
+    padding-right: 0;
+}
+
+.navbar-inverse .navbar-search .input-append .search-query:focus {
+    border: 1px solid black;
+    border-right: 0;
+    padding: 4px 14px;
+    padding-right: 0;
+}
+
+.navbar-inverse .navbar-search .search-query:-moz-placeholder {
+    color: #cccccc;
+}
+
+.navbar-inverse .navbar-search .search-query:-ms-input-placeholder {
+    color: #cccccc;
+}
+
+.navbar-inverse .navbar-search .search-query::-webkit-input-placeholder {
+    color: #cccccc;
+}
+
+.affix {
+    position: fixed;
+    top: 41px;
+}
+
+#thesaurus .accordion-inner ul li:after,
+#equivalent .accordion-inner ul li:after {
+    content: ".";
+    padding: 0 5px;
+}
+
+#thesaurus .accordion-inner ul li:last-child:after,
+#equivalent .accordion-inner ul li:last-child:after {
+    content: "";
+    padding: 0;
+}
+
+#thesaurus .accordion-inner ul li,
+#equivalent .accordion-inner ul li {
+    display: inline;
+    list-style: none outside none;
+}
+
+#discussion ul {
+    padding: 0;
+    margin: 0;
+    list-style: none outside none;
+}
+
+#discussion footer menu{
+    list-style: none outside none;
+    padding: 0;
+}
+
+#discussion footer menu li{
+    display: inline;
+    list-style: none outside none;
+}
+
+.avatar{
+    float: left;
+}
+
+.comment{
+    padding-left: 30px;
+}
+
+.btn-signup{
+    width: 285px;
+}

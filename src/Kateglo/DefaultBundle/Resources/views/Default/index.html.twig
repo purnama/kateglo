@@ -1,14 +1,16 @@
 {% extends '::base.html.twig' %}
 
-{% block content %}}
+{% block content %}
     <div class="row">
         <div class="span12 center">
             <div id="home-container">
                 <h1 class="logo">Kateglo</h1>
 
-                <form class="form-search" action="entri.html">
+                <form name="{{ form.search.name }}" class="form-search" action="{{ form.search.action }}"
+                      method="{{ form.search.method }}">
                     <div class="input-append">
-                        <input type="search" class="input-xxlarge search-query"
+                        <input type="{{ form.search.field.0.type }}" name="{{ form.search.field.0.name }}"
+                               class="input-xxlarge search-query"
                                placeholder="Masukkan kata, peribahasa atau singkatan...">
                         <button type="submit" class="btn">Telusuri</button>
                     </div>

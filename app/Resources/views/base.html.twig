@@ -13,21 +13,23 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <meta name="description" content="Kamus, Tesaurus dan Glosarium bahasa Indonesia."/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('bundles/kateglo/default/images/favicon.ico') }}"/>
-    <link rel="icon" type="image/png" href="{{ asset('bundles/kateglo/default/images/favicon.png') }}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('bundles/kateglodefault/images/favicon.ico') }}"/>
+    <link rel="icon" type="image/png" href="{{ asset('bundles/kateglodefault/images/favicon.png') }}"/>
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('bundles/kateglo/default/css/vendor/font.css') }}" type="text/css"
-              media="all"/>
-        <link rel="stylesheet" href="{{ asset('bundles/kateglo/default/css/vendor/bootstrap.min.css') }}"
-              type="text/css" media="all"/>
-        <link rel="stylesheet" href="{{ asset('bundles/kateglo/default/css/vendor/bootstrap-responsive.min.css') }}"
-              type="text/css" media="all"/>
-        <link rel="stylesheet" href="{{ asset('bundles/kateglo/default/css/main.css') }}" type="text/css"
-              media="all"/>
+        {% stylesheets
+        '@KategloDefaultBundle/Resources/public/css/vendor/font.css'
+        '@KategloDefaultBundle/Resources/public/css/vendor/bootstrap.min.css'
+        '@KategloDefaultBundle/Resources/public/css/vendor/bootstrap-responsive.min.css'
+        '@KategloDefaultBundle/Resources/public/css/main.css' output='bundles/kateglodefault/css/*' %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" media="all"/>
+        {% endstylesheets %}
     {% endblock %}
     {% block headscripts %}
-        <script src="{{ asset('bundles/kateglo/default/js/vendor/html5.js') }}"></script>
-        <script src="{{ asset('bundles/kateglo/default/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js') }}"></script>
+        {% javascripts
+        '@KategloDefaultBundle/Resources/public/js/vendor/html5.js'
+        '@KategloDefaultBundle/Resources/public/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js' output='bundles/kateglodefault/js/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
     {% endblock %}
 </head>
 <body>
@@ -57,8 +59,8 @@
                             <li><a href="#">Padanan</a></li>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="/user/signup">Daftar</a></li>
-                            <li><a href="/user/login">Masuk</a></li>
+                            <li><a href="{{ user.register.link }}">Daftar</a></li>
+                            <li><a href="{{ user.login.link }}">Masuk</a></li>
                         </ul>
                     </div>
                 </div>
@@ -134,10 +136,13 @@
     </footer>
 {% endblock %}
 {% block footscripts %}
-    <script src="{{ asset('bundles/kateglo/default/js/vendor/jquery-1.9.0.min.js') }}"></script>
-    <script src="{{ asset('bundles/kateglo/default/js/vendor/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('bundles/kateglo/default/js/plugins.js') }}"></script>
-    <script src="{{ asset('bundles/kateglo/default/js/main.js') }}"></script>
+    {% javascripts
+    '@KategloDefaultBundle/Resources/public/js/vendor/jquery-1.9.0.min.js'
+    '@KategloDefaultBundle/Resources/public/js/vendor/bootstrap.min.js'
+    '@KategloDefaultBundle/Resources/public/js/plugins.js'
+    '@KategloDefaultBundle/Resources/public/js/main.js' output='bundles/kateglodefault/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
     <script>
         var _gaq = [
             ['_setAccount', 'UA-XXXXX-X'],

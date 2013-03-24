@@ -9,6 +9,7 @@
            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
            xmlns:webprofiler="http://symfony.com/schema/dic/webprofiler"
            xmlns:monolog="http://symfony.com/schema/dic/monolog"
+           xmlns:jms_di_extra="jms_di_extra"
            xmlns:sensio_framework_extra="sensio_framework_extra"
            xmlns:fos_user="fos_user"
            xmlns:fos_rest="fos_rest"
@@ -141,14 +142,17 @@
 
     <fos_rest:config>
         <fos_rest:view failed_validation="HTTP_BAD_REQUEST" default_engine="twig" view_response_listener="true">
-            <fos_rest:formats json="true" xml="true" rss="false"/>
+            <fos_rest:formats css="true" js="true" json="true" xml="true" rss="true"/>
             <fos_rest:templating_formats html="true"/>
         </fos_rest:view>
 
-        <fos_rest:format_listener fallback_format="html">
+        <fos_rest:format_listener fallback_format="html" prefer_extension="true">
             <fos_rest:default_priorities>html</fos_rest:default_priorities>
+            <fos_rest:default_priorities>css</fos_rest:default_priorities>
+            <fos_rest:default_priorities>js</fos_rest:default_priorities>
             <fos_rest:default_priorities>xml</fos_rest:default_priorities>
             <fos_rest:default_priorities>json</fos_rest:default_priorities>
+            <fos_rest:default_priorities>rss</fos_rest:default_priorities>
         </fos_rest:format_listener>
         <fos_rest:access_denied_listener json="true"/>
         <fos_rest:exception>
@@ -160,4 +164,12 @@
         <sensio_framework_extra:view annotations="false"/>
         <sensio_framework_extra:router annotations="true"/>
     </sensio_framework_extra:config>
+
+    <jms_di_extra:config>
+        <jms_di_extra:locations all-bundles="false">
+            <jms_di_extra:bundles>KategloDefaultBundle</jms_di_extra:bundles>
+
+            <jms_di_extra:directories>%kernel.root_dir%/../src</jms_di_extra:directories>
+        </jms_di_extra:locations>
+    </jms_di_extra:config>
 </container>
