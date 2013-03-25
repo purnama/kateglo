@@ -24,25 +24,43 @@
  */
 namespace Kateglo\DefaultBundle\Service;
 
+use Kateglo\DefaultBundle\ViewModel\Alphabet;
+use Kateglo\DefaultBundle\ViewModel\Base;
+use Kateglo\DefaultBundle\ViewModel\Link;
+use Kateglo\DefaultBundle\ViewModel\Menu;
+use Kateglo\DefaultBundle\ViewModel\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\DiExtraBundle\Annotation\Service;
+
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  * @Service
- */ 
-class BaseLink {
+ */
+class BaseLink
+{
 
-    public function get(Controller $controller){
-        return array(
-            'user' => array(
-                'register' => array(
-                    'link' => $controller->generateUrl('fos_user_registration_register')
-                ),
-                'login' => array(
-                    'link' => $controller->generateUrl('fos_user_security_login')
-                ),
-            )
-        );
+    public function get(Controller $controller)
+    {
+        $menu = new Menu(array
+        (
+            'start' => new Link($controller->generateUrl('kateglo_default_default_index'), 'start', 'Beranda'),
+            'kamus' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
+            'tesaurus' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
+            'padanan' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
+        ));
+        $user = new User(array
+        (
+            'register' => new Link($controller->generateUrl('fos_user_registration_register'), 'contents', 'register'),
+            'login' => new Link($controller->generateUrl('fos_user_security_login'), 'contents', 'login'),
+        ));
+
+        $alphabet = new Alphabet(array
+        (
+            new Link($controller->generateUrl('fos_user_registration_register'), 'index', 'a'),
+            new Link($controller->generateUrl('fos_user_security_login'), 'index', 'b'),
+        ));
+
+        return new Base($alphabet, $menu, $user);
     }
 }

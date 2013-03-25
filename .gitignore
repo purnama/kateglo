@@ -1,5 +1,4 @@
-/web/bundles/framework
-/web/bundles/sensiodistribution
+/web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
 /app/logs/*

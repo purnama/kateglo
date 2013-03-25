@@ -3,12 +3,17 @@
 namespace Kateglo\DefaultBundle\Controller;
 
 use Kateglo\DefaultBundle\Service\BaseLink;
+use Kateglo\DefaultBundle\ViewModel\Form;
+use Kateglo\DefaultBundle\ViewModel\Input;
+use Kateglo\DefaultBundle\ViewModel\Start;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\DiExtraBundle\Annotation\InjectParams;
+use JMS\DiExtraBundle\Annotation\Inject;
 use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Head;
+use FOS\RestBundle\Controller\Annotations\Options;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -19,7 +24,9 @@ class DefaultController extends Controller
 
     /**
      * @param BaseLink $baseLink
-     * @InjectParams
+     * @InjectParams({
+     *  "baseLink" = @Inject("kateglo.defaultbundle.service.baselink")
+     * })
      */
     public function __construct(BaseLink $baseLink){
         $this->baseLink = $baseLink;
@@ -27,26 +34,24 @@ class DefaultController extends Controller
     
     /**
      * @Get("/")
+     * @Head("/")
      * @View()
      */
     public function indexAction()
     {
-        $response = $this->baseLink->get($this);
-        $response['form'] = array(
-            'search' => array(
-                'name' => 'search',
-                'action' => 'entri.html',
-                'method' => 'get',
-                'field' => array(
-                    array(
-                        'name' => 'query',
-                        'type' => 'search'
-                    ),
-                ),
-            )
-        );
+        $base = $this->baseLink->get($this);
+        $form = new Form(array(
+            'search' => new Input('search', null, 'query')
+        ), $this->generateUrl('kateglo_default_default_index'), 'get', 'search');
 
-        return $response;
+        return new Start($base, $form);
+    }
+
+    /**
+     * @Options("/")
+     */
+    public function indexOptionsAction(){
+        return new Response();
     }
 
 }

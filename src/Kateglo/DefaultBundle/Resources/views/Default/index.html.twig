@@ -6,10 +6,10 @@
             <div id="home-container">
                 <h1 class="logo">Kateglo</h1>
 
-                <form name="{{ form.search.name }}" class="form-search" action="{{ form.search.action }}"
-                      method="{{ form.search.method }}">
+                <form name="{{ data.form.name }}" class="form-search" action="{{ data.form.action }}"
+                      method="{{ data.form.method }}">
                     <div class="input-append">
-                        <input type="{{ form.search.field.0.type }}" name="{{ form.search.field.0.name }}"
+                        <input type="{{ data.form.input.search.type }}" name="{{ data.form.input.search.name }}"
                                class="input-xxlarge search-query"
                                placeholder="Masukkan kata, peribahasa atau singkatan...">
                         <button type="submit" class="btn">Telusuri</button>
