@@ -1,0 +1,34 @@
+{% extends '::base.html.twig' %}
+
+
+{% block user %}
+    <ul class="nav pull-right">
+
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <li>{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} </li>
+            <li>
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            </li>
+        {% else %}
+            <li><a href="{{ data.base.user.link.register.href }}">Daftar</a></li>
+            <li><a href="{{ data.base.user.link.login.href }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+        {% endif %}
+    </ul>
+{% endblock %}
+{% block content %}
+    {% for key, message in app.session.getFlashes() %}
+        <div class="{{ key }}">
+            {{ message|trans({}, 'FOSUserBundle') }}
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="span6">
+            {% block fos_user_content %}
+            {% endblock fos_user_content %}
+        </div>
+    </div>
+{% endblock %}
+

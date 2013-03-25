@@ -40,7 +40,7 @@ use JMS\DiExtraBundle\Annotation\Service;
 class BaseLink
 {
 
-    public function get(Controller $controller)
+    public function get(GenerateUrlInterface $controller)
     {
         $menu = new Menu(array
         (

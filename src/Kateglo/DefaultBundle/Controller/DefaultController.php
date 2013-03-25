@@ -3,6 +3,7 @@
 namespace Kateglo\DefaultBundle\Controller;
 
 use Kateglo\DefaultBundle\Service\BaseLink;
+use Kateglo\DefaultBundle\Service\GenerateUrlInterface;
 use Kateglo\DefaultBundle\ViewModel\Form;
 use Kateglo\DefaultBundle\ViewModel\Input;
 use Kateglo\DefaultBundle\ViewModel\Start;
@@ -15,7 +16,7 @@ use FOS\RestBundle\Controller\Annotations\Options;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Response;
 
-class DefaultController extends Controller
+class DefaultController extends Controller implements GenerateUrlInterface
 {
     /**
      * @var BaseLink

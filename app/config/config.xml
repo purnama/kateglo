@@ -55,8 +55,8 @@
 
      -->
     <framework:config secret="%secret%" default-locale="%locale%" trusted-proxies="">
-        <!--framework:esi enabled="true"/>
-        <framework:translator fallback="%locale%"/-->
+        <!--framework:esi enabled="true"/-->
+        <framework:translator fallback="%locale%"/>
         <framework:router resource="%kernel.root_dir%/config/routing.xml" strict-requirements="%kernel.debug%"/>
         <framework:form enabled="true"/>
         <framework:csrf-protection enabled="true"/>
@@ -141,7 +141,7 @@
     <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User"/>
 
     <fos_rest:config allowed_methods_listener="true">
-        <fos_rest:view failed_validation="HTTP_BAD_REQUEST" default_engine="twig" view_response_listener="true" >
+        <fos_rest:view failed_validation="HTTP_BAD_REQUEST" default_engine="twig" view_response_listener="true">
             <fos_rest:formats css="true" js="true" json="true" xml="true"/>
             <fos_rest:templating_formats html="true"/>
         </fos_rest:view>
@@ -153,7 +153,7 @@
             <fos_rest:default_priorities>json</fos_rest:default_priorities>
         </fos_rest:format_listener>
         <fos_rest:access_denied_listener json="true"/>
-        <fos_rest:exception />
+        <fos_rest:exception/>
     </fos_rest:config>
 
     <sensio_framework_extra:config>

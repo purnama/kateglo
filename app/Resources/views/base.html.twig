@@ -58,10 +58,12 @@
                             <li><a href="#">Tesaurus</a></li>
                             <li><a href="#">Padanan</a></li>
                         </ul>
+                        {% block user %}
                         <ul class="nav pull-right">
                             <li><a href="{{ data.base.user.link.register.href }}">Daftar</a></li>
                             <li><a href="{{ data.base.user.link.login.href }}">Masuk</a></li>
                         </ul>
+                        {% endblock %}
                     </div>
                 </div>
             </div>

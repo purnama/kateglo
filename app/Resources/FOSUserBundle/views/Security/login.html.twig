@@ -1,0 +1,36 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+    <h2>Masuk</h2>
+
+    <form action="{{ path("fos_user_security_check") }}" method="post">
+        <fieldset>
+            {% if error %}
+                <div class="control-group error">
+                    <div class="controls">
+                        <span class="help-inline">{{ error|trans({}, 'FOSUserBundle') }}</span>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="control-group<?=$this->formElementErrors($element) ? ' error' : '' ?>">
+                <div class="controls">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+
+                    <input type="text" id="username" name="_username" value="{{ last_username }}"
+                           class="input-xlarge" required="required" autocomplete="off"
+                           placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}"/>
+
+                    <input type="password" id="password" name="_password"
+                           class="input-xlarge" required="required" autocomplete="off"
+                           placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}"/>
+
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+                    <label for="remember_me">{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
+
+                    <button id="_submit" name="_submit" class="btn btn-large btn-primary btn-signup"
+                            type="submit">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
+                </div>
+            </div>
+    </form>
+    </fieldset>
+{% endblock fos_user_content %}
