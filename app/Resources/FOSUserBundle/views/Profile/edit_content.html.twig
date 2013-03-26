@@ -1,0 +1,10 @@
+<h2>Sunting Profil</h2>
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST">
+    <fieldset>
+        {{ form_widget(form) }}
+
+        <button class="btn btn-large btn-primary btn-signup"
+                type="submit">{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}</button>
+
+    </fieldset>
+</form>

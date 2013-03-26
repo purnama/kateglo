@@ -46,10 +46,10 @@
                         logout:       true
                         anonymous:    true
         -->
-        <security:firewall name="secured_area" pattern="^/">
+        <security:firewall name="secured_area" pattern="^/" >
             <security:form_login provider="fos_userbundle" login_path="fos_user_security_login"
                                  check_path="fos_user_security_check" csrf_provider="form.csrf_provider"/>
-            <security:logout/>
+            <security:logout path="fos_user_security_logout" target="fos_user_security_login" />
             <security:anonymous/>
         </security:firewall>
 
