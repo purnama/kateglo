@@ -2,21 +2,21 @@
 
 namespace Kateglo\DefaultBundle\Controller;
 
+use JMS\Serializer\Serializer;
 use Kateglo\DefaultBundle\Service\BaseLink;
-use Kateglo\DefaultBundle\Service\GenerateUrlInterface;
 use Kateglo\DefaultBundle\ViewModel\Form;
 use Kateglo\DefaultBundle\ViewModel\Input;
 use Kateglo\DefaultBundle\ViewModel\Start;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use JMS\DiExtraBundle\Annotation\InjectParams;
 use JMS\DiExtraBundle\Annotation\Inject;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Head;
 use FOS\RestBundle\Controller\Annotations\Options;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\HttpFoundation\Response;
 
-class DefaultController extends Controller implements GenerateUrlInterface
+class DefaultController extends Controller
 {
     /**
      * @var BaseLink
@@ -40,7 +40,7 @@ class DefaultController extends Controller implements GenerateUrlInterface
      */
     public function indexAction()
     {
-        $base = $this->baseLink->get($this);
+        $base = $this->baseLink->get();
         $form = new Form(array(
             'search' => new Input('search', null, 'query')
         ), $this->generateUrl('kateglo_default_default_index'), 'get', 'search');

@@ -153,7 +153,10 @@
             <fos_rest:default_priorities>json</fos_rest:default_priorities>
         </fos_rest:format_listener>
         <fos_rest:access_denied_listener json="true"/>
-        <fos_rest:exception/>
+        <fos_rest:exception>
+            <fos_rest:code name="Symfony\Component\Routing\Exception\ResourceNotFoundException">404</fos_rest:code>
+            <fos_rest:code name="Doctrine\ORM\OptimisticLockException">HTTP_CONFLICT</fos_rest:code>
+        </fos_rest:exception>
     </fos_rest:config>
 
     <sensio_framework_extra:config>

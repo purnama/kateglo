@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Title Template{% endblock %}</title>
     <meta name="description" content="Kamus, Tesaurus dan Glosarium bahasa Indonesia."/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('bundles/kateglodefault/images/favicon.ico') }}"/>
@@ -40,35 +40,7 @@
 <![endif]-->
 
 {% block header %}
-    <header>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar collapsed" data-target=".navbar-responsive-collapse"
-                       data-toggle="collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="{{ data.base.menu.link.start.href }}" title="{{ data.base.menu.link.start.title }}">Kateglo</a>
-
-                    <div class="nav-collapse collapse navbar-responsive-collapse">
-                        <ul class="nav">
-                            <li><a href="#">Kamus</a></li>
-                            <li><a href="#">Tesaurus</a></li>
-                            <li><a href="#">Padanan</a></li>
-                        </ul>
-                        {% block user %}
-                        <ul class="nav pull-right">
-                            <li><a href="{{ data.base.user.link.register.href }}">Daftar</a></li>
-                            <li><a href="{{ data.base.user.link.login.href }}">Masuk</a></li>
-                        </ul>
-                        {% endblock %}
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    {{ include('::baseHeader.html.twig') }}
 {% endblock %}
 {% block body %}
     <div class="wrap">
@@ -80,62 +52,7 @@
     </div>
 {% endblock %}
 {% block footer %}
-    <footer class="footer">
-        <div class="container">
-            <nav>
-                <ul>
-                    <li class="no"><a href="http://bahtera.org">Bahtera</a></li>
-                    <li><a href="/entri/hariini">Entri hari ini</a></li>
-                    <li><a href="/acak/entri">Entri acak</a></li>
-                    <li><a href="/acak/salaheja">Salah eja</a></li>
-                    <li><a href="http://blog.bahtera.org">Blog</a></li>
-                    <!--li><a href="#">Mobile</a></li-->
-                    <li><a href="/kontak">Kontak</a></li>
-                    <li>
-                        <a href="http://code.google.com/p/kateglo/wiki/KategloPemanfaatanInternetUntukPengayaanIstilahBahasaIndonesia">Tentang
-                            Kateglo</a></li>
-                    <li><a href="http://code.google.com/p/kateglo/wiki/PencarianKateglo">FAQ</a></li>
-                    <li><a href="/privacy">Privacy</a></li>
-                    <li><a href="/terms">Terms</a></li>
-                    <li><a href="/api">API</a></li>
-                    <li><a href="/aplikasi">Aplikasi</a></li>
-                    <li><a href="http://twitter.com/#!/kateglo">Twitter</a></li>
-                    <!--li><a href="#">Facebook</a></li-->
-                </ul>
-                <!-- footnav -->
-                <ul class="alphabet">
-                    <li class="no"><a href="/alfabet/a">A</a></li>
-                    <li><a href="/alfabet/b">B</a></li>
-                    <li><a href="/alfabet/c">C</a></li>
-                    <li><a href="/alfabet/d">D</a></li>
-                    <li><a href="/alfabet/e">E</a></li>
-                    <li><a href="/alfabet/f">F</a></li>
-                    <li><a href="/alfabet/g">G</a></li>
-                    <li><a href="/alfabet/h">H</a></li>
-                    <li><a href="/alfabet/i">I</a></li>
-                    <li><a href="/alfabet/j">J</a></li>
-                    <li><a href="/alfabet/k">K</a></li>
-                    <li><a href="/alfabet/l">L</a></li>
-                    <li><a href="/alfabet/m">M</a></li>
-                    <li><a href="/alfabet/n">N</a></li>
-                    <li><a href="/alfabet/o">O</a></li>
-                    <li><a href="/alfabet/p">P</a></li>
-                    <li><a href="/alfabet/q">Q</a></li>
-                    <li><a href="/alfabet/r">R</a></li>
-                    <li><a href="/alfabet/s">S</a></li>
-                    <li><a href="/alfabet/t">T</a></li>
-                    <li><a href="/alfabet/u">U</a></li>
-                    <li><a href="/alfabet/v">V</a></li>
-                    <li><a href="/alfabet/w">W</a></li>
-                    <li><a href="/alfabet/x">X</a></li>
-                    <li><a href="/alfabet/y">Y</a></li>
-                    <li><a href="/alfabet/z">Z</a></li>
-                </ul>
-                <!-- abc -->
-            </nav>
-            <p>All the words are brought to you by Kateglo, the free online Indonesia dictionary and thesaurus &copy;2009-2013</p>
-        </div>
-    </footer>
+    {{ include('::baseFooter.html.twig') }}
 {% endblock %}
 {% block footscripts %}
     {% javascripts

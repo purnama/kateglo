@@ -29,8 +29,11 @@ use Kateglo\DefaultBundle\ViewModel\Base;
 use Kateglo\DefaultBundle\ViewModel\Link;
 use Kateglo\DefaultBundle\ViewModel\Menu;
 use Kateglo\DefaultBundle\ViewModel\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\Container;
 use JMS\DiExtraBundle\Annotation\Service;
+use JMS\DiExtraBundle\Annotation\InjectParams;
+use JMS\DiExtraBundle\Annotation\Inject;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  *
@@ -39,26 +42,59 @@ use JMS\DiExtraBundle\Annotation\Service;
  */
 class BaseLink
 {
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
-    public function get(GenerateUrlInterface $controller)
+    /**
+     * @param RouterInterface $router
+     * @InjectParams({
+     *  "router" = @Inject("router")
+     * })
+     */
+    public function __construct(RouterInterface $router){
+        $this->router = $router;
+    }
+
+    /**
+     * @param RouterInterface $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @return RouterInterface
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * @return Base
+     */
+    public function get()
     {
         $menu = new Menu(array
         (
-            'start' => new Link($controller->generateUrl('kateglo_default_default_index'), 'start', 'Beranda'),
-            'kamus' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
-            'tesaurus' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
-            'padanan' => new Link($controller->generateUrl('fos_user_registration_register'), 'index'),
+            'start' => new Link($this->router->generate('kateglo_default_default_index'), 'start', 'Beranda'),
+            'kamus' => new Link($this->router->generate('fos_user_registration_register'), 'index'),
+            'tesaurus' => new Link($this->router->generate('fos_user_registration_register'), 'index'),
+            'padanan' => new Link($this->router->generate('fos_user_registration_register'), 'index'),
         ));
         $user = new User(array
         (
-            'register' => new Link($controller->generateUrl('fos_user_registration_register'), 'contents', 'register'),
-            'login' => new Link($controller->generateUrl('fos_user_security_login'), 'contents', 'login'),
+            'register' => new Link($this->router->generate('fos_user_registration_register'), 'contents', 'register'),
+            'login' => new Link($this->router->generate('fos_user_security_login'), 'contents', 'login'),
         ));
 
         $alphabet = new Alphabet(array
         (
-            new Link($controller->generateUrl('fos_user_registration_register'), 'index', 'a'),
-            new Link($controller->generateUrl('fos_user_security_login'), 'index', 'b'),
+            new Link($this->router->generate('fos_user_registration_register'), 'index', 'a'),
+            new Link($this->router->generate('fos_user_security_login'), 'index', 'b'),
         ));
 
         return new Base($alphabet, $menu, $user);
