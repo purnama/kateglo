@@ -34,7 +34,7 @@
                     fos_userbundle:
                         id: fos_user.user_provider.username
         -->
-        <security:provider name="fos_userbundle" id="fos_user.user_provider.username"/>
+        <security:provider name="fos_userbundle" id="fos_user.user_provider.username_email"/>
 
         <!--
                 firewalls:

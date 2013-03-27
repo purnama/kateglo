@@ -133,12 +133,25 @@
             password:  %mailer_password%
             spool:     { type: memory }
     -->
-    <swiftmailer:config transport="%mailer_transport%" host="%mailer_host%" username="%mailer_user%"
+    <swiftmailer:config transport="%mailer_transport%" username="%mailer_user%"
                         password="%mailer_password%">
         <swiftmailer:spool type="memory"/>
     </swiftmailer:config>
 
-    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User"/>
+    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User" use_username_form_type="true">
+        <fos_user:registration>
+            <fos_user:form type="kateglo_user_registration" />
+            <fos_user:confirmation enabled="true">
+                <fos_user:from_email address="registration@kateglo.com" sender_name="Kateglo Registration"/>
+            </fos_user:confirmation>
+        </fos_user:registration>
+        <fos_user:resetting token_ttl="86400">
+            <fos_user:email>
+                <fos_user:from_email address="registration@kateglo.com" sender_name="Kateglo Registration"/>
+            </fos_user:email>
+        </fos_user:resetting>
+        <fos_user:service mailer="fos_user.mailer.twig_swift"/>
+    </fos_user:config>
 
     <fos_rest:config allowed_methods_listener="true">
         <fos_rest:view failed_validation="HTTP_BAD_REQUEST" default_engine="twig" view_response_listener="true">

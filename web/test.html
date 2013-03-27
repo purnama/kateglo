@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+<h2>Aktivasi Akun</h2>
+<script>
+    function changeAction(e){
+        e.action += '/'+e.key.value;
+        this.removeChild(e.key);
+        return false;
+    }
+</script>
+<form action="/user/register/confirm" method="GET" onSubmit="console.log($(this).children('input')); return false">
+    <fieldset>
+        <div class="control-group">
+            <div class="controls">
+                <input name="key" class="input-xlarge" required="required" autocomplete="off" placeholder="Kunci Aktivasi" type="text">
+            </div>
+        </div>
+        <button class="btn btn-large btn-primary btn-signup" type="submit">Aktivasi Akun</button>
+    </fieldset>
+</form>
+
+</body>
+</html>

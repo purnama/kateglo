@@ -28,8 +28,7 @@
                 mailer_user:       ~
                 mailer_password:   ~
         -->
-        <parameter key="mailer_transport" type="string">smtp</parameter>
-        <parameter key="mailer_host" type="string">127.0.0.1</parameter>
+        <parameter key="mailer_transport" type="string">gmail</parameter>
         <parameter key="mailer_user" type="string"></parameter>
         <parameter key="mailer_password"></parameter>
 

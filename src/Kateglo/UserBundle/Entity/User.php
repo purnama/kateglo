@@ -24,29 +24,53 @@
  */
 namespace Kateglo\UserBundle\Entity;
 
-use FOS\UserBundle\Entity;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @ORM\Entity
- * @ORM\Table(name="user")
+ * @Entity
+ * @Table(name="user")
  */
-class User extends Entity\User
+class User extends \FOS\UserBundle\Entity\User
 {
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var int
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var Invitation
+     * @OneToOne(targetEntity="Kateglo\UserBundle\Entity\Invitation", inversedBy="user")
+     * @JoinColumn(referencedColumnName="code")
+     * @NotNull(message="Your invitation is wrong")
+     */
+    protected $invitation;
 
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+    }
+
+    public function setInvitation($invitation)
+    {
+        $this->invitation = $invitation;
+    }
+
+    public function getInvitation()
+    {
+        return $this->invitation;
     }
 
 }
