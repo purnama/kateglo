@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Kateglo\UserBundle\KategloUserBundle(),
             new Kateglo\DefaultBundle\KategloDefaultBundle(),
+            new Kateglo\KbbiBundle\KategloKbbiBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
