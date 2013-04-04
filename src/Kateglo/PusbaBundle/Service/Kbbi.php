@@ -129,12 +129,15 @@ class Kbbi
     protected function parseDefine(\DOMDocument $dom)
     {
         $text = '';
+        /** @var $html \DOMNode */
         foreach ($dom->childNodes as $html) {
             if ($html->hasChildNodes()) {
+                /** @var $body \DOMNode */
                 foreach ($html->childNodes as $body) {
-                    foreach ($body->childNodes as $node) {
-                        print_r($node->nodeName."\n");
-                    }
+                    print_r($body->firstChild->nodeName);
+//                    foreach ($body->childNodes as $node) {
+//                        print_r($node->nodeName."\n");
+//                    }
                 }
             }
         }
