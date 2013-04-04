@@ -27,6 +27,7 @@ namespace Kateglo\PusbaBundle\Service;
 use JMS\DiExtraBundle\Annotation\Service;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -114,10 +115,10 @@ class Kbbi
             preg_match($pattern, $result, $match);
 
             if (is_array($match)) {
-                $dom = new \DOMDocument();
+                $dom = new \DOMDocument('', 'UTF-8');
                 $dom->loadHTML($match[2] . '</i>');
 
-                return $this->parseDefine($dom);
+                return json_encode($this->parseDefinition($dom));
             } else {
                 throw new \Exception('Pattern can not match the result!');
             }
@@ -126,22 +127,92 @@ class Kbbi
         }
     }
 
-    protected function parseDefine(\DOMDocument $dom)
+    protected function parseDefinition(\DOMDocument $dom)
     {
-        $text = '';
+        $result = new ArrayCollection();
         /** @var $html \DOMNode */
         foreach ($dom->childNodes as $html) {
             if ($html->hasChildNodes()) {
                 /** @var $body \DOMNode */
                 foreach ($html->childNodes as $body) {
-                    print_r($body->firstChild->nodeName);
-//                    foreach ($body->childNodes as $node) {
-//                        print_r($node->nodeName."\n");
-//                    }
+                    $this->parseDefinitionBody($body, $result);
                 }
             }
         }
 
-        return $text;
+        return $result->toArray();
+    }
+
+    protected function parseDefinitionBody(\DOMNode $body, ArrayCollection $result)
+    {
+        $entry = array('entry' => $this->param);
+
+        $firstChild = $body->firstChild;
+        if ($firstChild->nodeName === 'b') {
+            /** @var $b \DOMNode */
+            foreach ($firstChild->childNodes as $b) {
+                if ($b->nodeName === '#text') {
+                    $entry['syllable'] = trim($b->nodeValue);
+                }
+            }
+        } else {
+            throw new \Exception('Syllable not Found');
+        }
+
+        $firstSibling = $firstChild->nextSibling->nextSibling;
+        if ($firstSibling->nodeName === 'i') {
+            $entry['class'] = trim($firstSibling->nodeValue);
+        } else {
+            throw new \Exception('Classification not Found. Node Name:' . $firstSibling->nodeName . ' Node Value:' . $firstSibling->nodeValue);
+        }
+
+        $secondSibling = $firstSibling->nextSibling;
+        if ($secondSibling->nodeName === '#text') {
+            $definitions = explode(';', $secondSibling->nodeValue);
+            foreach ($definitions as $definition) {
+                $definition = trim($definition);
+                if ($definition !== '') {
+                    $entry['definition'][] = $definition;
+                }
+            }
+        } else {
+            throw new \Exception('Definition not Found');
+        }
+
+        $result->add($entry);
+
+        if ($secondSibling->nextSibling->nodeName !== 'br') {
+            throw new \Exception('Instead br found Node:' . $secondSibling->nextSibling->nodeValue);
+        }
+
+        $this->parseRestDefinition($secondSibling->nextSibling->nextSibling, $result);
+    }
+
+    protected function parseRestDefinition(\DOMNode $node, ArrayCollection $result)
+    {
+        if ($node->nodeName === '#text') {
+            if ($node->nodeValue === '--') {
+                $entrySibling = $node->nextSibling;
+                if ($entrySibling->nodeName === 'i') {
+                    $entryRaw = explode(',', $entrySibling->nodeValue);
+                    $entry['entry'] = $this->param . ' ' . trim($entryRaw[0]);
+                    $entry['class'] = trim($entryRaw[1]);
+                    $definitionSibling = $entrySibling->nextSibling;
+                    if ($definitionSibling->nodeName === '#text') {
+                        $definitionRaw = explode(';', $definitionSibling->nodeValue);
+                        $entry['definition'] = trim($definitionRaw[0]);
+                        $result->add($entry);
+                    } else {
+                        throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
+                    }
+                } else {
+                    throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');
+                }
+            }
+        } elseif ($node->nodeName === 'b') {
+
+        } else {
+            throw new \Exception('Next Step not understand');
+        }
     }
 }
