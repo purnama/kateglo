@@ -375,9 +375,6 @@ class Curl
         curl_setopt($result, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($result, CURLOPT_FOLLOWLOCATION, $this->followLocation);
 
-        curl_setopt($result, CURLOPT_PROXY, 'wwwproxy.bahn-net.db.de:8080');
-        curl_setopt($result, CURLOPT_PROXYUSERPWD, 'arthurpurnama:s3k0l4H80!siang');
-
         if (is_string($this->cookieFileLocation) && $this->cookieFileLocation !== '') {
             curl_setopt($result, CURLOPT_COOKIEJAR, $this->cookieFileLocation);
             curl_setopt($result, CURLOPT_COOKIEFILE, $this->cookieFileLocation);
