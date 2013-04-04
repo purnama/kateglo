@@ -1,6 +1,6 @@
 <?php
 
-namespace Kateglo\KbbiBundle\Tests\Controller;
+namespace Kateglo\PusbaBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

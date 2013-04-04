@@ -1,6 +1,6 @@
 <?php
 
-namespace Kateglo\KbbiBundle\DependencyInjection;
+namespace Kateglo\PusbaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -18,11 +18,19 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('kateglo_kbbi');
+        $rootNode = $treeBuilder->root('kateglo_pusba');
 
         $rootNode
             ->children()
-                ->scalarNode('url')->isRequired()->cannotBeEmpty()->end()
+                ->arrayNode('kbbi')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('url')
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
 
