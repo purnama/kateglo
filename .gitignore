@@ -7,7 +7,6 @@
 /build/
 /vendor/
 /bin/
-/src/Kateglo/PusbaBundle/Service/Curl.php
 /composer.phar
 /.idea
 /.idea/*/*
