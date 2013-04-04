@@ -1,6 +1,6 @@
 <?php
 
-namespace Kateglo\KbbiBundle\DependencyInjection;
+namespace Kateglo\PusbaBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class KategloKbbiExtension extends Extension
+class KategloPusbaExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -25,5 +25,7 @@ class KategloKbbiExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $container->setParameter('kateglo_pusba.kbbi.url', $config['kbbi']['url']);
     }
 }

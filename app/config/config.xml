@@ -13,7 +13,7 @@
            xmlns:sensio_framework_extra="sensio_framework_extra"
            xmlns:fos_user="fos_user"
            xmlns:fos_rest="fos_rest"
-           xmlns:kateglo_kbbi="kateglo_kbbi"
+           xmlns:kateglo_pusba="kateglo_pusba"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
            http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd
            http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd
@@ -139,9 +139,10 @@
         <swiftmailer:spool type="memory"/>
     </swiftmailer:config>
 
-    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User" use_username_form_type="true">
+    <fos_user:config db-driver="orm" firewall-name="secured_area" user-class="Kateglo\UserBundle\Entity\User"
+                     use_username_form_type="true">
         <fos_user:registration>
-            <fos_user:form type="kateglo_user_registration" />
+            <fos_user:form type="kateglo_user_registration"/>
             <fos_user:confirmation enabled="true">
                 <fos_user:from_email address="registration@kateglo.com" sender_name="Kateglo Registration"/>
             </fos_user:confirmation>
@@ -181,10 +182,13 @@
     <jms_di_extra:config>
         <jms_di_extra:locations all-bundles="false">
             <jms_di_extra:bundles>KategloDefaultBundle</jms_di_extra:bundles>
+            <jms_di_extra:bundles>KategloPusbaBundle</jms_di_extra:bundles>
 
             <jms_di_extra:directories>%kernel.root_dir%/../src</jms_di_extra:directories>
         </jms_di_extra:locations>
     </jms_di_extra:config>
 
-    <kateglo_kbbi:config url="test" />
+    <kateglo_pusba:config>
+        <kateglo_pusba:kbbi url="http://bahasa.kemdiknas.go.id/kbbi/index.php" />
+    </kateglo_pusba:config>
 </container>

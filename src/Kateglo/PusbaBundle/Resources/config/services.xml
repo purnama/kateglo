@@ -6,11 +6,11 @@
 
     <!--
     <parameters>
-        <parameter key="kateglo_kbbi.example.class">Kateglo\KbbiBundle\Example</parameter>
+        <parameter key="kateglo_pusba.example.class">Kateglo\PusbaBundle\Example</parameter>
     </parameters>
 
     <services>
-        <service id="kateglo_kbbi.example" class="%kateglo_kbbi.example.class%">
+        <service id="kateglo_pusba.example" class="%kateglo_pusba.example.class%">
             <argument type="service" id="service_id" />
             <argument>plain_value</argument>
             <argument>%parameter_name%</argument>

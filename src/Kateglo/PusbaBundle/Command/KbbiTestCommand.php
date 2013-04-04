@@ -22,23 +22,21 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\KbbiBundle\Command;
+namespace Kateglo\PusbaBundle\Command;
 
-use Kateglo\KbbiBundle\Service\Kbbi;
+use Kateglo\PusbaBundle\Service\Kbbi;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class RequestTestCommand extends ContainerAwareCommand
+class KbbiTestCommand extends ContainerAwareCommand
 {
-    /**
-     * @var Kbbi
-     */
-    private $kbbiService;
 
     /**
      * @see Command
@@ -46,12 +44,12 @@ class RequestTestCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('kbbi:request:test')
+            ->setName('pusba:kbbi:test')
             ->setDescription('Test Pengambilan data dari KBBI')
             ->setDefinition(
                 array(
-                    new InputArgument('entri', InputArgument::REQUIRED, 'Entri Pencarian'),
-                    new InputOption('opkode', '-o', InputOption::VALUE_REQUIRED, 'Aturan Pencarian 1:Sama dengan, 2:diawali, 3:memuat', 1),
+                    new InputArgument('param', InputArgument::REQUIRED, 'Entri Pencarian'),
+                    new InputOption('opcode', '-o', InputOption::VALUE_REQUIRED, 'Aturan Pencarian 1:Sama dengan, 2:diawali, 3:memuat', 1),
                 )
             )
             ->setHelp(
@@ -80,22 +78,14 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entry = $input->getArgument('entri');
-        $opcode = $input->getOption('opkode');
+        $entry = $input->getArgument('param');
+        $opcode = $input->getOption('opcode');
 
-        $result = $this->kbbiService->request($entry, $opcode);
+        /** @var $kbbiService Kbbi */
+        $kbbiService = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi');
 
+        $result = $kbbiService->request($entry, $opcode);
         $output->writeln(sprintf('Hasil: <comment>%s</comment>', $result));
-    }
-
-    /**
-     * @param Kbbi $kbbiService
-     * @InjectParams({
-     *  "kbbiService" = @Inject("kateglo.kbbi_bundle.service.kbbi")
-     * })
-     */
-    public function setKbbiService(Kbbi $kbbiService){
-        $this->kbbiService = $kbbiService;
     }
 
 }
