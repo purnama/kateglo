@@ -34,13 +34,21 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Parser
 {
+    /**
+     * @var ArrayCollection
+     */
     private $result;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->result = new ArrayCollection();
     }
 
-    public function getResult(){
+    /**
+     * @return ArrayCollection
+     */
+    public function getResult()
+    {
         return $this->result;
     }
 
@@ -65,71 +73,62 @@ class Parser
         }
     }
 
-    protected function checkTag(\DOMNode $node, $tagName){
-        if($node->nodeName !== $tagName){
-            throw new \Exception('Expecting html tag.');
+    protected function checkTag(\DOMNode $node, $tagName)
+    {
+        if ($node->nodeName !== $tagName) {
+            throw new \Exception('Expecting ' . $tagName . ' tag.');
         }
     }
 
     protected function parseBody(\DOMNode $body)
     {
-        $entry = array('entry' => $this->param);
 
         $firstChild = $body->firstChild;
-        if ($firstChild->nodeName === 'b') {
-            /** @var $b \DOMNode */
-            foreach ($firstChild->childNodes as $b) {
-                if ($b->nodeName === '#text') {
-                    $entry['syllable'] = trim($b->nodeValue);
-                }
+        $this->checkTag($firstChild, 'b');
+        /** @var $b \DOMNode */
+        foreach ($firstChild->childNodes as $b) {
+            if ($b->nodeName === '#text') {
+                $entry['syllable'] = trim($b->nodeValue);
+                $entry['entry'] = str_ireplace('·', '', $entry['syllable']);
             }
-        } else {
-            throw new \Exception('Syllable not Found');
         }
 
         $firstSibling = $firstChild->nextSibling->nextSibling;
-        if ($firstSibling->nodeName === 'i') {
-            $entry['class'] = trim($firstSibling->nodeValue);
-        } else {
-            throw new \Exception('Classification not Found. Node Name:' . $firstSibling->nodeName . ' Node Value:' . $firstSibling->nodeValue);
-        }
+        $this->checkTag($firstSibling, 'i');
+        $entry['class'] = trim($firstSibling->nodeValue);
 
         $secondSibling = $firstSibling->nextSibling;
-        if ($secondSibling->nodeName === '#text') {
-            $definitions = explode(';', $secondSibling->nodeValue);
-            foreach ($definitions as $definition) {
-                $definition = trim($definition);
-                if ($definition !== '') {
-                    $entry['definition'][] = $definition;
-                }
+        $this->checkTag($secondSibling, '#text');
+        $definitions = explode(';', $secondSibling->nodeValue);
+        foreach ($definitions as $definition) {
+            $definition = trim($definition);
+            if ($definition !== '') {
+                $entry['definition'][] = $definition;
             }
-        } else {
-            throw new \Exception('Definition not Found');
         }
 
-        $result->add($entry);
 
-        if ($secondSibling->nextSibling->nodeName !== 'br') {
-            throw new \Exception('Instead br found Node:' . $secondSibling->nextSibling->nodeValue);
-        }
+        $this->result->add($entry);
+        $this->checkTag($secondSibling->nextSibling, 'br');
 
-        $this->parseRestDefinition($secondSibling->nextSibling->nextSibling, $result);
+
+        $this->parseRestDefinition($secondSibling->nextSibling->nextSibling);
     }
 
-    protected function parseRestDefinition(\DOMNode $node, ArrayCollection $result)
+    protected function parseRestDefinition(\DOMNode $node)
     {
         if ($node->nodeName === '#text') {
             if ($node->nodeValue === '--') {
                 $entrySibling = $node->nextSibling;
                 if ($entrySibling->nodeName === 'i') {
                     $entryRaw = explode(',', $entrySibling->nodeValue);
-                    $entry['entry'] = $this->param . ' ' . trim($entryRaw[0]);
+                    $entry['entry'] = $this->result->get(0)['entry'] . ' ' . trim($entryRaw[0]);
                     $entry['class'] = trim($entryRaw[1]);
                     $definitionSibling = $entrySibling->nextSibling;
                     if ($definitionSibling->nodeName === '#text') {
                         $definitionRaw = explode(';', $definitionSibling->nodeValue);
                         $entry['definition'] = trim($definitionRaw[0]);
-                        $result->add($entry);
+                        $this->result->add($entry);
                     } else {
                         throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
                     }

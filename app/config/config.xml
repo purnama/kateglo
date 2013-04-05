@@ -189,6 +189,8 @@
     </jms_di_extra:config>
 
     <kateglo_pusba:config>
-        <kateglo_pusba:kbbi url="http://bahasa.kemdiknas.go.id/kbbi/index.php" />
+        <kateglo_pusba:kbbi url="http://bahasa.kemdiknas.go.id/kbbi/index.php">
+            <kateglo_pusba:directory>%kernel.root_dir%/../src/Kateglo/PusbaBundle/Tests/Resources/Kbbi</kateglo_pusba:directory>
+        </kateglo_pusba:kbbi>
     </kateglo_pusba:config>
 </container>

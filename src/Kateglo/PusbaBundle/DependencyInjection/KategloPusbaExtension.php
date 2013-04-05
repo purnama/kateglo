@@ -27,5 +27,6 @@ class KategloPusbaExtension extends Extension
         $loader->load('services.xml');
 
         $container->setParameter('kateglo_pusba.kbbi.url', $config['kbbi']['url']);
+        $container->setParameter('kateglo_pusba.kbbi.directory', $config['kbbi']['directory']);
     }
 }
