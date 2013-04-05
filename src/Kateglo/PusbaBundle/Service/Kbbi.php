@@ -27,7 +27,8 @@ namespace Kateglo\PusbaBundle\Service;
 use JMS\DiExtraBundle\Annotation\Service;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
-use Doctrine\Common\Collections\ArrayCollection;
+use Kateglo\PusbaBundle\Service\Kbbi\Extractor;
+use Kateglo\PusbaBundle\Service\Kbbi\Parser;
 
 /**
  *
@@ -50,6 +51,16 @@ class Kbbi
      */
     private $curl;
 
+    /**
+     * @var Kbbi\Extractor
+     */
+    private $extractor;
+
+    /**
+     * @var Kbbi\Parser
+     */
+    private $parser;
+
     private $param;
 
     private $opCode;
@@ -58,13 +69,17 @@ class Kbbi
      * @param string $url
      * @InjectParams({
      *  "url" = @Inject("%kateglo_pusba.kbbi.url%"),
-     *  "curl" = @Inject("kateglo.pusba_bundle.service.curl")
+     *  "curl" = @Inject("kateglo.pusba_bundle.service.curl"),
+     *  "extractor" = @Inject("kateglo.pusba_bundle.service.kbbi.extractor"),
+     *  "parser" = @Inject("kateglo.pusba_bundle.service.kbbi.parser")
      * })
      */
-    public function __construct($url, Curl $curl)
+    public function __construct($url, Curl $curl, Extractor $extractor, Parser $parser)
     {
         $this->url = $url;
         $this->curl = $curl;
+        $this->extractor = $extractor;
+        $this->parser = $parser;
         $this->curl->setUrl($this->url);
         $this->curl->setPost(true);
     }
@@ -73,146 +88,34 @@ class Kbbi
     {
         $this->param = $param;
         $this->opCode = $opCode;
+
+        //Search Word
         $this->curl->setPostFields(sprintf(static::SEARCH, $opCode, $param));
-        $this->curl->execute();
-        if ($this->curl->getStatus() === 200) {
-            return $this->parseDft($this->curl->getResult());
-        } else {
-            throw new \Exception('Status: ' . $this->curl->getStatus());
-        }
-    }
+        $this->execute();
 
-    protected function parseDft($result)
-    {
-        $pattern = '/<input type="hidden" name="DFTKATA" value="(.+)" >.+' .
-            '<input type="hidden" name="MORE" value="(.+)" >.+' .
-            '<input type="hidden" name="HEAD" value="(.+)" >/s';
-        preg_match($pattern, $result, $match);
-        if (is_array($match)) {
-            if (is_numeric($match[2]) && $match[2] == 1) {
-                throw new \HttpException('Match Paginated!');
-            }
-            $dft = $match[1];
-            $entries = explode(';', $dft);
-            $result = '';
-            foreach ($entries as $entry) {
-                $result .= $this->define($dft, $entry);
-            }
+        //Extract the Result List
+        $listString = $this->extractor->extractList($this->curl->getResult());
 
-            return $result;
-        } else {
-            throw new \Exception('Pattern can not match the result!');
-        }
-    }
-
-    protected function define($dft, $entry)
-    {
-        $this->curl->setPostFields(sprintf(static::DEFINE, $dft, $entry, $this->opCode, $this->param));
-        $this->curl->execute();
-        if ($this->curl->getStatus() === 200) {
+        //For each words in the list get the Definition
+        $wordList = explode(';', $listString);
+        foreach ($wordList as $word) {
+            $this->curl->setPostFields(sprintf(static::DEFINE, $listString, $word, $this->opCode, $this->param));
+            $this->execute();
             $result = $this->curl->getResult();
-            $pattern = '/(<p style=\'margin-left:\.5in;text-indent:-\.5in\'>)(.+)(<\/(p|BODY)>)/s';
-            preg_match($pattern, $result, $match);
+            $rawDefinition =$this->extractor->extractDefinition($result);
+            $this->parser->parse($rawDefinition);
 
-            if (is_array($match)) {
-                $dom = new \DOMDocument('', 'UTF-8');
-                $dom->loadHTML($match[2] . '</i>');
+            return json_encode($this->parseDefinition($dom));
+        }
 
-                return json_encode($this->parseDefinition($dom));
-            } else {
-                throw new \Exception('Pattern can not match the result!');
-            }
-        } else {
+    }
+
+    protected function execute()
+    {
+        $this->curl->execute();
+        if ($this->curl->getStatus() !== 200) {
             throw new \Exception('Status: ' . $this->curl->getStatus());
         }
     }
 
-    protected function parseDefinition(\DOMDocument $dom)
-    {
-        $result = new ArrayCollection();
-        /** @var $html \DOMNode */
-        foreach ($dom->childNodes as $html) {
-            if ($html->hasChildNodes()) {
-                /** @var $body \DOMNode */
-                foreach ($html->childNodes as $body) {
-                    $this->parseDefinitionBody($body, $result);
-                }
-            }
-        }
-
-        return $result->toArray();
-    }
-
-    protected function parseDefinitionBody(\DOMNode $body, ArrayCollection $result)
-    {
-        $entry = array('entry' => $this->param);
-
-        $firstChild = $body->firstChild;
-        if ($firstChild->nodeName === 'b') {
-            /** @var $b \DOMNode */
-            foreach ($firstChild->childNodes as $b) {
-                if ($b->nodeName === '#text') {
-                    $entry['syllable'] = trim($b->nodeValue);
-                }
-            }
-        } else {
-            throw new \Exception('Syllable not Found');
-        }
-
-        $firstSibling = $firstChild->nextSibling->nextSibling;
-        if ($firstSibling->nodeName === 'i') {
-            $entry['class'] = trim($firstSibling->nodeValue);
-        } else {
-            throw new \Exception('Classification not Found. Node Name:' . $firstSibling->nodeName . ' Node Value:' . $firstSibling->nodeValue);
-        }
-
-        $secondSibling = $firstSibling->nextSibling;
-        if ($secondSibling->nodeName === '#text') {
-            $definitions = explode(';', $secondSibling->nodeValue);
-            foreach ($definitions as $definition) {
-                $definition = trim($definition);
-                if ($definition !== '') {
-                    $entry['definition'][] = $definition;
-                }
-            }
-        } else {
-            throw new \Exception('Definition not Found');
-        }
-
-        $result->add($entry);
-
-        if ($secondSibling->nextSibling->nodeName !== 'br') {
-            throw new \Exception('Instead br found Node:' . $secondSibling->nextSibling->nodeValue);
-        }
-
-        $this->parseRestDefinition($secondSibling->nextSibling->nextSibling, $result);
-    }
-
-    protected function parseRestDefinition(\DOMNode $node, ArrayCollection $result)
-    {
-        if ($node->nodeName === '#text') {
-            if ($node->nodeValue === '--') {
-                $entrySibling = $node->nextSibling;
-                if ($entrySibling->nodeName === 'i') {
-                    $entryRaw = explode(',', $entrySibling->nodeValue);
-                    $entry['entry'] = $this->param . ' ' . trim($entryRaw[0]);
-                    $entry['class'] = trim($entryRaw[1]);
-                    $definitionSibling = $entrySibling->nextSibling;
-                    if ($definitionSibling->nodeName === '#text') {
-                        $definitionRaw = explode(';', $definitionSibling->nodeValue);
-                        $entry['definition'] = trim($definitionRaw[0]);
-                        $result->add($entry);
-                    } else {
-                        throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
-                    }
-                } else {
-                    throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');
-                }
-            }
-        } elseif ($node->nodeName === 'b') {
-
-        } else {
-            throw new \Exception('Next Step not understand');
-        }
-    }
 }
