@@ -47,11 +47,6 @@ class Kbbi
     private $url;
 
     /**
-     * @var string directory for raw files
-     */
-    private $directory;
-
-    /**
      * @var Curl
      */
     private $curl;
@@ -77,16 +72,24 @@ class Kbbi
     private $opCode;
 
     /**
-     * @param string $url
+     * @var string
+     */
+    private $listString;
+
+    /**
+     * @param $url
+     * @param Curl $curl
+     * @param Extractor $extractor
+     * @param Parser $parser
+     *
      * @InjectParams({
      *  "url" = @Inject("%kateglo_pusba.kbbi.url%"),
-     *  "directory" = @Inject("kateglo_pusba.kbbi.directory%"),
      *  "curl" = @Inject("kateglo.pusba_bundle.service.curl"),
      *  "extractor" = @Inject("kateglo.pusba_bundle.service.kbbi.extractor"),
      *  "parser" = @Inject("kateglo.pusba_bundle.service.kbbi.parser")
      * })
      */
-    public function __construct($url, $directory, Curl $curl, Extractor $extractor, Parser $parser)
+    public function __construct($url, Curl $curl, Extractor $extractor, Parser $parser)
     {
         $this->url = $url;
         $this->curl = $curl;
@@ -114,13 +117,9 @@ class Kbbi
 
     public function request()
     {
-        //Extract the Result List
-        $listString = $this->extractor->extractList($this->requestSearch());
-
-        //For each words in the list get the Definition
-        $wordList = explode(';', $listString);
+        $wordList = $this->getWordList();
         foreach ($wordList as $word) {
-            $rawDefinition = $this->extractor->extractDefinition($this->requestDefinition($listString, $word));
+            $rawDefinition = $this->extractor->extractDefinition($this->requestDefinition($word));
             $this->parser->parse($rawDefinition);
 
             return json_encode($this->parser->getResult()->toArray());
@@ -128,59 +127,40 @@ class Kbbi
 
     }
 
-    public function createRawSearch()
+    public function getRaw()
     {
-        $filename = $this->directory . DIRECTORY_SEPARATOR . 'search_' . $this->param . '.html';
-        if (file_put_contents($filename, $this->requestSearch()) !== false) {
-            return 'File: ' . $filename . ' created.';
-        } else {
-            throw new \Exception('File can not be created.');
-        }
+        return $this->requestSearch();
     }
 
-    public function createRawDefinition()
+    public function getRawDefinition()
     {
-        //Extract the Result List
-        $listString = $this->extractor->extractList($this->requestSearch());
-
-        //For each words in the list get the Definition
-        $wordList = explode(';', $listString);
+        $wordList = $this->getWordList();
         $resultText = array();
         foreach ($wordList as $word) {
-            $filename = $this->directory . DIRECTORY_SEPARATOR . 'definition_' . $word . '.html';
-            if (file_put_contents($filename, $this->requestDefinition($listString, $word)) !== false) {
-                $resultText[] = 'File: ' . $filename . ' created.';
-            } else {
-                throw new \Exception('File can not be created.');
-            }
+            $resultText[$word] = $this->requestDefinition($word);
         }
 
-        return implode("\n", $resultText);
+        return $resultText;
     }
 
-    public function createRawExtractedDefinition()
+    public function getRawExtracted()
     {
-        //Extract the Result List
-        $listString = $this->extractor->extractList($this->requestSearch());
-
-        //For each words in the list get the Definition
-        $wordList = explode(';', $listString);
+        $wordList = $this->getWordList();
         $resultText = array();
         foreach ($wordList as $word) {
-            $filename = $this->directory . DIRECTORY_SEPARATOR . 'extracted_' . $word . '.html';
-
-            if (file_put_contents(
-                $filename,
-                $this->extractor->extractDefinition($this->requestDefinition($listString, $word))
-            ) !== false
-            ) {
-                $resultText[] = 'File: ' . $filename . ' created.';
-            } else {
-                throw new \Exception('File can not be created.');
-            }
+            $resultText[$word] = $this->extractor->extractDefinition($this->requestDefinition($word));
         }
 
-        return implode("\n", $resultText);
+        return $resultText;
+    }
+
+    protected function getWordList()
+    {
+        //Extract the Result List
+        $this->listString = $this->extractor->extractList($this->requestSearch());
+
+        //For each words in the list get the Definition
+        return explode(';', $this->listString);
     }
 
     protected function requestSearch()
@@ -194,12 +174,12 @@ class Kbbi
         return $this->curl->getResult();
     }
 
-    protected function requestDefinition($listString, $word)
+    protected function requestDefinition($word)
     {
-        if (empty($listString) || empty($word) || empty($this->opCode) || empty($this->param)) {
+        if (empty($this->listString) || empty($word) || empty($this->opCode) || empty($this->param)) {
             throw new \Exception('Parameter can not be empty');
         }
-        $this->curl->setPostFields(sprintf(static::DEFINITION, $listString, $word, $this->opCode, $this->param));
+        $this->curl->setPostFields(sprintf(static::DEFINITION, $this->listString, $word, $this->opCode, $this->param));
         $this->execute();
 
         return $this->curl->getResult();

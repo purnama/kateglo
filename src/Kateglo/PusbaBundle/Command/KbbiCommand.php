@@ -90,21 +90,43 @@ EOT
 
         $kbbiService->setOpCode($opcode);
         $kbbiService->setParam($entry);
-        $result = '';
         switch ($create) {
             case 'search':
-                $result = $kbbiService->createRawSearch();
+                $this->createFile($output, $verbose, 'search_' . $entry . '.html', $kbbiService->getRaw());
+                break;
             case 'definition' :
-                $result = $kbbiService->createRawDefinition();
+                $wordList = $kbbiService->getRawDefinition();
+                foreach ($wordList as $word => $content) {
+                    $this->createFile($output, $verbose, 'definition_' . $word . '.html', $content);
+                }
+                break;
             case 'extracted' :
-                $result = $kbbiService->createRawExtractedDefinition();
+                $wordList = $kbbiService->getRawExtracted();
+                foreach ($wordList as $word => $content) {
+                    $this->createFile($output, $verbose, 'extracted_' . $word . '.html', $content);
+                }
+                break;
             case null:
                 $result = $kbbiService->request();
+                if ($verbose) {
+                    $output->writeln(sprintf('<comment>%s</comment>', $result));
+                }
+                break;
             default:
                 throw new \Exception('Create option not found');
         }
-        if ($verbose) {
-            $output->writeln(sprintf('Hasil: <comment>%s</comment>', $result));
+
+    }
+
+    protected function createFile(OutputInterface $output, $verbose = false, $filename, $content)
+    {
+        $filename = $this->getContainer()->getParameter('kateglo_pusba.kbbi.directory') . DIRECTORY_SEPARATOR . str_replace(' ', '_', $filename);
+        if (file_put_contents($filename, $content) !== false) {
+            if ($verbose) {
+                $output->writeln('File: ' . $filename . ' created.');
+            }
+        } else {
+            throw new \Exception('File ' . $filename . ' can not be created.');
         }
     }
 

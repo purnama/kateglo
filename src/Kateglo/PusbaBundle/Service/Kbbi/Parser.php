@@ -112,34 +112,53 @@ class Parser
         $this->checkTag($secondSibling->nextSibling, 'br');
 
 
-        $this->parseRestDefinition($secondSibling->nextSibling->nextSibling);
+        $this->parseRestDefinition($secondSibling->nextSibling);
     }
 
     protected function parseRestDefinition(\DOMNode $node)
     {
-        if ($node->nodeName === '#text') {
-            if ($node->nodeValue === '--') {
-                $entrySibling = $node->nextSibling;
-                if ($entrySibling->nodeName === 'i') {
-                    $entryRaw = explode(',', $entrySibling->nodeValue);
-                    $entry['entry'] = $this->result->get(0)['entry'] . ' ' . trim($entryRaw[0]);
-                    $entry['class'] = trim($entryRaw[1]);
-                    $definitionSibling = $entrySibling->nextSibling;
-                    if ($definitionSibling->nodeName === '#text') {
-                        $definitionRaw = explode(';', $definitionSibling->nodeValue);
-                        $entry['definition'] = trim($definitionRaw[0]);
-                        $this->result->add($entry);
-                    } else {
-                        throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
+        if ($node->nextSibling instanceof \DOMNode) {
+            do {
+                $node = $node->nextSibling;
+                if ($node->nodeName === '#text') {
+                    if ($node->nodeValue === '--') {
+                        $this->parseInheritance($node);
                     }
-                } else {
-                    throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');
-                }
-            }
-        } elseif ($node->nodeName === 'b') {
+                } elseif ($node->nodeName === 'b') {
 
+                } else {
+                    throw new \Exception('Next Step not understand');
+                }
+            } while ($node->nextSibling instanceof \DOMNode);
         } else {
-            throw new \Exception('Next Step not understand');
+            throw new \Exception('Next Sibling not found.');
+        }
+    }
+
+    protected function parseInheritance(\DOMNode $node)
+    {
+        $entrySibling = $node->nextSibling;
+        if ($entrySibling->nodeName === 'i') {
+            $entryRaw = explode(',', $entrySibling->nodeValue);
+            if (strpos(trim($entryRaw[0]), '--') === false) {
+                $entry['entry'] = $this->result->get(0)['entry'] . ' ' . trim($entryRaw[0]);
+            } else {
+                $entry['entry'] = str_replace('--', $this->result->get(0)['entry'], trim($entryRaw[0]));
+            }
+            $entry['class'] = trim($entryRaw[1]);
+            $definitionSibling = $entrySibling->nextSibling;
+            if ($definitionSibling->nodeName === '#text') {
+                $definitionRaw = explode(';', $definitionSibling->nodeValue);
+                $entry['definition'] = trim($definitionRaw[0]);
+                $this->result->add($entry);
+                if (count($definitionRaw) > 1 && (trim($definitionRaw[1]) === '--' || trim($definitionRaw[1]) === '')) {
+                    $this->parseInheritance($definitionSibling);
+                }
+            } else {
+                throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
+            }
+        } else {
+            throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');
         }
     }
 }
