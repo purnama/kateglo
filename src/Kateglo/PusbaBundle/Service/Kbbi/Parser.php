@@ -67,7 +67,7 @@ class Parser
                 /** @var $body \DOMNode */
                 foreach ($html->childNodes as $body) {
                     $this->checkTag($body, 'body');
-                    $this->parseBody($body);
+                    $this->parseBody($body->firstChild);
                 }
             }
         }
@@ -80,56 +80,130 @@ class Parser
         }
     }
 
-    protected function parseBody(\DOMNode $body)
+    protected function parseBody(\DOMNode $node)
     {
-
-        $firstChild = $body->firstChild;
-        $this->checkTag($firstChild, 'b');
+        $this->checkTag($node, 'b');
         /** @var $b \DOMNode */
-        foreach ($firstChild->childNodes as $b) {
+        foreach ($node->childNodes as $b) {
             if ($b->nodeName === '#text') {
                 $entry['syllable'] = trim($b->nodeValue);
                 $entry['entry'] = str_ireplace('·', '', $entry['syllable']);
             }
         }
 
-        $firstSibling = $firstChild->nextSibling->nextSibling;
+        $firstSibling = $node->nextSibling->nextSibling;
         $this->checkTag($firstSibling, 'i');
         $entry['class'] = trim($firstSibling->nodeValue);
 
         $secondSibling = $firstSibling->nextSibling;
         $this->checkTag($secondSibling, '#text');
+        if (trim($secondSibling->nodeValue) === '') {
+            $secondSibling = $secondSibling->nextSibling;
+            if ($secondSibling->nodeName === 'b' && is_numeric($secondSibling->nodeValue)) {
+                $secondSibling = $secondSibling->nextSibling;
+                if ($secondSibling->nodeName !== '#text') {
+                    throw new \Exception('Next Step not understand');
+                }
+            } else {
+                throw new \Exception('Next Step not understand');
+            }
+        }
         $definitions = explode(';', $secondSibling->nodeValue);
+        $sampleNode = null;
+        $this->extractDefinition($definitions, $secondSibling, $sampleNode, $entry);
+
+        $this->finishing($sampleNode, $secondSibling, $entry);
+    }
+
+    protected function finishing(&$sampleNode, \DOMNode $secondSibling, &$entry)
+    {
+        if ($sampleNode instanceof \DOMNode && $sampleNode->hasChildNodes()) {
+            $found = false;
+            /** @var $sampleChildNode \DOMNode */
+            foreach ($sampleNode->childNodes as $sampleChildNode) {
+                if ($sampleChildNode->nodeName === 'br') {
+                    $this->result->add($entry);
+                    if ($sampleNode->nextSibling->nodeName === 'b') {
+                        $this->parseBody($sampleNode->nextSibling);
+                        $found = true;
+                    } else {
+                        throw new \Exception('Next Step not understand');
+                    }
+                }
+            }
+            if (!$found) {
+                $this->result->add($entry);
+            }
+        } else {
+
+            $this->result->add($entry);
+            if ($secondSibling->nextSibling->nodeName !== 'br') {
+                if ($secondSibling->nextSibling->nodeName === 'b' && is_numeric(
+                    $secondSibling->nextSibling->nodeValue
+                )
+                ) {
+                    $nextEntry['entry'] = $entry['entry'];
+                    $nextEntry['class'] = $entry['class'];
+                    $nextEntry['syllable'] = $entry['syllable'];
+
+                    $definitions = explode(';', $secondSibling->nextSibling->nextSibling->nodeValue);
+                    $sampleNode = null;
+                    $this->extractDefinition(
+                        $definitions,
+                        $secondSibling->nextSibling->nextSibling,
+                        $sampleNode,
+                        $nextEntry
+                    );
+                    $this->finishing($sampleNode, $secondSibling->nextSibling->nextSibling, $nextEntry);
+                } else {
+                    throw new \Exception('Next Step not understand');
+                }
+            } else {
+                $this->checkTag($secondSibling->nextSibling, 'br');
+
+
+                $this->parseRestDefinition($secondSibling->nextSibling);
+            }
+        }
+    }
+
+    protected function extractDefinition($definitions, \DOMNode $secondSibling, &$sampleNode, &$entry)
+    {
         foreach ($definitions as $definition) {
             $definition = trim($definition);
             if ($definition !== '') {
-                $entry['definition'][] = $definition;
+                $explodeSample = explode(':', $definition);
+                if (count($explodeSample) > 1) {
+                    $sampleNode = $secondSibling->nextSibling;
+                    if ($sampleNode->nodeName === 'i') {
+                        $explodeSampleEntry = explode(';', trim($sampleNode->nodeValue));
+                        if (strpos($explodeSampleEntry[0], '~') === false) {
+                            $entry['sample'] = $entry['entry'] . ' ' . trim($explodeSampleEntry[0]);
+                        } else {
+                            $entry['sample'] = str_replace('~', $entry['entry'], $explodeSampleEntry[0]);
+                        }
+                        $entry['definition'][] = trim($explodeSample[0]);
+                    }
+                } else {
+                    $entry['definition'][] = $explodeSample[0];
+                }
             }
         }
-
-
-        $this->result->add($entry);
-        $this->checkTag($secondSibling->nextSibling, 'br');
-
-
-        $this->parseRestDefinition($secondSibling->nextSibling);
     }
 
     protected function parseRestDefinition(\DOMNode $node)
     {
         if ($node->nextSibling instanceof \DOMNode) {
-            do {
-                $node = $node->nextSibling;
-                if ($node->nodeName === '#text') {
-                    if ($node->nodeValue === '--') {
-                        $this->parseInheritance($node);
-                    }
-                } elseif ($node->nodeName === 'b') {
-
-                } else {
-                    throw new \Exception('Next Step not understand');
+            $node = $node->nextSibling;
+            if ($node->nodeName === '#text') {
+                if ($node->nodeValue === '--') {
+                    $this->parseInheritance($node);
                 }
-            } while ($node->nextSibling instanceof \DOMNode);
+            } elseif($node->nodeName === 'b'){
+                $this->parseBody($node);
+            }else {
+                throw new \Exception('Next Step not understand');
+            }
         } else {
             throw new \Exception('Next Sibling not found.');
         }
@@ -138,24 +212,88 @@ class Parser
     protected function parseInheritance(\DOMNode $node)
     {
         $entrySibling = $node->nextSibling;
-        if ($entrySibling->nodeName === 'i') {
+        if ($entrySibling->nodeName === 'i' || $entrySibling->nodeName === 'b') {
             $entryRaw = explode(',', $entrySibling->nodeValue);
-            if (strpos(trim($entryRaw[0]), '--') === false) {
-                $entry['entry'] = $this->result->get(0)['entry'] . ' ' . trim($entryRaw[0]);
-            } else {
-                $entry['entry'] = str_replace('--', $this->result->get(0)['entry'], trim($entryRaw[0]));
+            $trimEntry = trim($entryRaw[0]);
+            if (is_numeric(substr($trimEntry, -1))) {
+                if (strlen($trimEntry) > 1) {
+                    $trimEntry = trim(substr($trimEntry, 0, strlen($trimEntry) - 1));
+                } else {
+                    $trimEntry = str_replace(
+                        $this->result->get(0)['entry'],
+                        '--',
+                        $this->result->get(count($this->result) - 1)['entry']
+                    );
+                }
             }
-            $entry['class'] = trim($entryRaw[1]);
+            if (strpos($trimEntry, '--') === false) {
+                $entry['entry'] = $this->result->get(0)['entry'] . ' ' . $trimEntry;
+            } else {
+                $entry['entry'] = str_replace('--', $this->result->get(0)['entry'], $trimEntry);
+            }
+            if (count($entryRaw) > 1) {
+                $entry['class'] = trim($entryRaw[1]);
+            }
             $definitionSibling = $entrySibling->nextSibling;
             if ($definitionSibling->nodeName === '#text') {
                 $definitionRaw = explode(';', $definitionSibling->nodeValue);
-                $entry['definition'] = trim($definitionRaw[0]);
-                $this->result->add($entry);
-                if (count($definitionRaw) > 1 && (trim($definitionRaw[1]) === '--' || trim($definitionRaw[1]) === '')) {
-                    $this->parseInheritance($definitionSibling);
+                $trimDefinition = trim($definitionRaw[0]);
+                if ($trimDefinition === '') {
+                    $nextDefinitionSibling = $definitionSibling->nextSibling;
+                    if ($nextDefinitionSibling->nodeName === 'i') {
+                        $entry['discipline'] = trim($nextDefinitionSibling->nodeValue);
+                        $definitionSibling = $nextDefinitionSibling->nextSibling;
+                        if ($definitionSibling->nodeName === '#text') {
+                            $definitionRaw = explode(';', $definitionSibling->nodeValue);
+                            $trimDefinition = trim($definitionRaw[0]);
+                        } else {
+                            throw new \Exception('Sibling ' . $definitionSibling->nodeName . ' not expected');
+                        }
+                    } else {
+                        throw new \Exception('Sibling ' . $nextDefinitionSibling->nodeName . ' not expected');
+                    }
                 }
+                $explodeSample = explode(':', $trimDefinition);
+                if (count($explodeSample) > 1) {
+                    $sampleNode = $definitionSibling->nextSibling;
+                    if ($sampleNode->nodeName === 'i') {
+                        $explodeSampleEntry = explode(';', trim($sampleNode->nodeValue));
+                        $entry['sample'] = str_replace('--', $this->result->get(0)['entry'], $explodeSampleEntry[0]);
+                        $entry['definition'][] = trim($explodeSample[0]);
+                        $this->result->add($entry);
+                        if (count($explodeSampleEntry) > 1 && trim($explodeSampleEntry[1]) === '') {
+                            $nextSampleNode = $sampleNode->nextSibling;
+                            if ($nextSampleNode->nodeName === '#text' && trim($nextSampleNode->nodeValue) === '--') {
+                                $this->parseInheritance($nextSampleNode);
+                            }
+                        }
+                    }
+                } else {
+                    $entry['definition'][] = trim($explodeSample[0]);
+                    $this->result->add($entry);
+                    for ($i = 1; $i < count($definitionRaw); $i++) {
+                        $trimDefinitionRaw = trim($definitionRaw[$i]);
+                        if ($trimDefinitionRaw === '--' || $trimDefinitionRaw === '') {
+                            $this->parseInheritance($definitionSibling);
+                        } elseif (strpos($trimDefinitionRaw, $this->result->get(0)['entry']) !== false) {
+                            $entry['definition'][] = $trimDefinitionRaw;
+                        } else {
+                            throw new \Exception('Trim Definition not understand');
+                        }
+                    }
+                }
+
             } else {
                 throw new \Exception('Definition Sibling not found. Found:' . $definitionSibling->nodeName);
+            }
+        } elseif ($entrySibling->nodeName === 'br') {
+            $nextSibling = $entrySibling->nextSibling;
+            if ($nextSibling->nodeName === '#text' && trim($nextSibling->nodeValue) === '--') {
+                $this->parseInheritance($nextSibling);
+            } elseif ($nextSibling->nodeName === 'b') {
+                $this->parseBody($nextSibling);
+            } else {
+                throw new \Exception('Sibling ' . $nextSibling->nodeName . ' not expected');
             }
         } else {
             throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');

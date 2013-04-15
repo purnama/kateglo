@@ -58,9 +58,23 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $content = $this->getContent('extracted_kapal_(1).html');
         $this->testObj->parse($content);
         $result = $this->testObj->getResult();
+        $this->assertEquals(61, $result->count());
     }
 
-    private function getContent($filename){
-        return file_get_contents($this->resourceDir.$filename);
+    /**
+     *
+     * @test
+     */
+    public function parseKapal2()
+    {
+        $content = $this->getContent('extracted_kapal_(2).html');
+        $this->testObj->parse($content);
+        $result = $this->testObj->getResult();
+        $this->assertEquals(2, $result->count());
+    }
+
+    private function getContent($filename)
+    {
+        return file_get_contents($this->resourceDir . $filename);
     }
 }
