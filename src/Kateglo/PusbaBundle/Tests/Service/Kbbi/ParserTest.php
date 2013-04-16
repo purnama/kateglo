@@ -53,11 +53,27 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
+    public function parseAir(){
+        $result = $this->getParseResult('extracted_air.html');
+        $this->assertEquals(164, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseAlur(){
+        $result = $this->getParseResult('extracted_alur.html');
+        $this->assertEquals(165, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
     public function parseKapal1()
     {
-        $content = $this->getContent('extracted_kapal_(1).html');
-        $this->testObj->parse($content);
-        $result = $this->testObj->getResult();
+        $result = $this->getParseResult('extracted_kapal_(1).html');
         $this->assertEquals(61, $result->count());
     }
 
@@ -67,14 +83,14 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function parseKapal2()
     {
-        $content = $this->getContent('extracted_kapal_(2).html');
-        $this->testObj->parse($content);
-        $result = $this->testObj->getResult();
+        $result = $this->getParseResult('extracted_kapal_(2).html');
         $this->assertEquals(2, $result->count());
     }
 
-    private function getContent($filename)
+    private function getParseResult($filename)
     {
-        return file_get_contents($this->resourceDir . $filename);
+        $content = file_get_contents($this->resourceDir . $filename);
+        $this->testObj->parse($content);
+        return $this->testObj->getResult();
     }
 }
