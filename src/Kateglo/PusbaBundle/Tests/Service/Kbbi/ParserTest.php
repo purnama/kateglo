@@ -64,7 +64,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function parseAlur(){
         $result = $this->getParseResult('extracted_alur.html');
-        $this->assertEquals(165, $result->count());
+        $this->assertEquals(31, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseBeriTahu(){
+        $result = $this->getParseResult('extracted_beri_tahu.html');
+        $this->assertEquals(31, $result->count());
     }
 
     /**
