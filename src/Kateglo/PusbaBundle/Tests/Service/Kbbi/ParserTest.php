@@ -91,7 +91,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function parseHutan(){
         $result = $this->getParseResult('extracted_hutan.html');
-        $this->assertEquals(40, $result->count());
+        $this->assertEquals(43, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseInduk(){
+        $result = $this->getParseResult('extracted_induk.html');
+        $this->assertEquals(43, $result->count());
     }
 
     /**
