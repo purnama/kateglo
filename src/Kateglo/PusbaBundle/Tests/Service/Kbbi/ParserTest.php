@@ -133,6 +133,46 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(56, $result->count());
     }
 
+    /**
+     *
+     * @test
+     */
+    public function parseLampu()
+    {
+        $result = $this->getParseResult('extracted_lampu.html');
+        $this->assertEquals(60, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseLemah1()
+    {
+        $result = $this->getParseResult('extracted_lemah_(1).html');
+        $this->assertEquals(28, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseLemah2()
+    {
+        $result = $this->getParseResult('extracted_lemah_(2).html');
+        $this->assertEquals(1, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseLepas()
+    {
+        $result = $this->getParseResult('extracted_lepas.html');
+        $this->assertEquals(1, $result->count());
+    }
+
     private function getParseResult($filename)
     {
         $content = file_get_contents($this->resourceDir . $filename);
