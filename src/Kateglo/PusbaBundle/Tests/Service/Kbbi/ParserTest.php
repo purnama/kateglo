@@ -55,7 +55,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function parseAir(){
         $result = $this->getParseResult('extracted_air.html');
-        $this->assertEquals(163, $result->count());
+        $this->assertEquals(164, $result->count());
     }
 
     /**
@@ -100,7 +100,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function parseInduk(){
         $result = $this->getParseResult('extracted_induk.html');
-        $this->assertEquals(43, $result->count());
+        $this->assertEquals(30, $result->count());
     }
 
     /**
@@ -121,6 +121,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->getParseResult('extracted_kapal_(2).html');
         $this->assertEquals(2, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parseKepala()
+    {
+        $result = $this->getParseResult('extracted_kepala.html');
+        $this->assertEquals(56, $result->count());
     }
 
     private function getParseResult($filename)
