@@ -190,7 +190,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function parseTarik()
     {
         $result = $this->getParseResult('extracted_tarik.html');
-        $this->assertEquals(100, $result->count());
+        $this->assertEquals(60, $result->count());
     }
 
     private function getParseResult($filename)

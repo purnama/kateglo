@@ -296,7 +296,7 @@ class Parser
                             )
                             ) {
                                 $this->extractNextMeaning($secondSibling, $entry);
-                            }else{
+                            } else {
                                 $this->parseBody($secondSibling->nextSibling);
                             }
                         } else {
@@ -390,86 +390,13 @@ class Parser
                         $secondSibling = $secondSibling->nextSibling;
                         $sampleNode = $sampleNode->nextSibling;
                     }
-                    if ($sampleNode->nodeName === 'i') {
-                        $explodeSampleEntry = explode(';', $this->trimNewLines($sampleNode->nodeValue));
-                        $this->checkNextSiblingForSample(
-                            $secondSibling,
-                            $sampleNode,
-                            $explodeSampleEntry
-                        );
-                        for ($i = 0; $i < count($explodeSampleEntry); $i++) {
-                            if ($explodeSampleEntry[$i] === '' || $this->trimNewLines(
-                                $explodeSampleEntry[$i]
-                            ) === '--'
-                            ) {
-                                continue;
-                            }
-                            if (strpos($explodeSampleEntry[$i], '~') === false
-                                && strpos($explodeSampleEntry[$i], '- ') === false && strpos(
-                                $explodeSampleEntry[$i],
-                                ' -'
-                            ) === false && strpos(
-                                $explodeSampleEntry[$i],
-                                '--'
-                            ) === false
-                            ) {
-                                $sampleRaw = $this->trimNewLines(
-                                    $entry['entry'] . ' ' . $this->trimNewLines($explodeSampleEntry[$i])
-                                );
-                            } else {
-                                if (strpos($explodeSampleEntry[$i], ' -') === strlen($explodeSampleEntry[$i]) - 2) {
-                                    $sampleRaw = $this->trimNewLines(
-                                        str_replace(
-                                            ' -',
-                                            ' ' . $entry['entry'],
-                                            str_replace(
-                                                '--',
-                                                $entry['entry'] . ' ',
-                                                str_replace('~', $entry['entry'], $explodeSampleEntry[$i])
-                                            )
-                                        )
-                                    );
-                                } else {
-                                    $sampleRaw = $this->trimNewLines(
-                                        str_replace(
-                                            '- ',
-                                            $entry['entry'] . ' ',
-                                            str_replace(
-                                                '--',
-                                                $entry['entry'] . ' ',
-                                                str_replace('~', $entry['entry'], $explodeSampleEntry[$i])
-                                            )
-                                        )
-                                    );
-                                }
-                            }
-                            $explodeSampleRaw = explode(',', $sampleRaw);
-                            if (count($explodeSampleRaw) > 1 && strpos(
-                                $explodeSampleRaw[count($explodeSampleRaw) - 1],
-                                ' '
-                            ) === false
-                            ) {
-                                $newEntry['class'] = $this->trimNewLines(array_pop($explodeSampleRaw));
-                                $newEntry['entry'] = $this->trimNewLines(implode(', ', $explodeSampleRaw));
-                                $this->currentEntry = $newEntry['entry'];
-                                $newDefinition = $sampleNode->nextSibling;
-                                $this->checkTag($newDefinition, '#text');
-                                $newDefinitionRaw = explode(';', $newDefinition->nodeValue);
-                                foreach ($newDefinitionRaw as $definitionRaw) {
-                                    $newEntry['definition'][] = $this->trimNewLines($definitionRaw);
-                                }
-                                $this->result->add($newEntry);
-                            } else {
-                                $entry['sample'][] = $sampleRaw;
-                            }
-                        }
-                        $entry['definition'][] = $this->trimNewLines($explodeSample[0]);
-                    }elseif($sampleNode->nodeName === 'b' && is_numeric($this->trimNewLines($sampleNode->nodeValue))){
-                        $entry['definition'][] = $this->trimNewLines($explodeSample[0]);
-                        $sampleNode = $sampleNode->previousSibling;
-                    }else{
-                        throw new \Exception('Next Step not understand');
-                    }
+                    $this->extractSample(
+                        $sampleNode,
+                        $entry,
+                        $newEntry,
+                        $explodeSample,
+                        $secondSibling
+                    );
                 } else {
                     if (strpos($explodeSample[0], ',') === strlen($explodeSample[0]) - 1) {
                         $this->checkTag($secondSibling->nextSibling, 'i');
@@ -553,8 +480,6 @@ class Parser
                         $trimDefinition,
                         $explodeSample
                     );
-
-                    return array($definitionSibling, $definitionRaw, $trimDefinition, $explodeSample);
                 } else {
                     throw new \Exception('Sibling ' . $definitionSibling->nextSibling->nextSibling->nodeName . ' not expected');
                 }
@@ -626,6 +551,7 @@ class Parser
                 $this->getDefinitionSibling($definitionSibling, $definitionRaw, $trimDefinition, $explodeSample);
             }
         }
+
         $trimDefinition = $this->trimNewLines($definitionRaw[0]);
         if (strpos($trimDefinition, '--') !== false && strpos($trimDefinition, '--') === strlen($trimDefinition) - 2) {
             $strReplaceDefinitionRaw = str_replace(' --', '; --', $trimDefinition);
@@ -670,9 +596,9 @@ class Parser
                 $entry['entry'] = $this->currentEntry . ' ' . $trimEntry;
             } elseif (strpos($this->trimNewLines($entrySibling->previousSibling->nodeValue), '--') !== false) {
                 $entry['entry'] = $this->result->get(0)['entry'] . ' ' . $trimEntry;
-            } elseif($this->trimNewLines($trimEntry) !== ''){
+            } elseif ($this->trimNewLines($trimEntry) !== '') {
                 $entry['entry'] = $trimEntry;
-            }else {
+            } else {
                 throw new \Exception('Next Step not understand');
             }
 
@@ -697,7 +623,12 @@ class Parser
 
         }
         $definitionSibling = $entrySibling->nextSibling;
-
+        if ($definitionSibling->nodeName === '#text' && $this->trimNewLines($definitionSibling->nodeValue) === '') {
+            $definitionSibling = $definitionSibling->nextSibling;
+        }
+        if ($definitionSibling->nodeName === 'b' && is_numeric($this->trimNewLines($definitionSibling->nodeValue))) {
+            $definitionSibling = $definitionSibling->nextSibling;
+        }
         if ($definitionSibling->nodeName === 'i') {
             $entry['discipline'] = $this->trimNewLines($definitionSibling->nodeValue);
             $definitionSibling = $definitionSibling->nextSibling;
@@ -793,12 +724,27 @@ class Parser
             $save = true;
             for ($i = 1; $i < count($definitionRaw); $i++) {
                 $trimDefinitionRaw = $this->trimNewLines($definitionRaw[$i]);
+                $explodeSample = explode(':', $trimDefinitionRaw);
                 if ($trimDefinitionRaw === '--' || $trimDefinitionRaw === '~' || $trimDefinitionRaw === '') {
                     $this->result->add($entry);
                     $save = false;
                     $this->parseInheritance($definitionSibling);
                 } elseif ($trimDefinitionRaw !== '') {
-                    $entry['definition'][] = $trimDefinitionRaw;
+                    if (count($explodeSample) > 1) {
+                        $secondSibling = $definitionSibling;
+                        $definitionSibling = $definitionSibling->nextSibling;
+                        $this->extractSample($definitionSibling, $entry, $newEntry, $explodeSample, $secondSibling);
+                        if ($definitionSibling->nextSibling->nodeName === '#text' && strpos(
+                            $this->trimNewLines($definitionSibling->nextSibling->nodeValue),
+                            '~') !== false && $definitionSibling->nextSibling->nextSibling->nodeName === 'b'
+                        ) {
+                            $this->result->add($entry);
+                            $save = false;
+                            $this->parseInheritance($definitionSibling->nextSibling);
+                        }
+                    } else {
+                        $entry['definition'][] = $trimDefinitionRaw;
+                    }
                 } else {
                     throw new \Exception('Trim Definition not understand');
                 }
@@ -830,5 +776,105 @@ class Parser
 
         }
 
+    }
+
+    /**
+     * @param \DOMNode $sampleNode
+     * @param $entry
+     * @param $newEntry
+     * @param $explodeSample
+     * @param \DOMNode $secondSibling
+     * @throws \Exception
+     */
+    protected function extractSample(
+        \DOMNode &$sampleNode,
+        &$entry,
+        &$newEntry,
+        &$explodeSample,
+        \DOMNode &$secondSibling
+    ) {
+        if ($sampleNode->nodeName === 'i') {
+            $explodeSampleEntry = explode(';', $this->trimNewLines($sampleNode->nodeValue));
+            $this->checkNextSiblingForSample(
+                $secondSibling,
+                $sampleNode,
+                $explodeSampleEntry
+            );
+            for ($i = 0; $i < count($explodeSampleEntry); $i++) {
+                if ($explodeSampleEntry[$i] === '' || $this->trimNewLines(
+                    $explodeSampleEntry[$i]
+                ) === '--'
+                ) {
+                    continue;
+                }
+                if (strpos($explodeSampleEntry[$i], '~') === false
+                    && strpos($explodeSampleEntry[$i], '- ') === false && strpos(
+                    $explodeSampleEntry[$i],
+                    ' -'
+                ) === false && strpos(
+                    $explodeSampleEntry[$i],
+                    '--'
+                ) === false
+                ) {
+                    $sampleRaw = $this->trimNewLines(
+                        $entry['entry'] . ' ' . $this->trimNewLines($explodeSampleEntry[$i])
+                    );
+                } else {
+                    if (strpos($explodeSampleEntry[$i], ' -') === strlen($explodeSampleEntry[$i]) - 2) {
+                        $sampleRaw = $this->trimNewLines(
+                            str_replace(
+                                ' -',
+                                ' ' . $entry['entry'],
+                                str_replace(
+                                    '--',
+                                    $entry['entry'] . ' ',
+                                    str_replace('~', $entry['entry'], $explodeSampleEntry[$i])
+                                )
+                            )
+                        );
+                    } else {
+                        $sampleRaw = $this->trimNewLines(
+                            str_replace(
+                                '- ',
+                                $entry['entry'] . ' ',
+                                str_replace(
+                                    '--',
+                                    $entry['entry'] . ' ',
+                                    str_replace('~', $entry['entry'], $explodeSampleEntry[$i])
+                                )
+                            )
+                        );
+                    }
+                }
+                $explodeSampleRaw = explode(',', $sampleRaw);
+                if (count($explodeSampleRaw) > 1 && strpos(
+                    $explodeSampleRaw[count($explodeSampleRaw) - 1],
+                    ' '
+                ) === false
+                ) {
+                    $newEntry['class'] = $this->trimNewLines(array_pop($explodeSampleRaw));
+                    $newEntry['entry'] = $this->trimNewLines(implode(', ', $explodeSampleRaw));
+                    $this->currentEntry = $newEntry['entry'];
+                    $newDefinition = $sampleNode->nextSibling;
+                    $this->checkTag($newDefinition, '#text');
+                    $newDefinitionRaw = explode(';', $newDefinition->nodeValue);
+                    foreach ($newDefinitionRaw as $definitionRaw) {
+                        $newEntry['definition'][] = $this->trimNewLines($definitionRaw);
+                    }
+                    $this->result->add($newEntry);
+                } else {
+                    $entry['sample'][] = $sampleRaw;
+                }
+            }
+            $entry['definition'][] = $this->trimNewLines($explodeSample[0]);
+        } elseif ($sampleNode->nodeName === 'b' && is_numeric(
+            $this->trimNewLines($sampleNode->nodeValue)
+        )
+        ) {
+            $entry['definition'][] = $this->trimNewLines($explodeSample[0]);
+            $sampleNode = $sampleNode->previousSibling;
+        } else {
+            throw new \Exception('Next Step not understand');
+        }
     }
 }
