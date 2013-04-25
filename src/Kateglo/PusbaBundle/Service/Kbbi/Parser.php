@@ -205,7 +205,9 @@ class Parser
                 }
                 $this->entry->setEntry(str_ireplace('·', '', $this->entry->getSyllable()));
             } else {
-                throw new \Exception('Next Step not understand');
+                if ($b->nodeName !== 'sup') {
+                    throw new \Exception('Next Step not understand');
+                }
             }
         }
     }
@@ -261,9 +263,21 @@ class Parser
                         $this->currentNode = $this->currentNode->nextSibling;
                         $this->sampleNode = $this->sampleNode->nextSibling;
                     }
-                    if($this->isBoldAndNumeric($this->sampleNode)){
+                    if ($this->isBoldAndNumeric($this->sampleNode)) {
                         $this->currentNode = $this->sampleNode->nextSibling;
                         $this->sampleNode = $this->currentNode->nextSibling;
+                        if ($this->sampleNode->nodeName === 'br' && $this->sampleNode->nextSibling->nextSibling->nodeName === 'i') {
+                            $this->currentNode = $this->currentNode->nextSibling->nextSibling;
+                            $this->sampleNode = $this->sampleNode->nextSibling->nextSibling;
+                        }
+                    }
+                    if ($this->sampleNode->nextSibling instanceof \DOMNode &&
+                        $this->sampleNode->nodeName === 'i' &&
+                        !$this->isTextAndEmpty($this->sampleNode->nextSibling) &&
+                        $this->isTextAndEmpty($this->currentNode)
+                    ) {
+                        $this->sampleNode = $this->sampleNode->nextSibling->nextSibling;
+                        $this->currentNode = $this->currentNode->nextSibling->nextSibling;
                     }
                     $this->extractSample();
                 } else {
@@ -329,7 +343,7 @@ class Parser
                                 str_replace(
                                     '--',
                                     $this->entry->getEntry() . ' ',
-                                    str_replace('~', $this->entry->getEntry(), $this->explodeSampleEntry[$i])
+                                    str_replace('~', $this->currentEntry, $this->explodeSampleEntry[$i])
                                 )
                             )
                         );
@@ -339,20 +353,22 @@ class Parser
                 if (count($explodeSampleRaw) > 1 && strpos(
                     $explodeSampleRaw[count($explodeSampleRaw) - 1],
                     ' '
-                ) === 0 && $this->sampleNode->nextSibling->nodeName === '#text'
+                ) === 0 && strlen(
+                    $explodeSampleRaw[count($explodeSampleRaw) - 1]
+                ) <= 5 && $this->sampleNode->nextSibling->nodeName === '#text'
                 ) {
                     $newEntry = new Entry();
                     $newEntry->setDiscipline($this->trimNewLines(array_pop($explodeSampleRaw)));
                     $newEntry->setEntry($this->trimNewLines(implode(', ', $explodeSampleRaw)));
                     $this->currentEntry = $newEntry->getEntry();
-                    $newDefinition = $this->sampleNode->nextSibling;
-                    $this->currentNode = $newDefinition;
-                    $this->checkTag($newDefinition, '#text');
-                    $newDefinitionRaw = explode(';', $newDefinition->nodeValue);
+                    $this->definitionNode = $this->sampleNode->nextSibling;
+                    $this->checkTag($this->definitionNode, '#text');
+                    $newDefinitionRaw = explode(';', $this->definitionNode->nodeValue);
                     foreach ($newDefinitionRaw as $definitionRaw) {
                         $newEntry->getDefinitions()->add($this->trimNewLines($definitionRaw));
                     }
                     $this->result->add($newEntry);
+                    $this->definitionNode = $this->sampleNode;
                 } else {
                     $this->entry->getSamples()->add($sampleRaw);
                     $this->currentNode = $this->sampleNode;
@@ -426,8 +442,10 @@ class Parser
                     } else {
                         throw new \Exception('Next Step not understand');
                     }
-                } elseif ($sampleChildNode->nodeName === '#text' && $this->currentNode->nextSibling->nodeName !== 'b') {
+                } elseif ($this->currentNode->nextSibling instanceof \DOMNode && $sampleChildNode->nodeName === '#text' && $this->currentNode->nextSibling->nodeName !== 'b') {
                     $entryRaw = explode(',', $sampleChildNode->nodeValue);
+                    $this->entry = new Entry();
+                    $this->definitionRaw = null;
                     $this->extractInheritance($this->currentNode, $entryRaw);
                 }
             }
@@ -610,17 +628,34 @@ class Parser
             $this->sampleNode = $this->definitionNode->nextSibling;
             if ($this->sampleNode->nodeName === 'i') {
                 $this->explodeSampleEntry = explode(';', $this->trimNewLines($this->sampleNode->nodeValue));
-                $this->entry->getSamples()->add(
-                    $this->trimNewLines(
-                        str_replace(
-                            '- ',
-                            $this->result->get(0)->getEntry() . ' ',
-                            str_replace('--', $this->result->get(0)->getEntry(), $this->explodeSampleEntry[0])
+
+                if (strpos($this->explodeSampleEntry[0], '~') === false && strpos(
+                    $this->explodeSampleEntry[0],
+                    '- '
+                ) === false &&
+                    strpos($this->explodeSampleEntry[0], '--') === false
+                ) {
+                    $this->entry->getSamples()->add($this->currentEntry . ' ' . $this->explodeSampleEntry[0]);
+                } else {
+                    $this->entry->getSamples()->add(
+                        $this->trimNewLines(
+                            str_replace(
+                                '~',
+                                $this->currentEntry,
+                                str_replace(
+                                    '- ',
+                                    $this->result->get(0)->getEntry() . ' ',
+                                    str_replace('--', $this->result->get(0)->getEntry(), $this->explodeSampleEntry[0])
+                                )
+                            )
                         )
-                    )
-                );
+                    );
+                }
                 foreach ($this->explodeSample as $singleExplodeSample) {
-                    if ($this->trimNewLines($singleExplodeSample) !== '') {
+                    if ($this->trimNewLines($singleExplodeSample) !== '' && $this->trimNewLines(
+                        $singleExplodeSample
+                    ) !== '~'
+                    ) {
                         $this->entry->getDefinitions()->add($this->trimNewLines($singleExplodeSample));
                     }
                 }
@@ -668,6 +703,7 @@ class Parser
                     if (count($this->explodeSample) > 1) {
                         $this->currentNode = $this->definitionNode;
                         $this->definitionNode = $this->definitionNode->nextSibling;
+                        $this->sampleNode = $this->definitionNode;
                         $this->extractSample();
                         if ($this->definitionNode->nextSibling->nodeName === '#text' && strpos(
                             $this->trimNewLines($this->definitionNode->nextSibling->nodeValue),
@@ -692,11 +728,13 @@ class Parser
         }
     }
 
-    private final function getDefinitionSibling() {
+    private final function getDefinitionSibling()
+    {
         if ($this->definitionNode->nodeName === '#text') {
             if ($this->definitionNode->nextSibling instanceof \DOMNode &&
                 $this->definitionNode->nextSibling->nodeName === 'br' &&
-                $this->definitionNode->nextSibling->nextSibling->nodeName === '#text') {
+                $this->definitionNode->nextSibling->nextSibling->nodeName === '#text'
+            ) {
                 $concatDefinitionRaw = $this->definitionNode->nodeValue . ' ' .
                     $this->definitionNode->nextSibling->nextSibling->nodeValue;
                 $this->definitionRaw = explode(';', $concatDefinitionRaw);
@@ -747,7 +785,8 @@ class Parser
 
         $this->trimDefinition = $this->trimNewLines($this->definitionRaw[0]);
         if (strpos($this->trimDefinition, '--') !== false &&
-            strpos($this->trimDefinition, '--') === strlen($this->trimDefinition) - 2) {
+            strpos($this->trimDefinition, '--') === strlen($this->trimDefinition) - 2
+        ) {
             $strReplaceDefinitionRaw = str_replace(' --', '; --', $this->trimDefinition);
             $this->definitionRaw = explode(';', $strReplaceDefinitionRaw);
             $this->trimDefinition = $this->trimNewLines($this->definitionRaw[0]);
@@ -757,7 +796,8 @@ class Parser
     }
 
 
-    private final function checkDefinitionSibling() {
+    private final function checkDefinitionSibling()
+    {
         if ($this->definitionNode->nextSibling instanceof \DOMNode && count(
             $this->definitionRaw
         ) === 1 && $this->trimDefinition !== '' && count($this->explodeSample) <= 1
@@ -773,7 +813,8 @@ class Parser
                         ' not expected');
                 }
             } elseif ($this->definitionNode->nextSibling->nodeName === 'i' ||
-                $this->definitionNode->nextSibling->nodeName === '#text') {
+                $this->definitionNode->nextSibling->nodeName === '#text'
+            ) {
                 $this->definitionNode = $this->definitionNode->nextSibling;
                 $this->getDefinitionSibling();
             } else {
@@ -810,13 +851,16 @@ class Parser
 
     private final function extractEntryDefinition()
     {
-        if (!$this->definitionString === null || $this->definitionString !== '') {
-            $this->definitionString .= $this->trimNewLines(' ' . $this->trimNewLines($this->definitionNode->nodeValue));
+        if (!$this->definitionString !== null && $this->definitionString !== '') {
+            $this->definitionString = $this->trimNewLines(
+                $this->definitionString . ' ' . $this->trimNewLines($this->definitionNode->nodeValue)
+            );
         } else {
             $this->definitionString = $this->trimNewLines($this->definitionNode->nodeValue);
         }
         if (strpos($this->definitionString, ';') !== strlen($this->definitionString) - 1 &&
-            strpos($this->definitionString, ':') === false) {
+            strpos($this->definitionString, ':') === false
+        ) {
             if ($this->definitionNode->nextSibling instanceof \DOMNode) {
                 if ($this->definitionNode->nextSibling->nodeName !== 'b') {
                     if ($this->definitionNode->nextSibling->nodeName === 'i' || $this->definitionNode->nextSibling->nodeName === '#text') {

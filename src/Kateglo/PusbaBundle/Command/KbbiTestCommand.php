@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  */
-class KbbiCommand extends ContainerAwareCommand
+class KbbiTestCommand extends ContainerAwareCommand
 {
 
     /**
@@ -44,7 +44,7 @@ class KbbiCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('pusba:kbbi')
+            ->setName('pusba:kbbi:test')
             ->setDescription('Test Pengambilan data dari KBBI')
             ->setDefinition(
                 array(
@@ -56,11 +56,11 @@ class KbbiCommand extends ContainerAwareCommand
             )
             ->setHelp(
                 <<<EOT
-                Perintah <info>kbbi:request:test</info> mencoba mengambil dan membaca data dari web KBBI.
+                Perintah <info>pusba:kbbi:test</info> mencoba mengambil dan membaca data dari web KBBI.
 
 Contoh penggunaan:
 
-<info>php app/console pusba:kbbi -v kapal</info>
+<info>php app/console pusba:kbbi:test -v kapal</info>
 
 Aturan pencarian bisa digunakan dengan menambahkan parameter --opkode atau -o.
 Contoh:
