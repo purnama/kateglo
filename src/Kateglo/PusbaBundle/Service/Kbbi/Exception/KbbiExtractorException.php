@@ -22,54 +22,13 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\UserBundle\Entity;
+namespace Kateglo\PusbaBundle\Service\Kbbi\Exception;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @Entity
  */
-class User extends \FOS\UserBundle\Entity\User
-{
-
-    /**
-     * @var int
-     * @Id
-     * @Column(type="integer")
-     * @GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @var Invitation
-     * @OneToOne(targetEntity="Kateglo\UserBundle\Entity\Invitation", inversedBy="user")
-     * @JoinColumn(referencedColumnName="code")
-     * @NotNull(message="Your invitation is wrong")
-     */
-    protected $invitation;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function setInvitation($invitation)
-    {
-        $this->invitation = $invitation;
-    }
-
-    public function getInvitation()
-    {
-        return $this->invitation;
-    }
+class KbbiExtractorException extends \Exception {
 
 }

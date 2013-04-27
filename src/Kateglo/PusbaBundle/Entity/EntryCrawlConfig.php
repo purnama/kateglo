@@ -22,48 +22,40 @@
  * @link    http://code.google.com/p/kateglo/
  * @copyright Copyright (c) 2009 Kateglo (http://code.google.com/p/kateglo/)
  */
-namespace Kateglo\PusbaBundle\Service;
+namespace Kateglo\PusbaBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
-use JMS\DiExtraBundle\Annotation\Service;
-use Kateglo\PusbaBundle\Entity\EntryList;
-use JMS\DiExtraBundle\Annotation\Inject;
-use JMS\DiExtraBundle\Annotation\InjectParams;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
 
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
- * @Service
+ * @Entity
  */
-class ImportEntryList {
+class EntryCrawlConfig
+{
 
     /**
-     * @var EntityManager
+     * @var int
+     * @Id
+     * @Column(type="integer")
      */
-    private $entityManager;
+    private $lastId = 0;
 
     /**
-     * @param EntityManager $entityManager
-     * @InjectParams({
-     *  "entityManager" = @Inject("doctrine.orm.entity_manager")
-     * })
+     * @param int $lastId
      */
-    public function __construct(EntityManager $entityManager){
-        $this->entityManager = $entityManager;
+    public function setLastId($lastId)
+    {
+        $this->lastId = $lastId;
     }
 
     /**
-     * @param $content
+     * @return int
      */
-    public function import($content){
-        @ini_set('memory_limit', '2048M');
-        $entries = explode("\n", $content);
-        foreach($entries as $entry){
-            $entryList = new EntryList();
-            $entryList->setEntry($entry);
-            $this->entityManager->persist($entryList);
-        }
-        $this->entityManager->flush();
+    public function getLastId()
+    {
+        return $this->lastId;
     }
-
 }

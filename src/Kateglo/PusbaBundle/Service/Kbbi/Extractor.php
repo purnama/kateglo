@@ -25,6 +25,7 @@
 namespace Kateglo\PusbaBundle\Service\Kbbi;
 
 use JMS\DiExtraBundle\Annotation\Service;
+use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiExtractorException;
 
 /**
  *
@@ -40,14 +41,14 @@ class Extractor
             '<input type="hidden" name="MORE" value="(.+)" >.+' .
             '<input type="hidden" name="HEAD" value="(.+)" >/s';
         preg_match($pattern, $content, $match);
-        if (is_array($match)) {
+        if (is_array($match) && count($match) > 0) {
             if (is_numeric($match[2]) && $match[2] == 1) {
                 throw new \Exception('Match Paginated!');
             }
 
             return trim($match[1]);
         } else {
-            throw new \Exception('Pattern can not match the result!');
+            throw new KbbiExtractorException('Pattern can not match the result!');
         }
     }
 
@@ -56,10 +57,10 @@ class Extractor
         $pattern = '/(<p style=\'margin-left:\.5in;text-indent:-\.5in\'>)(.+)(<\/(p|BODY)>)/s';
         preg_match($pattern, $content, $match);
 
-        if (is_array($match)) {
+        if (is_array($match) && count($match) > 0) {
             return trim($match[2]);
         } else {
-            throw new \Exception('Pattern can not match the result!');
+            throw new KbbiExtractorException('Pattern can not match the result!');
         }
     }
 }

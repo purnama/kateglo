@@ -24,10 +24,12 @@
  */
 namespace Kateglo\PusbaBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  *
@@ -56,6 +58,19 @@ class EntryList
      * @Column(type="boolean")
      */
     protected $found = false;
+
+    /**
+     * @var ArrayCollection
+     * @OneToMany(targetEntity="Kateglo\PusbaBundle\Entity\EntryCrawl", mappedBy="list")
+     */
+    protected $crawls;
+
+    /**
+     * Constructor
+     */
+    public function __construct(){
+        $this->crawls = new ArrayCollection();
+    }
 
     /**
      * @param string $entry
@@ -95,6 +110,22 @@ class EntryList
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $crawls
+     */
+    public function setCrawls($crawls)
+    {
+        $this->crawls = $crawls;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getCrawls()
+    {
+        return $this->crawls;
     }
 
 }

@@ -28,12 +28,15 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\ManyToOne;
+
 /**
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  * @Entity
  */
-class EntryCrawl {
+class EntryCrawl
+{
 
     /**
      * @var int
@@ -60,6 +63,12 @@ class EntryCrawl {
      * @Column(type="datetimetz")
      */
     private $lastUpdated;
+
+    /**
+     * @var EntryList
+     * @ManyToOne(targetEntity="Kateglo\PusbaBundle\Entity\EntryList", inversedBy="crawls")
+     */
+    private $list;
 
     /**
      * @param string $entry
@@ -115,6 +124,22 @@ class EntryCrawl {
     public function getRaw()
     {
         return $this->raw;
+    }
+
+    /**
+     * @param \Kateglo\PusbaBundle\Entity\EntryList $list
+     */
+    public function setList($list)
+    {
+        $this->list = $list;
+    }
+
+    /**
+     * @return \Kateglo\PusbaBundle\Entity\EntryList
+     */
+    public function getList()
+    {
+        return $this->list;
     }
 
 }

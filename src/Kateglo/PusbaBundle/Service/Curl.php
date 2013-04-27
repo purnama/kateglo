@@ -375,6 +375,10 @@ class Curl
         curl_setopt($result, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($result, CURLOPT_FOLLOWLOCATION, $this->followLocation);
 
+        //Never use cache.
+        curl_setopt($result, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($result, CURLOPT_FORBID_REUSE, 1);
+
         if (is_string($this->cookieFileLocation) && $this->cookieFileLocation !== '') {
             curl_setopt($result, CURLOPT_COOKIEJAR, $this->cookieFileLocation);
             curl_setopt($result, CURLOPT_COOKIEFILE, $this->cookieFileLocation);

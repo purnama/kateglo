@@ -86,41 +86,50 @@ EOT
         $verbose = $input->getOption('verbose');
 
         /** @var $kbbiService Kbbi */
-        $kbbiService = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi');
+        $kbbiService = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi.requester');
 
         $kbbiService->setOpCode($opcode);
         $kbbiService->setParam($entry);
-        switch ($create) {
-            case 'search':
-                $this->createFile($output, $verbose, 'search_' . $entry . '.html', $kbbiService->getRaw());
-                break;
-            case 'definition' :
-                $wordList = $kbbiService->getRawDefinition();
-                foreach ($wordList as $word => $content) {
-                    $this->createFile($output, $verbose, 'definition_' . $word . '.html', $content);
-                }
-                break;
-            case 'extracted' :
-                $wordList = $kbbiService->getRawExtracted();
-                foreach ($wordList as $word => $content) {
-                    $this->createFile($output, $verbose, 'extracted_' . $word . '.html', $content);
-                }
-                break;
-            case null:
-                $result = $kbbiService->request();
-                if ($verbose) {
-                    $output->writeln(sprintf('<comment>%s</comment>', $result));
-                }
-                break;
-            default:
-                throw new \Exception('Create option not found');
+        try {
+            switch ($create) {
+                case 'search':
+                    $this->createFile($output, $verbose, 'search_' . $entry . '.html', $kbbiService->getRaw());
+                    break;
+                case 'definition' :
+                    $wordList = $kbbiService->getRawDefinition();
+                    foreach ($wordList as $word => $content) {
+                        $this->createFile($output, $verbose, 'definition_' . $word . '.html', $content);
+                    }
+                    break;
+                case 'extracted' :
+                    $wordList = $kbbiService->getRawExtracted();
+                    foreach ($wordList as $word => $content) {
+                        $this->createFile($output, $verbose, 'extracted_' . $word . '.html', $content);
+                    }
+                    break;
+                case null:
+                    $result = $kbbiService->request();
+                    if ($verbose) {
+                        $output->writeln(sprintf('<comment>%s</comment>', $result));
+                    }
+                    break;
+                default:
+                    throw new \Exception('Create option not found');
+            }
+        } catch (Kbbi\Exception\KbbiRequestStatusException $e) {
+            $output->writeln('<error>Request has an error: '.$e->getMessage().'</error>');
+        }catch (Kbbi\Exception\KbbiExtractorException $e) {
+            $output->writeln('<error>Extracting has an error: '.$e->getMessage().'</error>');
         }
+
 
     }
 
     protected function createFile(OutputInterface $output, $verbose = false, $filename, $content)
     {
-        $filename = $this->getContainer()->getParameter('kateglo_pusba.kbbi.directory') . DIRECTORY_SEPARATOR . str_replace(' ', '_', $filename);
+        $filename = $this->getContainer()->getParameter(
+            'kateglo_pusba.kbbi.directory'
+        ) . DIRECTORY_SEPARATOR . str_replace(' ', '_', $filename);
         if (file_put_contents($filename, $content) !== false) {
             if ($verbose) {
                 $output->writeln('File: ' . $filename . ' created.');
