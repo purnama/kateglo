@@ -3,11 +3,18 @@
 namespace Kateglo\PusbaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+
+    /**
+     * @Get("/")
+     * @View()
+     */
+    public function indexAction()
     {
-        return $this->render('KategloPusbaBundle:Default:index.html.twig', array('name' => $name));
+        return $this->render('KategloPusbaBundle:Default:index.html.twig');
     }
 }

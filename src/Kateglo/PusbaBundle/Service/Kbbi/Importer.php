@@ -25,9 +25,11 @@
 namespace Kateglo\PusbaBundle\Service\Kbbi;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NoResultException;
 use JMS\DiExtraBundle\Annotation\Service;
 use Kateglo\PusbaBundle\Entity\EntryCrawl;
 use Kateglo\PusbaBundle\Entity\EntryCrawlConfig;
+use Kateglo\PusbaBundle\Entity\EntryCrawlHistory;
 use Kateglo\PusbaBundle\Entity\EntryList;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
@@ -70,7 +72,7 @@ class Importer
      */
     public function import($content)
     {
-        @ini_set('memory_limit', '2048M');
+        @ini_set('memory_limit', '3069M');
         $entries = explode("\n", $content);
         foreach ($entries as $entry) {
             $entryList = new EntryList();
@@ -82,18 +84,19 @@ class Importer
 
     public function crawl($limit = 100, $start = false)
     {
-        @ini_set('memory_limit', '2048M');
+        @ini_set('memory_limit', '3069M');
         $result = $this->entityManager->getRepository('Kateglo\PusbaBundle\Entity\EntryCrawlConfig')->findAll();
         /** @var $config EntryCrawlConfig */
         if (count($result) > 0) {
             $config = $result[0];
-        }else{
+        } else {
             $config = new EntryCrawlConfig();
         }
         if ($start) {
             $config->setLastId(0);
             $this->entityManager->createQuery(
-                'UPDATE Kateglo\PusbaBundle\Entity\EntryList entryList SET entryList.found = false WHERE entryList.found = true'
+                'UPDATE Kateglo\PusbaBundle\Entity\EntryList entryList
+                    SET entryList.found = false WHERE entryList.found = true'
             )->execute();
         }
         $query = $this->entityManager->createQuery(
@@ -103,30 +106,57 @@ class Importer
         $query->setMaxResults($limit);
         $entries = $query->getResult();
         $this->requester->setOpCode(1);
-        /** @var $entry EntryList */
-        foreach ($entries as $entry) {
-            $this->requester->setParam($entry->getEntry());
-            try {
-                $wordList = $this->requester->getRawExtracted();
-                foreach ($wordList as $word => $content) {
-                    $entryCrawl = new EntryCrawl();
-                    $entryCrawl->setEntry($word);
-                    $entryCrawl->setRaw($content);
-                    $entryCrawl->setLastUpdated(new \DateTime());
-                    $entryCrawl->setList($entry);
-                    $this->entityManager->persist($entryCrawl);
+        $crawlHistory = new EntryCrawlHistory();
+        $crawlHistory->setStartId($config->getLastId());
+        $crawlHistory->setStartTime(new \DateTime());
+        try {
+            /** @var $entry EntryList */
+            foreach ($entries as $entry) {
+                $this->requester->setParam($entry->getEntry());
+                try {
+                    $wordList = $this->requester->getRawExtracted();
+                    foreach ($wordList as $word => $content) {
+                        $crawlQuery = $this->entityManager->createQuery(
+                            "SELECT entryCrawl
+                                FROM Kateglo\PusbaBundle\Entity\EntryCrawl entryCrawl
+                                WHERE entryCrawl.entry = :entry"
+                        );
+                        $crawlQuery->setParameter('entry', $word);
+                        try {
+                            $entryCrawl = $crawlQuery->getSingleResult();
+                        } catch (NoResultException $e) {
+                            $entryCrawl = new EntryCrawl();
+                        }
+                        $entryCrawl->setEntry($word);
+                        $entryCrawl->setRaw($content);
+                        $entryCrawl->setList($entry);
+                        $entryCrawl->setLastUpdated(new \DateTime());
+                        $this->entityManager->persist($entryCrawl);
+                    }
+                    $entry->setFound(true);
+                    $this->entityManager->persist($entry);
+                } catch (KbbiExtractorException $e) {
+                    continue;
                 }
-                $entry->setFound(true);
-                $this->entityManager->persist($entry);
-            } catch (KbbiExtractorException $e) {
-                continue;
             }
+            if ($entry instanceof EntryList) {
+                $config->setLastId($entry->getId());
+                $config->setLastUpdated(new \DateTime());
+            }
+            $this->entityManager->persist($config);
+            $crawlHistory->setFinishId($entry->getId());
+            $crawlHistory->setFinishTime(new \DateTime());
+            $crawlHistory->setStatus(true);
+            $this->entityManager->persist($crawlHistory);
+            $this->entityManager->flush();
+        } catch (\Exception $e) {
+            $crawlHistory->setFinishTime(new \DateTime());
+            $crawlHistory->setStatus(false);
+            $crawlHistory->setMessages($e->getMessage());
+            $this->entityManager->persist($crawlHistory);
+            $this->entityManager->flush($crawlHistory);
+            throw $e;
         }
-        if ($entry instanceof EntryList) {
-            $config->setLastId($entry->getId());
-        }
-        $this->entityManager->persist($config);
-        $this->entityManager->flush();
     }
 
 }

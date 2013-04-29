@@ -90,12 +90,12 @@ EOT
 
         try {
             $importService->crawl($limit, $start);
-            $output->writeln('Crawl successful!');
+            $output->writeln('<info>Crawl successful!</info>');
         } catch (\Exception $e) {
             $output->writeln(
                 sprintf(
                     'something is wrong. here is the error text:' . "\r\n" .
-                        '<error>%s</<error>',
+                        '<error>%s</error>',
                     $e->getMessage()
                 )
             );

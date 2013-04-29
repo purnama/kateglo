@@ -129,7 +129,7 @@ class EntryCrawl
     /**
      * @param \Kateglo\PusbaBundle\Entity\EntryList $list
      */
-    public function setList($list)
+    public function setList(EntryList $list)
     {
         $this->list = $list;
     }

@@ -110,7 +110,7 @@ EOT
                 case null:
                     $result = $kbbiService->request();
                     if ($verbose) {
-                        $output->writeln(sprintf('<comment>%s</comment>', $result));
+                        $output->writeln(sprintf('<info>%s</info>', $result));
                     }
                     break;
                 default:
@@ -132,10 +132,10 @@ EOT
         ) . DIRECTORY_SEPARATOR . str_replace(' ', '_', $filename);
         if (file_put_contents($filename, $content) !== false) {
             if ($verbose) {
-                $output->writeln('File: ' . $filename . ' created.');
+                $output->writeln('<info>File: ' . $filename . ' created.</info>');
             }
         } else {
-            throw new \Exception('File ' . $filename . ' can not be created.');
+            throw new \Exception('<error>File ' . $filename . ' can not be created.</error>');
         }
     }
 

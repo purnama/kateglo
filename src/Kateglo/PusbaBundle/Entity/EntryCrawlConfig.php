@@ -44,11 +44,39 @@ class EntryCrawlConfig
     private $lastId = 0;
 
     /**
-     * @param int $lastId
+     * @var \DateTime
+     * @Column(type="datetimetz")
      */
-    public function setLastId($lastId)
+    private $lastUpdated;
+
+    /**
+     * Constructor
+     */
+    public function __construct(){
+        $this->lastUpdated = new \DateTime();
+    }
+
+    /**
+     * @param \DateTime $lastUpdated
+     */
+    public function setLastUpdated(\DateTime $lastUpdated)
     {
-        $this->lastId = $lastId;
+        $this->lastUpdated = $lastUpdated;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastUpdated()
+    {
+        return $this->lastUpdated;
+    }
+
+    /**
+     * @param $id int
+     */
+    public function setLastId($id){
+        $this->id = $id;
     }
 
     /**

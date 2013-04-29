@@ -60,6 +60,12 @@ class EntryList
     protected $found = false;
 
     /**
+     * @var bool
+     * @Column(type="boolean")
+     */
+    protected $extracted = false;
+
+    /**
      * @var ArrayCollection
      * @OneToMany(targetEntity="Kateglo\PusbaBundle\Entity\EntryCrawl", mappedBy="list")
      */
@@ -113,9 +119,9 @@ class EntryList
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $crawls
+     * @param ArrayCollection $crawls
      */
-    public function setCrawls($crawls)
+    public function setCrawls(ArrayCollection $crawls)
     {
         $this->crawls = $crawls;
     }
@@ -126,6 +132,22 @@ class EntryList
     public function getCrawls()
     {
         return $this->crawls;
+    }
+
+    /**
+     * @param boolean $extracted
+     */
+    public function setExtracted($extracted)
+    {
+        $this->extracted = $extracted;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getExtracted()
+    {
+        return $this->extracted;
     }
 
 }

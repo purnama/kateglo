@@ -87,7 +87,7 @@ EOT
 
         try {
             $importService->import($content);
-            $output->writeln('Import successful!');
+            $output->writeln('<info>Import successful!</info>');
         } catch (\Exception $e) {
             $output->writeln(
                 sprintf(
