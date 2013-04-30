@@ -1,0 +1,19 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block title %}Kateglo - Aktivasi Akun{% endblock %}
+{% block fos_user_content %}
+    <h2>Aktivasi Akun</h2>
+    <form action="{{ path('kateglo_user_default_confirm') }}" method="GET" onSubmit="this.action += '/'+this.token.value; $(this.token).removeAttr('name');">
+        <fieldset>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="text" name="token"
+                           class="input-xlarge" required="required" autocomplete="off"
+                           placeholder="Kunci Aktivasi"/>
+                </div>
+            </div>
+            <button class="btn btn-large btn-primary btn-signup"
+                    type="submit">Aktivasi Akun</button>
+        </fieldset>
+    </form>
+{% endblock fos_user_content %}

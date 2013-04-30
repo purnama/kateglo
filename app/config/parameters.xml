@@ -39,4 +39,8 @@
         <parameter key="locale" type="string">en</parameter>
         <parameter key="secret" type="string">ThisTokenIsNotSoSecretChangeIt</parameter>
     </parameters>
+
+    <services>
+        <service id="doctrine.common.annotations.reader" class="Doctrine\Common\Annotations\AnnotationReader" />
+    </services>
 </container>
