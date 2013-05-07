@@ -1,5 +1,9 @@
 {% extends '::base.html.twig' %}
 
 {% block content %}
-Hello World KBBI!
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry.entry }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

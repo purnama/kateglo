@@ -36,6 +36,9 @@ class KbbiController extends Controller
     {
         $offset = $this->getRequest()->get('offset');
         $limit = $this->getRequest()->get('limit');
+        if(is_null($limit)){
+            $limit = 10;
+        }
         return array('entries' => $this->listRepository->getFoundEntry($offset, $limit));
     }
 }

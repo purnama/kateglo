@@ -79,7 +79,7 @@ class Importer
     }
 
     /**
-     * @param $content
+     * @param string $content
      */
     public function import($content)
     {
@@ -91,65 +91,6 @@ class Importer
             $this->listRepository->persist($entryList);
         }
         $this->listRepository->flush();
-    }
-
-    public function crawl($limit = 100, $start = false)
-    {
-        @ini_set('memory_limit', '3069M');
-        try {
-            $config = $this->crawlRepository->getCrawlConfig();
-        } catch (NoResultException $e) {
-            $config = new EntryCrawlConfig();
-        }
-        if ($start) {
-            $config->setLastId(0);
-            $this->listRepository->reset();
-        }
-        $entries = $this->listRepository->findAll($config->getLastId(), $limit);
-        $this->requester->setOpCode(1);
-        $crawlHistory = new EntryCrawlHistory();
-        $crawlHistory->setStartId($config->getLastId());
-        $crawlHistory->setStartTime(new \DateTime());
-        try {
-            /** @var $entry EntryList */
-            foreach ($entries as $entry) {
-                $this->requester->setParam($entry->getEntry());
-                try {
-                    $wordList = $this->requester->getRawExtracted();
-                    foreach ($wordList as $word => $content) {
-                        try {
-                            $entryCrawl = $this->crawlRepository->findByEntry($word);
-                        } catch (NoResultException $e) {
-                            $entryCrawl = new EntryCrawl();
-                        }
-                        $entryCrawl->setEntry($word);
-                        $entryCrawl->setRaw($content);
-                        $entryCrawl->setList($entry);
-                        $entryCrawl->setLastUpdated(new \DateTime());
-                        $this->crawlRepository->persist($entryCrawl);
-                    }
-                    $entry->setFound(true);
-                    $this->listRepository->persist($entry);
-                    $config->setLastId($entry->getId());
-                } catch (KbbiExtractorException $e) {
-                    continue;
-                }
-            }
-            $config->setLastUpdated(new \DateTime());
-            $this->crawlRepository->persistConfig($config);
-            $crawlHistory->setFinishId($entry->getId());
-            $crawlHistory->setFinishTime(new \DateTime());
-            $crawlHistory->setStatus(true);
-            $this->crawlRepository->persistHistory($crawlHistory);
-            $this->crawlRepository->flush();
-        } catch (\Exception $e) {
-            $crawlHistory->setFinishTime(new \DateTime());
-            $crawlHistory->setStatus(false);
-            $crawlHistory->setMessages($e->getMessage());
-            $this->crawlRepository->persistHistory($crawlHistory);
-            $this->crawlRepository->flush();
-            throw $e;
-        }
     }
 
 }

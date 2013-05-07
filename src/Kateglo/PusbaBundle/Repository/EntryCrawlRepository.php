@@ -55,6 +55,8 @@ class EntryCrawlRepository extends Repository
         $query = $this->entityManager->createQuery(
             'SELECT crawlConfig FROM Kateglo\PusbaBundle\Entity\EntryCrawlConfig crawlConfig'
         );
+        $query->setMaxResults(1);
+
         return $query->getSingleResult();
     }
 
@@ -64,27 +66,31 @@ class EntryCrawlRepository extends Repository
      * @throws NonUniqueResultException If the query result is not unique.
      * @throws NoResultException If the query returned no result.
      */
-    public function findByEntry($entry){
+    public function findByEntry($entry)
+    {
         $query = $this->entityManager->createQuery(
             "SELECT entryCrawl
                 FROM Kateglo\PusbaBundle\Entity\EntryCrawl entryCrawl
                 WHERE entryCrawl.entry = :entry"
         );
         $query->setParameter('entry', $entry);
+
         return $query->getSingleResult();
     }
 
     /**
      * @param EntryCrawlConfig $crawlConfig
      */
-    public function persistConfig(EntryCrawlConfig $crawlConfig){
+    public function persistConfig(EntryCrawlConfig $crawlConfig)
+    {
         $this->entityManager->persist($crawlConfig);
     }
 
     /**
      * @param EntryCrawlHistory $crawlHistory
      */
-    public function persistHistory(EntryCrawlHistory $crawlHistory){
+    public function persistHistory(EntryCrawlHistory $crawlHistory)
+    {
         $this->entityManager->persist($crawlHistory);
     }
 

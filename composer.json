@@ -25,7 +25,9 @@
         "jms/serializer": ">=0.11.0,<0.13-dev",
         "jms/serializer-bundle": "dev-master",
         "friendsofsymfony/user-bundle": "*",
-        "friendsofsymfony/rest-bundle": "dev-master"
+        "friendsofsymfony/rest-bundle": "dev-master",
+        "knplabs/knp-paginator-bundle": "dev-master",
+        "solarium/solarium": "dev-develop"
     },
     "require-dev": {
         "sebastian/exporter": "1.0.*@dev",

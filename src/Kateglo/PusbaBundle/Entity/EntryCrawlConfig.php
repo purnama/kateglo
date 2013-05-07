@@ -50,10 +50,32 @@ class EntryCrawlConfig
     private $lastUpdated;
 
     /**
+     * @var string
+     * @Column(type="string")
+     */
+    private $status;
+
+    /**
      * Constructor
      */
     public function __construct(){
         $this->lastUpdated = new \DateTime();
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -73,10 +95,10 @@ class EntryCrawlConfig
     }
 
     /**
-     * @param $id int
+     * @param $lastId int
      */
-    public function setLastId($id){
-        $this->id = $id;
+    public function setLastId($lastId){
+        $this->lastId = $lastId;
     }
 
     /**

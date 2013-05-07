@@ -25,8 +25,17 @@
 namespace Kateglo\PusbaBundle\Command;
 
 
-use Kateglo\PusbaBundle\Service\ImportEntryList;
+use Doctrine\ORM\NoResultException;
+use Kateglo\PusbaBundle\Entity\EntryCrawl;
+use Kateglo\PusbaBundle\Entity\EntryCrawlConfig;
+use Kateglo\PusbaBundle\Entity\EntryCrawlHistory;
+use Kateglo\PusbaBundle\Entity\EntryList;
+use Kateglo\PusbaBundle\Repository\EntryCrawlRepository;
+use Kateglo\PusbaBundle\Repository\EntryListRepository;
+use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiExtractorException;
+use Kateglo\PusbaBundle\Service\Kbbi\Requester;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,11 +47,36 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class KbbiCrawlCommand extends ContainerAwareCommand
 {
+    const STATUS_CRAWLING = "crawling";
+
+    const STATUS_FINISH = "finish";
+
+    /**
+     * @var EntryListRepository
+     */
+    private $listRepository;
+
+    /**
+     * @var EntryCrawlRepository
+     */
+    private $crawlRepository;
+
+    /**
+     * @var Requester
+     */
+    private $requester;
+
+    /**
+     * @var ProgressHelper
+     */
+    private $progress;
+
     /**
      * @see Command
      */
     protected function configure()
     {
+
         $this
             ->setName('pusba:kbbi:crawl')
             ->setDescription('Crawl Kbbi Online from the Database List')
@@ -81,24 +115,122 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
+        $this->listRepository = $this->getContainer()->get('kateglo.pusba_bundle.repository.entry_list_repository');
+        $this->crawlRepository = $this->getContainer()->get('kateglo.pusba_bundle.repository.entry_crawl_repository');
+        $this->requester = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi.requester');
+        $this->progress = $this->getHelperSet()->get('progress');
+
         $limit = $input->getOption('limit');
         $start = $input->getOption('start');
 
-        /** @var $importService ImportEntryList */
-        $importService = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi.importer');
-
-
         try {
-            $importService->crawl($limit, $start);
-            $output->writeln('<info>Crawl successful!</info>');
+            if ($this->getStatus() === self::STATUS_FINISH) {
+                $this->setStatus(self::STATUS_CRAWLING);
+                $output->writeln('<info>Start Crawling!</info>');
+                $this->progress->start($output, $limit);
+                $this->crawl($limit, $start);
+                $this->setStatus(self::STATUS_FINISH);
+                $this->progress->finish();
+                $output->writeln('<info>Crawl successful!</info>');
+            } else {
+                $output->writeln('<info>Crawl still in progress! Try again later</info>');
+            }
         } catch (\Exception $e) {
+            $this->setStatus(self::STATUS_FINISH);
             $output->writeln(
                 sprintf(
-                    'something is wrong. here is the error text:' . "\r\n" .
+                    'something is wrong. here is the error text:' . "\n" .
                         '<error>%s</error>',
                     $e->getMessage()
                 )
             );
         }
+    }
+
+    /**
+     * @param int $limit
+     * @param bool $start
+     * @throws \Exception
+     */
+    private function crawl($limit = 100, $start = false)
+    {
+        @ini_set('memory_limit', '3069M');
+        try {
+            $config = $this->crawlRepository->getCrawlConfig();
+        } catch (NoResultException $e) {
+            $config = new EntryCrawlConfig();
+        }
+        if ($start) {
+            $config->setLastId(0);
+            $this->listRepository->reset();
+        }
+        $entries = $this->listRepository->findAll($config->getLastId(), $limit);
+        $this->requester->setOpCode(1);
+        $crawlHistory = new EntryCrawlHistory();
+        $crawlHistory->setStartId($config->getLastId());
+        $crawlHistory->setStartTime(new \DateTime());
+        try {
+            /** @var $entry EntryList */
+            $countEntries = count($entries);
+            for ($i = 0; $i < $countEntries; $i++) {
+                $entry = $entries[$i];
+                $this->requester->setParam($entry->getEntry());
+                try {
+                    $wordList = $this->requester->getRawExtracted();
+                    foreach ($wordList as $word => $content) {
+                        try {
+                            $entryCrawl = $this->crawlRepository->findByEntry($word);
+                        } catch (NoResultException $e) {
+                            $entryCrawl = new EntryCrawl();
+                        }
+                        $entryCrawl->setEntry($word);
+                        $entryCrawl->setRaw($content);
+                        $entryCrawl->setList($entry);
+                        $entryCrawl->setLastUpdated(new \DateTime());
+                        $this->crawlRepository->persist($entryCrawl);
+                    }
+                    $entry->setFound(true);
+                    $this->listRepository->persist($entry);
+                    $this->progress->advance();
+                } catch (KbbiExtractorException $e) {
+                    $this->progress->advance();
+                    continue;
+                }
+            }
+            $config->setLastId($entry->getId());
+            $config->setLastUpdated(new \DateTime());
+            $this->crawlRepository->persistConfig($config);
+            $crawlHistory->setFinishId($entry->getId());
+            $crawlHistory->setFinishTime(new \DateTime());
+            $crawlHistory->setStatus(true);
+            $this->crawlRepository->persistHistory($crawlHistory);
+            $this->crawlRepository->flush();
+        } catch (\Exception $e) {
+            $crawlHistory->setFinishTime(new \DateTime());
+            $crawlHistory->setStatus(false);
+            $crawlHistory->setMessages($e->getMessage());
+            $this->crawlRepository->persistHistory($crawlHistory);
+            $this->crawlRepository->flush();
+            throw $e;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getStatus(){
+        $config = $this->crawlRepository->getCrawlConfig();
+        return $config->getStatus();
+    }
+
+    /**
+     * @param string $status
+     */
+    private function setStatus($status){
+        $config = $this->crawlRepository->getCrawlConfig();
+        $config->setStatus($status);
+        $this->crawlRepository->persistConfig($config);
+        $this->crawlRepository->flush();
     }
 }

@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Kateglo\UserBundle\KategloUserBundle(),
             new Kateglo\DefaultBundle\KategloDefaultBundle(),
             new Kateglo\PusbaBundle\KategloPusbaBundle(),
