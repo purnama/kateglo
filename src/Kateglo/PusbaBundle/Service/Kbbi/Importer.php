@@ -24,17 +24,12 @@
  */
 namespace Kateglo\PusbaBundle\Service\Kbbi;
 
-use Doctrine\ORM\NoResultException;
 use JMS\DiExtraBundle\Annotation\Service;
-use Kateglo\PusbaBundle\Entity\EntryCrawl;
-use Kateglo\PusbaBundle\Entity\EntryCrawlConfig;
-use Kateglo\PusbaBundle\Entity\EntryCrawlHistory;
-use Kateglo\PusbaBundle\Entity\EntryList;
+use Kateglo\PusbaBundle\Entity\PusbaEntryList;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
 use Kateglo\PusbaBundle\Repository\EntryCrawlRepository;
 use Kateglo\PusbaBundle\Repository\EntryListRepository;
-use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiExtractorException;
 
 /**
  *
@@ -86,7 +81,7 @@ class Importer
         @ini_set('memory_limit', '3069M');
         $entries = explode("\n", $content);
         foreach ($entries as $entry) {
-            $entryList = new EntryList();
+            $entryList = new PusbaEntryList();
             $entryList->setEntry($entry);
             $this->listRepository->persist($entryList);
         }

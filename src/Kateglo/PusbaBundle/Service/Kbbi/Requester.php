@@ -168,7 +168,7 @@ class Requester
     protected function requestSearch()
     {
         if (empty($this->opCode) || empty($this->param)) {
-            throw new \Exception('Parameter can not be empty');
+            throw new \Exception('requestSearch(): Parameter can not be empty opcode:'.$this->opCode.' param:'.$this->param);
         }
         $this->curl->setPostFields(sprintf(static::SEARCH, $this->opCode, $this->param));
         $this->execute();
@@ -179,7 +179,7 @@ class Requester
     protected function requestDefinition($word)
     {
         if (empty($this->listString) || empty($word) || empty($this->opCode) || empty($this->param)) {
-            throw new \Exception('Parameter can not be empty');
+            throw new \Exception('requestDefinition(): Parameter can not be empty');
         }
         $this->curl->setPostFields(sprintf(static::DEFINITION, $this->listString, $word, $this->opCode, $this->param));
         $this->execute();

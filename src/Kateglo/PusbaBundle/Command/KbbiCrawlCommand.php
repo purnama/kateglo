@@ -26,10 +26,10 @@ namespace Kateglo\PusbaBundle\Command;
 
 
 use Doctrine\ORM\NoResultException;
-use Kateglo\PusbaBundle\Entity\EntryCrawl;
-use Kateglo\PusbaBundle\Entity\EntryCrawlConfig;
-use Kateglo\PusbaBundle\Entity\EntryCrawlHistory;
-use Kateglo\PusbaBundle\Entity\EntryList;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawl;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlConfig;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlHistory;
+use Kateglo\PusbaBundle\Entity\PusbaEntryList;
 use Kateglo\PusbaBundle\Repository\EntryCrawlRepository;
 use Kateglo\PusbaBundle\Repository\EntryListRepository;
 use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiExtractorException;
@@ -159,7 +159,7 @@ EOT
         try {
             $config = $this->crawlRepository->getCrawlConfig();
         } catch (NoResultException $e) {
-            $config = new EntryCrawlConfig();
+            $config = new KbbiEntryCrawlConfig();
         }
         if ($start) {
             $config->setLastId(0);
@@ -167,14 +167,17 @@ EOT
         }
         $entries = $this->listRepository->findAll($config->getLastId(), $limit);
         $this->requester->setOpCode(1);
-        $crawlHistory = new EntryCrawlHistory();
+        $crawlHistory = new KbbiEntryCrawlHistory();
         $crawlHistory->setStartId($config->getLastId());
         $crawlHistory->setStartTime(new \DateTime());
         try {
-            /** @var $entry EntryList */
+            /** @var $entry PusbaEntryList */
             $countEntries = count($entries);
             for ($i = 0; $i < $countEntries; $i++) {
                 $entry = $entries[$i];
+                if(trim($entry->getEntry()) === ''){
+                    throw new \Exception('empty id:'.$entry->getId());
+                }
                 $this->requester->setParam($entry->getEntry());
                 try {
                     $wordList = $this->requester->getRawExtracted();
@@ -182,7 +185,7 @@ EOT
                         try {
                             $entryCrawl = $this->crawlRepository->findByEntry($word);
                         } catch (NoResultException $e) {
-                            $entryCrawl = new EntryCrawl();
+                            $entryCrawl = new KbbiEntryCrawl();
                         }
                         $entryCrawl->setEntry($word);
                         $entryCrawl->setRaw($content);

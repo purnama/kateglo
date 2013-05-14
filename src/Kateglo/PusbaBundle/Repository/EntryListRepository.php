@@ -36,7 +36,7 @@ use Library\Repository\Annotation\KeyEntity;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  * @Service
- * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\EntryList")
+ * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\PusbaEntryList")
  */
 class EntryListRepository extends Repository
 {
@@ -47,7 +47,7 @@ class EntryListRepository extends Repository
     public function reset()
     {
         $this->entityManager->createQuery(
-            'UPDATE Kateglo\PusbaBundle\Entity\EntryList entryList
+            'UPDATE Kateglo\PusbaBundle\Entity\PusbaEntryList entryList
                 SET entryList.found = false WHERE entryList.found = true'
         )->execute();
     }
@@ -60,7 +60,7 @@ class EntryListRepository extends Repository
     public function getFoundEntry($offset = null, $limit = null)
     {
         $query = $this->entityManager->createQuery(
-            "SELECT entryList FROM Kateglo\PusbaBundle\Entity\EntryList entryList
+            "SELECT entryList FROM Kateglo\PusbaBundle\Entity\PusbaEntryList entryList
                 WHERE entryList.found = true ORDER BY entryList.id"
         );
 

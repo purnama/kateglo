@@ -30,9 +30,9 @@ use JMS\DiExtraBundle\Annotation\Service;
 use Doctrine\ORM\EntityManager;
 use JMS\DiExtraBundle\Annotation\Inject;
 use JMS\DiExtraBundle\Annotation\InjectParams;
-use Kateglo\PusbaBundle\Entity\EntryCrawl;
-use Kateglo\PusbaBundle\Entity\EntryCrawlConfig;
-use Kateglo\PusbaBundle\Entity\EntryCrawlHistory;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawl;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlConfig;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlHistory;
 use Library\Repository\Repository;
 use Library\Repository\Annotation\KeyEntity;
 
@@ -40,7 +40,7 @@ use Library\Repository\Annotation\KeyEntity;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  * @Service
- * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\EntryCrawl")
+ * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\KbbiEntryCrawl")
  */
 class EntryCrawlRepository extends Repository
 {
@@ -62,7 +62,7 @@ class EntryCrawlRepository extends Repository
 
     /**
      * @param string $entry
-     * @return EntryCrawl
+     * @return KbbiEntryCrawl
      * @throws NonUniqueResultException If the query result is not unique.
      * @throws NoResultException If the query returned no result.
      */
@@ -70,7 +70,7 @@ class EntryCrawlRepository extends Repository
     {
         $query = $this->entityManager->createQuery(
             "SELECT entryCrawl
-                FROM Kateglo\PusbaBundle\Entity\EntryCrawl entryCrawl
+                FROM Kateglo\PusbaBundle\Entity\KbbiEntryCrawl entryCrawl
                 WHERE entryCrawl.entry = :entry"
         );
         $query->setParameter('entry', $entry);
@@ -79,17 +79,17 @@ class EntryCrawlRepository extends Repository
     }
 
     /**
-     * @param EntryCrawlConfig $crawlConfig
+     * @param KbbiEntryCrawlConfig $crawlConfig
      */
-    public function persistConfig(EntryCrawlConfig $crawlConfig)
+    public function persistConfig(KbbiEntryCrawlConfig $crawlConfig)
     {
         $this->entityManager->persist($crawlConfig);
     }
 
     /**
-     * @param EntryCrawlHistory $crawlHistory
+     * @param KbbiEntryCrawlHistory $crawlHistory
      */
-    public function persistHistory(EntryCrawlHistory $crawlHistory)
+    public function persistHistory(KbbiEntryCrawlHistory $crawlHistory)
     {
         $this->entityManager->persist($crawlHistory);
     }
