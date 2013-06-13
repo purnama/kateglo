@@ -24,6 +24,7 @@
  */
 namespace Kateglo\PusbaBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -102,75 +103,19 @@ class KbbiEntryExtracted
     }
 
     /**
-     * @param string $entry
+     * @param string $class
      */
-    public function setEntry($entry)
+    public function setClass($class)
     {
-        $this->entry = $entry;
+        $this->class = $class;
     }
 
     /**
      * @return string
      */
-    public function getEntry()
+    public function getClass()
     {
-        return $this->entry;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param \DateTime $lastUpdated
-     */
-    public function setLastUpdated($lastUpdated)
-    {
-        $this->lastUpdated = $lastUpdated;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getLastUpdated()
-    {
-        return $this->lastUpdated;
-    }
-
-    /**
-     * @param string $raw
-     */
-    public function setRaw($raw)
-    {
-        $this->raw = $raw;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRaw()
-    {
-        return $this->raw;
-    }
-
-    /**
-     * @param \Kateglo\PusbaBundle\Entity\PusbaEntryList $list
-     */
-    public function setList(PusbaEntryList $list)
-    {
-        $this->list = $list;
-    }
-
-    /**
-     * @return \Kateglo\PusbaBundle\Entity\PusbaEntryList
-     */
-    public function getList()
-    {
-        return $this->list;
+        return $this->class;
     }
 
     /**
@@ -188,5 +133,118 @@ class KbbiEntryExtracted
     {
         return $this->crawl;
     }
+
+    /**
+     * @param \Kateglo\PusbaBundle\Entity\ArrayCollection $definitions
+     */
+    public function setDefinitions($definitions)
+    {
+        $this->definitions = $definitions;
+    }
+
+    /**
+     * @return \Kateglo\PusbaBundle\Entity\ArrayCollection
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * @param string $discipline
+     */
+    public function setDiscipline($discipline)
+    {
+        $this->discipline = $discipline;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscipline()
+    {
+        return $this->discipline;
+    }
+
+    /**
+     * @param string $entry
+     */
+    public function setEntry($entry)
+    {
+        $this->entry = $entry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntry()
+    {
+        return $this->entry;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param ArrayCollection $samples
+     */
+    public function setSamples($samples)
+    {
+        $this->samples = $samples;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSamples()
+    {
+        return $this->samples;
+    }
+
+    /**
+     * @param string $syllable
+     */
+    public function setSyllable($syllable)
+    {
+        $this->syllable = $syllable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSyllable()
+    {
+        return $this->syllable;
+    }
+
+    /**
+     * @param ArrayCollection $synonyms
+     */
+    public function setSynonyms($synonyms)
+    {
+        $this->synonyms = $synonyms;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSynonyms()
+    {
+        return $this->synonyms;
+    }
+
 
 }

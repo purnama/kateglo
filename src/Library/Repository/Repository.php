@@ -33,6 +33,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Library\Repository\Annotation\KeyEntity;
 use JMS\DiExtraBundle\Annotation\InjectParams;
 use JMS\DiExtraBundle\Annotation\Inject;
+use Library\Repository\Exception\InvalidEntityException;
 
 /**
  *

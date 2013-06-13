@@ -24,12 +24,15 @@
  */
 namespace Kateglo\PusbaBundle\Repository;
 
-use Doctrine\ORM\Query;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\NonUniqueResultException;
 use JMS\DiExtraBundle\Annotation\Service;
-use JMS\DiExtraBundle\Annotation\InjectParams;
-use JMS\DiExtraBundle\Annotation\Inject;
 use Doctrine\ORM\EntityManager;
-use Kateglo\PusbaBundle\Entity\PusbaEntryList;
+use JMS\DiExtraBundle\Annotation\Inject;
+use JMS\DiExtraBundle\Annotation\InjectParams;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawl;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlConfig;
+use Kateglo\PusbaBundle\Entity\KbbiEntryCrawlHistory;
 use Library\Repository\Repository;
 use Library\Repository\Annotation\KeyEntity;
 
@@ -37,57 +40,27 @@ use Library\Repository\Annotation\KeyEntity;
  *
  * @author  Arthur Purnama <arthur@purnama.de>
  * @Service
- * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\PusbaEntryList")
+ * @KeyEntity(key="id", entity="Kateglo\PusbaBundle\Entity\KbbiEntryExtracted")
  */
-class EntryListRepository extends Repository
+class EntryExtractRepository extends Repository
 {
 
     /**
-     * Reset List
-     */
-    public function reset()
-    {
-        $this->entityManager->createQuery(
-            'UPDATE Kateglo\PusbaBundle\Entity\PusbaEntryList entryList
-                SET entryList.found = false WHERE entryList.found = true'
-        )->execute();
-    }
-
-    /**
-     * @param $entry string
-     * @return PusbaEntryList
+     * @param string $entry
+     * @return KbbiEntryCrawl
      * @throws NonUniqueResultException If the query result is not unique.
      * @throws NoResultException If the query returned no result.
      */
     public function findByEntry($entry)
     {
         $query = $this->entityManager->createQuery(
-            "SELECT entryList FROM Kateglo\PusbaBundle\Entity\PusbaEntryList entryList
-                    WHERE entryList.entry = :entry"
+            "SELECT entryExtracted
+                FROM Kateglo\PusbaBundle\Entity\KbbiEntryExtracted entryExtracted
+                WHERE entryExtracted.entry = :entry"
         );
-        $query->setParameter("entry", $entry);
+        $query->setParameter('entry', $entry);
+
         return $query->getSingleResult();
     }
 
-    /**
-     * @param int $offset
-     * @param int $limit
-     * @return array
-     */
-    public function getFoundEntry($offset = null, $limit = null)
-    {
-        $query = $this->entityManager->createQuery(
-            "SELECT entryList FROM Kateglo\PusbaBundle\Entity\PusbaEntryList entryList
-                WHERE entryList.found = true ORDER BY entryList.id"
-        );
-
-        if (!is_null($offset) && is_numeric($offset)) {
-            $query->setFirstResult($offset);
-        }
-        if (!is_null($limit) && is_numeric($limit)) {
-            $query->setMaxResults($limit);
-        }
-
-        return $query->getResult();
-    }
 }

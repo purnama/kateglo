@@ -27,6 +27,7 @@ namespace Kateglo\PusbaBundle\Service\Kbbi;
 use JMS\DiExtraBundle\Annotation\Service;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kateglo\PusbaBundle\Model\Entry;
+use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiParserException;
 
 /**
  *
@@ -115,7 +116,7 @@ class Parser
 
         try {
             $this->loadHTML($dom, $content);
-        } catch (\Exception $e) {
+        } catch (KbbiParserException $e) {
             //KBBI HTML is sometimes invalid. Add an i end tag before load.
             //If still not valid. throw the exceptions
             $this->loadHTML($dom, $content . '</i>');
@@ -140,7 +141,7 @@ class Parser
             function ($number, $error) {
                 if (preg_match('/^DOMDocument::loadHTML\(\): (.+)$/', $error, $m) === 1) {
                     restore_error_handler();
-                    throw new \Exception($m[1]);
+                    throw new KbbiParserException($m[1]);
                 }
             }
         );
@@ -151,7 +152,7 @@ class Parser
     private final function checkTag(\DOMNode $node, $tagName)
     {
         if ($node->nodeName !== $tagName) {
-            throw new \Exception('Expecting ' . $tagName . ' tag.');
+            throw new KbbiParserException('Expecting ' . $tagName . ' tag.');
         }
     }
 
@@ -163,33 +164,35 @@ class Parser
 
         $firstSibling = $this->findClassNode($node);
 
-        $entryClass = $this->findSynonym($firstSibling);
+        if ($firstSibling != null) {
+            $entryClass = $this->findSynonym($firstSibling);
 
-        $this->entry->setClass($this->trimNewLines($entryClass));
-        $this->currentEntry = $this->entry->getEntry();
+            $this->entry->setClass($this->trimNewLines($entryClass));
 
-        if ($this->isBoldAndNumeric($firstSibling->nextSibling)) {
-            $this->currentNode = $firstSibling->nextSibling->nextSibling;
-        } else {
-            $this->currentNode = $firstSibling->nextSibling;
-        }
+            $this->currentEntry = $this->entry->getEntry();
 
-        if ($this->isTextAndEmpty($this->currentNode)) {
-            $this->currentNode = $this->currentNode->nextSibling;
-            if ($this->isBoldAndNumeric($this->currentNode)) {
-                $this->currentNode = $this->currentNode->nextSibling;
-                if ($this->currentNode->nodeName !== '#text') {
-                    throw new \Exception('Next Step not understand');
-                }
+            if ($this->isBoldAndNumeric($firstSibling->nextSibling)) {
+                $this->currentNode = $firstSibling->nextSibling->nextSibling;
             } else {
-                throw new \Exception('Next Step not understand');
+                $this->currentNode = $firstSibling->nextSibling;
             }
+
+            if ($this->isTextAndEmpty($this->currentNode)) {
+                $this->currentNode = $this->currentNode->nextSibling;
+                if ($this->isBoldAndNumeric($this->currentNode)) {
+                    $this->currentNode = $this->currentNode->nextSibling;
+                    if ($this->currentNode->nodeName !== '#text') {
+                        throw new KbbiParserException('Next Step not understand');
+                    }
+                } else {
+                    throw new KbbiParserException('Next Step not understand');
+                }
+            }
+
+            $this->definitions = explode(';', $this->currentNode->nodeValue);
+            $this->sampleNode = null;
+            $this->extractDefinition();
         }
-
-        $this->definitions = explode(';', $this->currentNode->nodeValue);
-        $this->sampleNode = null;
-        $this->extractDefinition();
-
         $this->finishing();
     }
 
@@ -203,10 +206,14 @@ class Parser
                 } else {
                     $this->entry->setSyllable($this->trimNewLines($b->nodeValue));
                 }
-                $this->entry->setEntry(str_ireplace('·', '', $this->entry->getSyllable()));
+                $entryText = str_ireplace('·', '', $this->entry->getSyllable());
+                if (preg_match('/[0-9]/', substr($entryText, -1)) === 1) {
+                    $entryText = $this->trimNewLines(substr($entryText, 0, strlen($entryText) - 1));
+                }
+                $this->entry->setEntry($entryText);
             } else {
                 if ($b->nodeName !== 'sup') {
-                    throw new \Exception('Next Step not understand');
+                    throw new KbbiParserException('Next Step not understand');
                 }
             }
         }
@@ -219,16 +226,24 @@ class Parser
         } elseif ($this->isTextAndEmpty($node->nextSibling)
         ) {
             $firstSibling = $node->nextSibling->nextSibling;
+        } elseif ($node->nextSibling->nodeName === '#text' && $this->trimNewLines(
+                $node->nextSibling->nodeValue
+            ) === 'lihat'
+        ) {
+            $textNode = $node->nextSibling;
+            $this->checkTag($textNode->nextSibling, 'b');
+            $this->entry->getSynonyms()->add($this->trimNewLines($textNode->nextSibling->nodeValue));
+            $firstSibling = $node->nextSibling->nextSibling->nextSibling;
         } else {
-            throw new \Exception('Next Step not understand');
+            throw new KbbiParserException('Next Step not understand');
         }
 
-        if ($firstSibling->nodeName === 'b') {
+        if (isset($firstSibling) && $firstSibling instanceof \DOMNode && $firstSibling->nodeName === 'b') {
             $this->createEntry($firstSibling);
             $firstSibling = $this->findClassNode($firstSibling);
         }
 
-        return $firstSibling;
+        return isset($firstSibling) ? $firstSibling : null;
     }
 
 
@@ -245,7 +260,7 @@ class Parser
         } elseif (strpos($rawClass, ',') === false) {
             $entryClass = $rawClass;
         } else {
-            throw new \Exception('Next Step not understand');
+            throw new KbbiParserException('Next Step not understand');
         }
 
         return $entryClass;
@@ -304,8 +319,8 @@ class Parser
             $this->checkNextSiblingForSample();
             for ($i = 0; $i < count($this->explodeSampleEntry); $i++) {
                 if ($this->explodeSampleEntry[$i] === '' || $this->trimNewLines(
-                    $this->explodeSampleEntry[$i]
-                ) === '--'
+                        $this->explodeSampleEntry[$i]
+                    ) === '--'
                 ) {
                     continue;
                 }
@@ -319,9 +334,21 @@ class Parser
                         '--'
                     ) === false
                 ) {
-                    $sampleRaw = $this->trimNewLines(
-                        $this->entry->getEntry() . ' ' . $this->trimNewLines($this->explodeSampleEntry[$i])
-                    );
+                    if (strpos($this->currentEntry, '-') === 0 && preg_match(
+                            '/[a-zA-Z]/',
+                            substr($this->currentEntry, 1, 1)
+                        ) === 1
+                    ) {
+
+                        $sampleRaw = $this->trimNewLines(
+                            $this->trimNewLines($this->explodeSampleEntry[$i])
+                        );
+
+                    } else {
+                        $sampleRaw = $this->trimNewLines(
+                            $this->entry->getEntry() . ' ' . $this->trimNewLines($this->explodeSampleEntry[$i])
+                        );
+                    }
                 } else {
                     if (strpos($this->explodeSampleEntry[$i], ' -') === strlen($this->explodeSampleEntry[$i]) - 2) {
                         $sampleRaw = $this->trimNewLines(
@@ -351,11 +378,11 @@ class Parser
                 }
                 $explodeSampleRaw = explode(',', $sampleRaw);
                 if (count($explodeSampleRaw) > 1 && strpos(
-                    $explodeSampleRaw[count($explodeSampleRaw) - 1],
-                    ' '
-                ) === 0 && strlen(
-                    $explodeSampleRaw[count($explodeSampleRaw) - 1]
-                ) <= 5 && $this->sampleNode->nextSibling->nodeName === '#text'
+                        $explodeSampleRaw[count($explodeSampleRaw) - 1],
+                        ' '
+                    ) === 0 && strlen(
+                        $explodeSampleRaw[count($explodeSampleRaw) - 1]
+                    ) <= 5 && $this->sampleNode->nextSibling->nodeName === '#text'
                 ) {
                     $newEntry = new Entry();
                     $newEntry->setDiscipline($this->trimNewLines(array_pop($explodeSampleRaw)));
@@ -380,7 +407,7 @@ class Parser
             $this->entry->getDefinitions()->add($this->trimNewLines($this->explodeSample[0]));
             $this->sampleNode = $this->sampleNode->previousSibling;
         } else {
-            throw new \Exception('Next Step not understand');
+            throw new KbbiParserException('Next Step not understand');
         }
     }
 
@@ -388,7 +415,15 @@ class Parser
     {
         if ($this->explodeSampleEntry[count($this->explodeSampleEntry) - 1] !== '') {
             if ($this->sampleNode->nextSibling instanceof \DOMNode && $this->sampleNode->nextSibling->nodeName === '#text') {
-                if ($this->trimNewLines($this->sampleNode->nextSibling->nodeValue) === ';') {
+                if ($this->sampleNode->nextSibling->nodeName === '#text' && $this->trimNewLines(
+                        $this->sampleNode->nextSibling->nodeValue
+                    ) === ';' && $this->sampleNode->nextSibling->nextSibling->nodeName === 'i'
+                ) {
+                    $this->explodeSampleEntry[] = $this->sampleNode->nextSibling->nextSibling->nodeValue;
+                    $this->currentNode = $this->sampleNode->nextSibling;
+                    $this->sampleNode = $this->sampleNode->nextSibling->nextSibling;
+                    $this->checkNextSiblingForSample();
+                } elseif ($this->trimNewLines($this->sampleNode->nextSibling->nodeValue) === ';') {
                     $this->explodeSampleEntry[] = '';
                     $this->currentNode = $this->currentNode->nextSibling;
                     $this->sampleNode = $this->sampleNode->nextSibling;
@@ -418,8 +453,8 @@ class Parser
                     $this->result->add($this->entry);
                     if ($this->currentNode->nextSibling->nodeName === 'b') {
                         if ($sampleChildNode->nextSibling instanceof \DOMNode && $sampleChildNode->nextSibling->nodeName === '#text' && $this->trimNewLines(
-                            $sampleChildNode->nextSibling->nodeValue
-                        ) === '--'
+                                $sampleChildNode->nextSibling->nodeValue
+                            ) === '--'
                         ) {
                             $this->parseInheritance($this->currentNode);
                         } else {
@@ -440,7 +475,7 @@ class Parser
                         }
                         $found = true;
                     } else {
-                        throw new \Exception('Next Step not understand');
+                        throw new KbbiParserException('Next Step not understand');
                     }
                 } elseif ($this->currentNode->nextSibling instanceof \DOMNode && $sampleChildNode->nodeName === '#text' && $this->currentNode->nextSibling->nodeName !== 'b') {
                     $entryRaw = explode(',', $sampleChildNode->nodeValue);
@@ -467,7 +502,7 @@ class Parser
         } else {
 
             $this->result->add($this->entry);
-            if ($this->currentNode->nextSibling instanceof \DOMNode) {
+            if ($this->currentNode instanceof \DOMNode && $this->currentNode->nextSibling instanceof \DOMNode) {
                 if ($this->currentNode->nextSibling->nodeName !== 'br') {
                     if ($this->isBoldAndNumeric($this->currentNode->nextSibling)) {
                         $this->extractNextMeaning();
@@ -489,17 +524,17 @@ class Parser
                                 $this->parseBody($this->currentNode->nextSibling);
                             }
                         } else {
-                            throw new \Exception('Next Step not understand');
+                            throw new KbbiParserException('Next Step not understand');
                         }
                     } elseif ($this->currentNode->nextSibling->nodeName === '#text' && $this->trimNewLines(
-                        $this->currentNode->nextSibling->nodeValue
-                    ) === ';'
+                            $this->currentNode->nextSibling->nodeValue
+                        ) === ';'
                     ) {
                         $br = $this->currentNode->nextSibling->nextSibling;
                         $this->checkTag($br, 'br');
                         $this->parseBody($br->nextSibling);
                     } else {
-                        throw new \Exception('Next Step not understand');
+                        throw new KbbiParserException('Next Step not understand');
                     }
                 } else {
                     $this->checkTag($this->currentNode->nextSibling, 'br');
@@ -522,17 +557,17 @@ class Parser
         } elseif ($entrySibling->nodeName === 'br') {
             $nextSibling = $entrySibling->nextSibling;
             if (($nextSibling->nodeName === '#text' || $nextSibling->nodeName === 'i') && $this->trimNewLines(
-                $nextSibling->nodeValue
-            ) === '--'
+                    $nextSibling->nodeValue
+                ) === '--'
             ) {
                 $this->parseInheritance($nextSibling);
             } elseif ($nextSibling->nodeName === 'b') {
                 $this->parseBody($nextSibling);
             } else {
-                throw new \Exception('Sibling ' . $nextSibling->nodeName . ' not expected');
+                throw new KbbiParserException('Sibling ' . $nextSibling->nodeName . ' not expected');
             }
         } else {
-            throw new \Exception('Sibling ' . $entrySibling->nodeName . ' not expected');
+            throw new KbbiParserException('Sibling ' . $entrySibling->nodeName . ' not expected');
         }
     }
 
@@ -556,9 +591,9 @@ class Parser
             }
         }
         if (strpos($trimEntry, '--') === false && strpos($trimEntry, '~') === false && strpos(
-            $trimEntry,
-            '- '
-        ) === false
+                $trimEntry,
+                '- '
+            ) === false
         ) {
 
             if (strpos($this->trimNewLines($entrySibling->previousSibling->nodeValue), '~') !== false) {
@@ -568,7 +603,7 @@ class Parser
             } elseif ($this->trimNewLines($trimEntry) !== '') {
                 $this->entry->setEntry($trimEntry);
             } else {
-                throw new \Exception('Next Step not understand');
+                throw new KbbiParserException('Next Step not understand');
             }
 
         } else {
@@ -591,7 +626,7 @@ class Parser
                     )
                 );
             } else {
-                throw new \Exception('Next Step not understand');
+                throw new KbbiParserException('Next Step not understand');
             }
 
         }
@@ -621,7 +656,7 @@ class Parser
                 $this->definitionNode = $nextDefinitionSibling->nextSibling;
                 $this->getDefinitionSibling();
             } else {
-                throw new \Exception('Sibling ' . $nextDefinitionSibling->nodeName . ' not expected');
+                throw new KbbiParserException('Sibling ' . $nextDefinitionSibling->nodeName . ' not expected');
             }
         }
         if (count($this->explodeSample) > 1) {
@@ -630,9 +665,9 @@ class Parser
                 $this->explodeSampleEntry = explode(';', $this->trimNewLines($this->sampleNode->nodeValue));
 
                 if (strpos($this->explodeSampleEntry[0], '~') === false && strpos(
-                    $this->explodeSampleEntry[0],
-                    '- '
-                ) === false &&
+                        $this->explodeSampleEntry[0],
+                        '- '
+                    ) === false &&
                     strpos($this->explodeSampleEntry[0], '--') === false
                 ) {
                     $this->entry->getSamples()->add($this->currentEntry . ' ' . $this->explodeSampleEntry[0]);
@@ -653,39 +688,39 @@ class Parser
                 }
                 foreach ($this->explodeSample as $singleExplodeSample) {
                     if ($this->trimNewLines($singleExplodeSample) !== '' && $this->trimNewLines(
-                        $singleExplodeSample
-                    ) !== '~'
+                            $singleExplodeSample
+                        ) !== '~'
                     ) {
                         $this->entry->getDefinitions()->add($this->trimNewLines($singleExplodeSample));
                     }
                 }
                 $this->result->add($this->entry);
                 if (count($this->explodeSampleEntry) > 1 && $this->trimNewLines(
-                    $this->explodeSampleEntry[count($this->explodeSampleEntry) - 1]
-                ) === ''
+                        $this->explodeSampleEntry[count($this->explodeSampleEntry) - 1]
+                    ) === ''
                 ) {
                     $nextSampleNode = $this->sampleNode->nextSibling;
                     if ($nextSampleNode->nodeName === '#text' && $this->trimNewLines(
-                        $nextSampleNode->nodeValue
-                    ) === '--'
+                            $nextSampleNode->nodeValue
+                        ) === '--'
                     ) {
                         $this->parseInheritance($nextSampleNode);
                     } elseif ($nextSampleNode->nodeName === 'b') {
                         $this->parseBody($nextSampleNode);
                     } else {
-                        throw new \Exception('Next Step not understand');
+                        throw new KbbiParserException('Next Step not understand');
                     }
                 } elseif ($this->sampleNode->nextSibling->nodeName === '#text') {
                     $nextSampleNodeExplode = explode(';', $this->sampleNode->nextSibling->nodeValue);
                     if (count($nextSampleNodeExplode) > 1 && ($this->trimNewLines(
-                        $nextSampleNodeExplode[1]
-                    ) === '--' || $this->trimNewLines(
-                        $nextSampleNodeExplode[1]
-                    ) === '~')
+                                $nextSampleNodeExplode[1]
+                            ) === '--' || $this->trimNewLines(
+                                $nextSampleNodeExplode[1]
+                            ) === '~')
                     ) {
                         $this->parseInheritance($this->sampleNode->nextSibling);
                     } else {
-                        throw new \Exception('Sibling ' . $nextDefinitionSibling->nodeName . ' not expected');
+                        throw new KbbiParserException('Sibling ' . $nextDefinitionSibling->nodeName . ' not expected');
                     }
                 }
             }
@@ -706,9 +741,9 @@ class Parser
                         $this->sampleNode = $this->definitionNode;
                         $this->extractSample();
                         if ($this->definitionNode->nextSibling->nodeName === '#text' && strpos(
-                            $this->trimNewLines($this->definitionNode->nextSibling->nodeValue),
-                            '~'
-                        ) !== false && $this->definitionNode->nextSibling->nextSibling->nodeName === 'b'
+                                $this->trimNewLines($this->definitionNode->nextSibling->nodeValue),
+                                '~'
+                            ) !== false && $this->definitionNode->nextSibling->nextSibling->nodeName === 'b'
                         ) {
                             $this->result->add($this->entry);
                             $save = false;
@@ -718,7 +753,7 @@ class Parser
                         $this->entry->getDefinitions()->add($trimDefinitionRaw);
                     }
                 } else {
-                    throw new \Exception('Trim Definition not understand');
+                    throw new KbbiParserException('Trim Definition not understand');
                 }
             }
 
@@ -755,28 +790,28 @@ class Parser
                 $concatDefinitionRaw = implode('; ', $this->definitionRaw);
                 $this->definitionRaw = explode(';', $concatDefinitionRaw);
             } else {
-                throw new \Exception('Next Step not understand');
+                throw new KbbiParserException('Next Step not understand');
             }
         } else {
-            throw new \Exception('Sibling ' . $this->definitionNode->nodeName . ' not expected');
+            throw new KbbiParserException('Sibling ' . $this->definitionNode->nodeName . ' not expected');
         }
         for ($i = 0; $i < count($this->definitionRaw); $i++) {
             $this->definitionRaw[$i] = $this->trimNewLines($this->definitionRaw[$i]);
         }
         if (count(
-            $this->definitionRaw
-        ) > 1 && $this->definitionRaw[count($this->definitionRaw) - 1] === ''
+                $this->definitionRaw
+            ) > 1 && $this->definitionRaw[count($this->definitionRaw) - 1] === ''
         ) {
             if (($this->definitionNode->nextSibling->nodeName === '#text' && $this->trimNewLines(
-                $this->definitionNode->nextSibling->nodeValue
-            ) === '--')
+                    $this->definitionNode->nextSibling->nodeValue
+                ) === '--')
             ) {
                 $this->definitionRaw[count($this->definitionRaw) - 1] = $this->definitionNode->nextSibling->nodeValue;
                 $this->definitionNode = $this->definitionNode->nextSibling;
             } elseif ($this->definitionNode->nextSibling->nodeName === 'i' && strpos(
-                $this->definitionNode->nextSibling->nodeValue,
-                ';'
-            ) !== false
+                    $this->definitionNode->nextSibling->nodeValue,
+                    ';'
+                ) !== false
             ) {
                 $this->definitionNode = $this->definitionNode->nextSibling;
                 $this->getDefinitionSibling();
@@ -799,8 +834,8 @@ class Parser
     private final function checkDefinitionSibling()
     {
         if ($this->definitionNode->nextSibling instanceof \DOMNode && count(
-            $this->definitionRaw
-        ) === 1 && $this->trimDefinition !== '' && count($this->explodeSample) <= 1
+                $this->definitionRaw
+            ) === 1 && $this->trimDefinition !== '' && count($this->explodeSample) <= 1
         ) {
             if ($this->definitionNode->nextSibling->nodeName === 'br') {
                 if ($this->definitionNode->nextSibling->nextSibling->nodeName === '#text' &&
@@ -809,8 +844,8 @@ class Parser
                     $this->definitionNode = $this->definitionNode->nextSibling->nextSibling;
                     $this->getDefinitionSibling();
                 } else {
-                    throw new \Exception('Sibling ' . $this->definitionNode->nextSibling->nextSibling->nodeName .
-                        ' not expected');
+                    throw new KbbiParserException('Sibling ' . $this->definitionNode->nextSibling->nextSibling->nodeName .
+                    ' not expected');
                 }
             } elseif ($this->definitionNode->nextSibling->nodeName === 'i' ||
                 $this->definitionNode->nextSibling->nodeName === '#text'
@@ -818,7 +853,7 @@ class Parser
                 $this->definitionNode = $this->definitionNode->nextSibling;
                 $this->getDefinitionSibling();
             } else {
-                throw new \Exception('Sibling ' . $this->definitionNode->nextSibling->nodeName . ' not expected');
+                throw new KbbiParserException('Sibling ' . $this->definitionNode->nextSibling->nodeName . ' not expected');
             }
         }
     }
@@ -885,17 +920,17 @@ class Parser
                 } elseif ($this->trimNewLines($node->nodeValue) === '~') {
                     $this->parseInheritance($node);
                 } else {
-                    throw new \Exception('Next Step not understand');
+                    throw new KbbiParserException('Next Step not understand');
                 }
             } elseif ($node->nodeName === 'b') {
                 $this->parseBody($node);
             } elseif ($node->nodeName === 'i') {
                 $this->parseInheritance($node->previousSibling);
             } else {
-                throw new \Exception('Next Step not understand');
+                throw new KbbiParserException('Next Step not understand');
             }
         } else {
-            throw new \Exception('Next Sibling not found.');
+            throw new KbbiParserException('Next Sibling not found.');
         }
     }
 

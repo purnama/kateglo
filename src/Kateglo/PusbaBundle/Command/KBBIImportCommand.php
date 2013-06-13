@@ -26,6 +26,7 @@ namespace Kateglo\PusbaBundle\Command;
 
 
 use Kateglo\PusbaBundle\Service\ImportEntryList;
+use Kateglo\PusbaBundle\Service\Kbbi\Importer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -80,7 +81,7 @@ EOT
     {
         $file = $input->getArgument('file');
 
-        /** @var $importService ImportEntryList */
+        /** @var $importService Importer */
         $importService = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi.importer');
 
         $content = file_get_contents($file);

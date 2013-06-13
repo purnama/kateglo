@@ -26,10 +26,15 @@ namespace Kateglo\PusbaBundle\Command;
 
 
 use Doctrine\ORM\NoResultException;
+use Kateglo\PusbaBundle\Entity\KbbiDefinitionExtracted;
 use Kateglo\PusbaBundle\Entity\KbbiEntryCrawl;
+use Kateglo\PusbaBundle\Entity\KbbiEntryExtracted;
+use Kateglo\PusbaBundle\Entity\KbbiSampleExtracted;
+use Kateglo\PusbaBundle\Entity\KbbiSynonymExtracted;
 use Kateglo\PusbaBundle\Model\Entry;
 use Kateglo\PusbaBundle\Repository\EntryCrawlRepository;
-use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiExtractorException;
+use Kateglo\PusbaBundle\Repository\EntryListRepository;
+use Kateglo\PusbaBundle\Service\Kbbi\Exception\KbbiParserException;
 use Kateglo\PusbaBundle\Service\Kbbi\Parser;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressHelper;
@@ -49,6 +54,11 @@ class KbbiExtractCommand extends ContainerAwareCommand
      * @var EntryCrawlRepository
      */
     private $crawlRepository;
+
+    /**
+     * @var EntryListRepository
+     */
+    private $listRepository;
 
     /**
      * @var Parser
@@ -71,7 +81,9 @@ class KbbiExtractCommand extends ContainerAwareCommand
             ->setDescription('Extract crawled Kbbi Online from the Database')
             ->setDefinition(
                 array(
+                    new InputOption('start', '-t', InputOption::VALUE_REQUIRED, 'Start id to extract in a transaction', 0),
                     new InputOption('limit', '-l', InputOption::VALUE_REQUIRED, 'Limit to extract in a transaction', 100),
+                    new InputOption('verbose', '-v', InputOption::VALUE_NONE, 'Verbose'),
                 )
             )
             ->setHelp(
@@ -97,82 +109,132 @@ EOT
     {
 
         $this->crawlRepository = $this->getContainer()->get('kateglo.pusba_bundle.repository.entry_crawl_repository');
-        $this->parser = $this->getContainer()->get('kateglo.pusba_bundle.service.parser');
+        $this->listRepository = $this->getContainer()->get('kateglo.pusba_bundle.repository.entry_list_repository');
+        $this->parser = $this->getContainer()->get('kateglo.pusba_bundle.service.kbbi.parser');
         $this->progress = $this->getHelperSet()->get('progress');
 
         $limit = $input->getOption('limit');
+        $start = $input->getOption('start');
+        $verbose = $input->getOption('verbose');
 
         try {
-                $output->writeln('<info>Start Extracting!</info>');
-                $this->extract($limit);
-                $this->progress->finish();
-                $output->writeln('<info>Extract successful!</info>');
+            $output->writeln('<info>Start Extracting!</info>');
+            $this->extract($start, $limit, $verbose, $output);
+            $this->progress->finish();
+            $output->writeln('<info>Extract successful!</info>');
 
         } catch (\Exception $e) {
             $output->writeln(
                 sprintf(
                     'something is wrong. here is the error text:' . "\n" .
-                        '<error>%s</error>',
+                    '<error>%s: %s</error>',
+                    get_class($e),
                     $e->getMessage()
                 )
             );
+            $output->writeln($e->getTraceAsString());
         }
     }
 
     /**
+     * @param int $start
      * @param int $limit
+     * @param boolean $verbose
      * @param OutputInterface $output
      * @throws \Exception
      */
-    private function extract($limit = 100, OutputInterface $output)
+    private function extract($start = 0, $limit = 100, $verbose = false, OutputInterface $output)
     {
         @ini_set('memory_limit', '3069M');
 
-        $entries = $this->crawlRepository->findAll();
+        $entries = $this->crawlRepository->findAll($start, $limit);
         try {
-            /** @var $entry KbbiEntryCrawl */
+            /** @var $entryRaw KbbiEntryCrawl */
             $countEntries = count($entries);
             $this->progress->start($output, $countEntries);
-            for ($i = 0; $i < $countEntries; $i+$limit) {
-                $entry = $entries[$i];
+            for ($i = 0; $i < $countEntries; $i++) {
+                $entryRaw = $entries[$i];
                 try {
-                    $wordList = $this->parser->parse($entry->getRaw());
-                    /** @var $word Entry */
-                    foreach ($wordList as $word) {
-                        try {
-                            $entryCrawl = $this->crawlRepository->findByEntry($word);
-                        } catch (NoResultException $e) {
-                            $entryCrawl = new KbbiEntryCrawl();
+                    $this->parser->parse($entryRaw->getRaw());
+                    $entryList = $this->parser->getResult();
+                    /** @var $entryExtracted Entry */
+                    foreach ($entryList as $entryExtracted) {
+                        $entry = new KbbiEntryExtracted();
+                        $entry->setEntry($entryExtracted->getEntry());
+                        $entry->setCrawl($entryRaw);
+                        if (!is_null($entryExtracted->getClass())) {
+                            $entry->setClass($entryExtracted->getClass());
                         }
-                        $entryCrawl->setEntry($word);
-                        $entryCrawl->setRaw($content);
-                        $entryCrawl->setList($entry);
-                        $entryCrawl->setLastUpdated(new \DateTime());
-                        $this->crawlRepository->persist($entryCrawl);
+                        if (!is_null($entryExtracted->getSyllable())) {
+                            $entryExtracted->setSyllable($entryExtracted->getSyllable());
+                        }
+                        if (!is_null($entryExtracted->getDiscipline())) {
+                            $entry->setDiscipline($entryExtracted->getDiscipline());
+                        }
+                        $this->crawlRepository->getEntityManager()->persist($entry);
+
+
+                        if ($entryExtracted->getDefinitions()->count() > 0) {
+                            foreach ($entryExtracted->getDefinitions() as $definitionString) {
+                                $definition = new KbbiDefinitionExtracted();
+                                $definition->setEntry($entry);
+                                $definition->setDefinition($definitionString);
+                                $this->crawlRepository->getEntityManager()->persist($definition);
+                            }
+                        }
+
+                        if ($entryExtracted->getSamples()->count() > 0) {
+                            foreach ($entryExtracted->getSamples() as $sampleString) {
+                                $sample = new KbbiSampleExtracted();
+                                $sample->setEntry($entry);
+                                $sample->setSample($sampleString);
+                                $this->crawlRepository->getEntityManager()->persist($sample);
+                            }
+                        }
+
+                        if ($entryExtracted->getSynonyms()->count() > 0) {
+                            foreach ($entryExtracted->getSynonyms() as $synonymString) {
+                                $synonym = new KbbiSynonymExtracted();
+                                $synonym->setEntry($entry);
+                                $synonym->setSynonym($synonymString);
+                                $this->crawlRepository->getEntityManager()->persist($synonym);
+                            }
+                        }
+
+                        try {
+                            $entryList = $this->listRepository->findByEntry($entryExtracted->getEntry());
+                            $entryList->setExtracted(true);
+                            $this->listRepository->persist($entryList);
+                        } catch (NoResultException $e) {
+                            continue;
+                        }
                     }
-                    $entry->setFound(true);
-                    $this->listRepository->persist($entry);
                     $this->progress->advance();
-                } catch (KbbiExtractorException $e) {
-                    $this->progress->advance();
-                    continue;
+                } catch (KbbiParserException $e) {
+                    if ($verbose) {
+                        $output->writeln('<error>'.$entryRaw->getEntry() . ' can not be parse!</error>');
+                    }
+                    $this->createFile($output, $verbose, 'extracted_' . $entryRaw->getEntry() . '.html', $entryRaw->getRaw());
+                    throw $e;
                 }
             }
-            $config->setLastId($entry->getId());
-            $config->setLastUpdated(new \DateTime());
-            $this->crawlRepository->persistConfig($config);
-            $crawlHistory->setFinishId($entry->getId());
-            $crawlHistory->setFinishTime(new \DateTime());
-            $crawlHistory->setStatus(true);
-            $this->crawlRepository->persistHistory($crawlHistory);
             $this->crawlRepository->flush();
         } catch (\Exception $e) {
-            $crawlHistory->setFinishTime(new \DateTime());
-            $crawlHistory->setStatus(false);
-            $crawlHistory->setMessages($e->getMessage());
-            $this->crawlRepository->persistHistory($crawlHistory);
-            $this->crawlRepository->flush();
             throw $e;
+        }
+    }
+
+    protected function createFile(OutputInterface $output, $verbose = false, $filename, $content)
+    {
+        $filename = $this->getContainer()->getParameter(
+                'kateglo_pusba.kbbi.directory'
+            ) . DIRECTORY_SEPARATOR . str_replace(' ', '_', $filename);
+        if (file_put_contents($filename, $content) !== false) {
+            if ($verbose) {
+                $output->writeln('<info>File: ' . $filename . ' created.</info>');
+            }
+        } else {
+            throw new \Exception('<error>File ' . $filename . ' can not be created.</error>');
         }
     }
 

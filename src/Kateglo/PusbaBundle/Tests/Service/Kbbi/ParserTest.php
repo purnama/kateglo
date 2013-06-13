@@ -193,6 +193,42 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(60, $result->count());
     }
 
+    /**
+     *
+     * @test
+     */
+    public function parse_An1(){
+        $result = $this->getParseResult('extracted_-an_(1).html');
+        $this->assertEquals(5, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parse_An4(){
+        $result = $this->getParseResult('extracted_-an_(4).html');
+        $this->assertEquals(2, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parse_Asi4(){
+        $result = $this->getParseResult('extracted_-asi_(4).html');
+        $this->assertEquals(1, $result->count());
+    }
+
+    /**
+     *
+     * @test
+     */
+    public function parse_Kah2(){
+        $result = $this->getParseResult('extracted_-kah_(2).html');
+        $this->assertEquals(2, $result->count());
+    }
+
     private function getParseResult($filename)
     {
         $content = file_get_contents($this->resourceDir . $filename);

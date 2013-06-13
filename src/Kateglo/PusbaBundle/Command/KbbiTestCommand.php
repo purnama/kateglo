@@ -65,7 +65,7 @@ Contoh penggunaan:
 Aturan pencarian bisa digunakan dengan menambahkan parameter --opkode atau -o.
 Contoh:
 
-<info>php app/console generate:bundle --entri=kapal -o=2</info>
+<info>php app/console pusba:kbbi:test --entri=kapal -o=2</info>
 
 Tanpa menambahkah aturan pencarian, maka otomatis aturan pencarian adalah 1:Sama dengan.
 EOT
